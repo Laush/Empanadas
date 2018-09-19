@@ -1,0 +1,36 @@
+﻿
+
+nav {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+nav.navbar { /* cambiar el color de fondo a la barra */
+    background-color: transparent;
+}
+
+.navbar-default .navbar-header .navbar-brand { /* empanadas ya */
+    color: white;
+}
+
+.navbar-nav { /* lista */
+    color: white;
+}
+
+div.jumbotron {
+    background-color: rgba(0,0,0,0.4);
+    color: white;
+    font-weight: bold;
+}
+
+
+body {
+    background-image: url("/Content/fondo.jpeg");
+
+}
+
+footer {
+    color: white;
+    text-align: center;
+    font-weight: bold;
+}
