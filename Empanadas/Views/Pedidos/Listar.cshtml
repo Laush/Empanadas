@@ -4,10 +4,38 @@
     Layout = "~/Views/Shared/_UsuarioLayout.cshtml";
 }
 
+
+@using Empanadas.Models
+@model List<Pedido>
+
 @section Body{
+    <table class="table-bordered">
+        <tr>
+            <td class="table-primary">Id</td>
+            <td>NombreNegocio</td>
+            <td>Descripcion</td>
+            <td>Precio x Unidad</td>
+            <td>Precio x Docena</td>
+            <td>Gustos Disponibles</td>
+            <td>Invitados</td>
+        </tr>
+        @foreach (Pedido p in Model)
+        {
+            <tr class="table-primary">
+                <td>@p.idPedido</td>
+                <td>@p.nombreNegocio</td>
+                <td> @p.descripcion</td>
+                <td>@p.precioUnidad</td>
+                <td>@p.precioDocena</td>
+                <td></td>
+                <td></td>
+            </tr>
+        }
 
-
-    <h2>Lista de pedidos</h2>
+    </table>
+    <a class="linkss" href="/Pedidos/Iniciar/"> Nuevo pedido</a>
+    <br>
+    <a class="linkss" href="#"> Cancelar</a>
 
 }
 

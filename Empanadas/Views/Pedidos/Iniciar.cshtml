@@ -4,10 +4,32 @@
     Layout = "~/Views/Shared/_UsuarioLayout.cshtml";
 }
 
-
+@using Empanadas.Models
+@model Pedido
 
 @section Body{
     <h2>Iniciar Pedido</h2>
+    <div class="container">
+        <form action="/Pedidos/Iniciar" method="Post">
+            <div class="row">
+                <div class="col-md-6">
+                    Id: @Html.TextBoxFor(p => p.idPedido, new { @class = "form-control" })
+                    Nombre Negocio: @Html.TextBoxFor(p => p.nombreNegocio, new { @class = "form-control" })
+                    Descripcion: @Html.TextBoxFor(p => p.descripcion, new { @class = "form-control" })
+                </div>
+                <div class="col-md-6">
+                    Precio x Unidad: @Html.TextBoxFor(p => p.precioUnidad, new { @class = "form-control" })
+                    Precio x Docena: @Html.TextBoxFor(p => p.precioDocena, new { @class = "form-control" })
+                    Gustos Disponibles:<select class="form-control" id="gustosDisponibles" name="gustosDisponibles">
+                        <option value="carne">Carne</option>
+                        <option value="pollo">Pollo</option>
+                    </select> <br>
+                </div>
+            </div>
 
+            <input type="submit" class="form-control" text="Guardar" />
+        </form>
+
+    </div>
 }
 
