@@ -4,38 +4,44 @@
     Layout = "~/Views/Shared/_UsuarioLayout.cshtml";
 }
 
-
-@using Empanadas.Models
 @model List<Pedido>
-
 @section Body{
     <table class="table-bordered">
         <tr>
-            <td class="table-primary">Id</td>
-            <td>NombreNegocio</td>
-            <td>Descripcion</td>
-            <td>Precio x Unidad</td>
-            <td>Precio x Docena</td>
-            <td>Gustos Disponibles</td>
-            <td>Invitados</td>
+            <td class="table-primary">IdPed</td>
+            <td>IdUsu</td>
+            <td>Nombre</td>
+            <td>Descrip</td>
+            <td>IdEstPed</td>
+            <td>PrecioxUni</td>
+            <td>PrecioxDoc</td>
+            <td>FechCreacion</td>
+            <td>FechModif</td>
+            <td></td>
+            <td></td>
         </tr>
         @foreach (Pedido p in Model)
         {
-            <tr class="table-primary">
-                <td>@p.idPedido</td>
-                <td>@p.nombreNegocio</td>
-                <td> @p.descripcion</td>
-                <td>@p.precioUnidad</td>
-                <td>@p.precioDocena</td>
-                <td></td>
-                <td></td>
-            </tr>
+        <tr class="table-primary">
+            <td>@p.IdPedido</td>
+            <td>@p.IdUsuarioResponsable</td>
+            <td>@p.NombreNegocio</td>
+            <td>@p.Descripcion</td>
+            <td>@p.IdEstadoPedido</td>
+            <td>@p.PrecioUnidad</td>
+            <td>@p.PrecioDocena</td>
+            <td>@p.FechaCreacion</td>
+            <td>@p.FechaModificacion</td>
+            <td><a href="#"><span class="glyphicon glyphicon-pencil"></span></a></td>
+            <td><a href="#"><span class="glyphicon glyphicon-remove"></span></a></td>
+
+        </tr>
         }
 
     </table>
     <a class="linkss" href="/Pedidos/Iniciar/"> Nuevo pedido</a>
     <br>
-    <a class="linkss" href="#"> Cancelar</a>
+ 
 
 }
 

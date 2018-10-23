@@ -1,0 +1,529 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="C_TPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="EstadoPedido">
+          <Key>
+            <PropertyRef Name="IdEstadoPedido" />
+          </Key>
+          <Property Name="IdEstadoPedido" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="GustoEmpanada">
+          <Key>
+            <PropertyRef Name="IdGustoEmpanada" />
+          </Key>
+          <Property Name="IdGustoEmpanada" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <EntityType Name="GustoEmpanadaDisponiblePedido">
+          <Key>
+            <PropertyRef Name="IdPedido" />
+            <PropertyRef Name="IdGustoEmpanada" />
+          </Key>
+          <Property Name="IdPedido" Type="int" Nullable="false" />
+          <Property Name="IdGustoEmpanada" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="InvitacionPedido">
+          <Key>
+            <PropertyRef Name="IdInvitacionPedido" />
+          </Key>
+          <Property Name="IdInvitacionPedido" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdPedido" Type="int" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" Nullable="false" />
+          <Property Name="Token" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Completado" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="InvitacionPedidoGustoEmpanadaUsuario">
+          <Key>
+            <PropertyRef Name="IdInvitacionPedidoGustoEmpanadaUsuario" />
+          </Key>
+          <Property Name="IdInvitacionPedidoGustoEmpanadaUsuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdPedido" Type="int" Nullable="false" />
+          <Property Name="IdGustoEmpanada" Type="int" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" Nullable="false" />
+          <Property Name="Cantidad" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Pedido">
+          <Key>
+            <PropertyRef Name="IdPedido" />
+          </Key>
+          <Property Name="IdPedido" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdUsuarioResponsable" Type="int" Nullable="false" />
+          <Property Name="NombreNegocio" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="IdEstadoPedido" Type="int" Nullable="false" />
+          <Property Name="PrecioUnidad" Type="int" Nullable="false" />
+          <Property Name="PrecioDocena" Type="int" Nullable="false" />
+          <Property Name="FechaCreacion" Type="datetime" Nullable="false" />
+          <Property Name="FechaModificacion" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdUsuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_GustoEmpanadaDisponiblePedido_GustoEmpanada">
+          <End Role="GustoEmpanada" Type="Self.GustoEmpanada" Multiplicity="1" />
+          <End Role="GustoEmpanadaDisponiblePedido" Type="Self.GustoEmpanadaDisponiblePedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GustoEmpanada">
+              <PropertyRef Name="IdGustoEmpanada" />
+            </Principal>
+            <Dependent Role="GustoEmpanadaDisponiblePedido">
+              <PropertyRef Name="IdGustoEmpanada" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GustoEmpanadaDisponiblePedido_Pedido">
+          <End Role="Pedido" Type="Self.Pedido" Multiplicity="1" />
+          <End Role="GustoEmpanadaDisponiblePedido" Type="Self.GustoEmpanadaDisponiblePedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pedido">
+              <PropertyRef Name="IdPedido" />
+            </Principal>
+            <Dependent Role="GustoEmpanadaDisponiblePedido">
+              <PropertyRef Name="IdPedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvitacionPedido_Pedido">
+          <End Role="Pedido" Type="Self.Pedido" Multiplicity="1" />
+          <End Role="InvitacionPedido" Type="Self.InvitacionPedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pedido">
+              <PropertyRef Name="IdPedido" />
+            </Principal>
+            <Dependent Role="InvitacionPedido">
+              <PropertyRef Name="IdPedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvitacionPedido_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="InvitacionPedido" Type="Self.InvitacionPedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="InvitacionPedido">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvitacionPedidoGustoEmpanadaUsuario_GustoEmpanada">
+          <End Role="GustoEmpanada" Type="Self.GustoEmpanada" Multiplicity="1" />
+          <End Role="InvitacionPedidoGustoEmpanadaUsuario" Type="Self.InvitacionPedidoGustoEmpanadaUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GustoEmpanada">
+              <PropertyRef Name="IdGustoEmpanada" />
+            </Principal>
+            <Dependent Role="InvitacionPedidoGustoEmpanadaUsuario">
+              <PropertyRef Name="IdGustoEmpanada" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvitacionPedidoGustoEmpanadaUsuario_Pedido">
+          <End Role="Pedido" Type="Self.Pedido" Multiplicity="1" />
+          <End Role="InvitacionPedidoGustoEmpanadaUsuario" Type="Self.InvitacionPedidoGustoEmpanadaUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pedido">
+              <PropertyRef Name="IdPedido" />
+            </Principal>
+            <Dependent Role="InvitacionPedidoGustoEmpanadaUsuario">
+              <PropertyRef Name="IdPedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvitacionPedidoGustoEmpanadaUsuario_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="InvitacionPedidoGustoEmpanadaUsuario" Type="Self.InvitacionPedidoGustoEmpanadaUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="InvitacionPedidoGustoEmpanadaUsuario">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Pedido_EstadoPedido">
+          <End Role="EstadoPedido" Type="Self.EstadoPedido" Multiplicity="1" />
+          <End Role="Pedido" Type="Self.Pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EstadoPedido">
+              <PropertyRef Name="IdEstadoPedido" />
+            </Principal>
+            <Dependent Role="Pedido">
+              <PropertyRef Name="IdEstadoPedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Pedido_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Pedido" Type="Self.Pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Pedido">
+              <PropertyRef Name="IdUsuarioResponsable" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="C_TPModelStoreContainer">
+          <EntitySet Name="EstadoPedido" EntityType="Self.EstadoPedido" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GustoEmpanada" EntityType="Self.GustoEmpanada" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GustoEmpanadaDisponiblePedido" EntityType="Self.GustoEmpanadaDisponiblePedido" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InvitacionPedido" EntityType="Self.InvitacionPedido" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InvitacionPedidoGustoEmpanadaUsuario" EntityType="Self.InvitacionPedidoGustoEmpanadaUsuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pedido" EntityType="Self.Pedido" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_GustoEmpanadaDisponiblePedido_GustoEmpanada" Association="Self.FK_GustoEmpanadaDisponiblePedido_GustoEmpanada">
+            <End Role="GustoEmpanada" EntitySet="GustoEmpanada" />
+            <End Role="GustoEmpanadaDisponiblePedido" EntitySet="GustoEmpanadaDisponiblePedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GustoEmpanadaDisponiblePedido_Pedido" Association="Self.FK_GustoEmpanadaDisponiblePedido_Pedido">
+            <End Role="Pedido" EntitySet="Pedido" />
+            <End Role="GustoEmpanadaDisponiblePedido" EntitySet="GustoEmpanadaDisponiblePedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvitacionPedido_Pedido" Association="Self.FK_InvitacionPedido_Pedido">
+            <End Role="Pedido" EntitySet="Pedido" />
+            <End Role="InvitacionPedido" EntitySet="InvitacionPedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvitacionPedido_Usuario" Association="Self.FK_InvitacionPedido_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="InvitacionPedido" EntitySet="InvitacionPedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvitacionPedidoGustoEmpanadaUsuario_GustoEmpanada" Association="Self.FK_InvitacionPedidoGustoEmpanadaUsuario_GustoEmpanada">
+            <End Role="GustoEmpanada" EntitySet="GustoEmpanada" />
+            <End Role="InvitacionPedidoGustoEmpanadaUsuario" EntitySet="InvitacionPedidoGustoEmpanadaUsuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvitacionPedidoGustoEmpanadaUsuario_Pedido" Association="Self.FK_InvitacionPedidoGustoEmpanadaUsuario_Pedido">
+            <End Role="Pedido" EntitySet="Pedido" />
+            <End Role="InvitacionPedidoGustoEmpanadaUsuario" EntitySet="InvitacionPedidoGustoEmpanadaUsuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvitacionPedidoGustoEmpanadaUsuario_Usuario" Association="Self.FK_InvitacionPedidoGustoEmpanadaUsuario_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="InvitacionPedidoGustoEmpanadaUsuario" EntitySet="InvitacionPedidoGustoEmpanadaUsuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Pedido_EstadoPedido" Association="Self.FK_Pedido_EstadoPedido">
+            <End Role="EstadoPedido" EntitySet="EstadoPedido" />
+            <End Role="Pedido" EntitySet="Pedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Pedido_Usuario" Association="Self.FK_Pedido_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Pedido" EntitySet="Pedido" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="C_TPModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="EstadoPedido">
+          <Key>
+            <PropertyRef Name="IdEstadoPedido" />
+          </Key>
+          <Property Name="IdEstadoPedido" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Pedido" Relationship="Self.FK_Pedido_EstadoPedido" FromRole="EstadoPedido" ToRole="Pedido" />
+        </EntityType>
+        <EntityType Name="GustoEmpanada">
+          <Key>
+            <PropertyRef Name="IdGustoEmpanada" />
+          </Key>
+          <Property Name="IdGustoEmpanada" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="InvitacionPedidoGustoEmpanadaUsuario" Relationship="Self.FK_InvitacionPedidoGustoEmpanadaUsuario_GustoEmpanada" FromRole="GustoEmpanada" ToRole="InvitacionPedidoGustoEmpanadaUsuario" />
+          <NavigationProperty Name="Pedido" Relationship="Self.GustoEmpanadaDisponiblePedido" FromRole="GustoEmpanada" ToRole="Pedido" />
+        </EntityType>
+        <EntityType Name="InvitacionPedido">
+          <Key>
+            <PropertyRef Name="IdInvitacionPedido" />
+          </Key>
+          <Property Name="IdInvitacionPedido" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdPedido" Type="Int32" Nullable="false" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="Token" Type="Guid" Nullable="false" />
+          <Property Name="Completado" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Pedido" Relationship="Self.FK_InvitacionPedido_Pedido" FromRole="InvitacionPedido" ToRole="Pedido" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_InvitacionPedido_Usuario" FromRole="InvitacionPedido" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="InvitacionPedidoGustoEmpanadaUsuario">
+          <Key>
+            <PropertyRef Name="IdInvitacionPedidoGustoEmpanadaUsuario" />
+          </Key>
+          <Property Name="IdInvitacionPedidoGustoEmpanadaUsuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdPedido" Type="Int32" Nullable="false" />
+          <Property Name="IdGustoEmpanada" Type="Int32" Nullable="false" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="Cantidad" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="GustoEmpanada" Relationship="Self.FK_InvitacionPedidoGustoEmpanadaUsuario_GustoEmpanada" FromRole="InvitacionPedidoGustoEmpanadaUsuario" ToRole="GustoEmpanada" />
+          <NavigationProperty Name="Pedido" Relationship="Self.FK_InvitacionPedidoGustoEmpanadaUsuario_Pedido" FromRole="InvitacionPedidoGustoEmpanadaUsuario" ToRole="Pedido" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_InvitacionPedidoGustoEmpanadaUsuario_Usuario" FromRole="InvitacionPedidoGustoEmpanadaUsuario" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Pedido">
+          <Key>
+            <PropertyRef Name="IdPedido" />
+          </Key>
+          <Property Name="IdPedido" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdUsuarioResponsable" Type="Int32" Nullable="false" />
+          <Property Name="NombreNegocio" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IdEstadoPedido" Type="Int32" Nullable="false" />
+          <Property Name="PrecioUnidad" Type="Int32" Nullable="false" />
+          <Property Name="PrecioDocena" Type="Int32" Nullable="false" />
+          <Property Name="FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FechaModificacion" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="EstadoPedido" Relationship="Self.FK_Pedido_EstadoPedido" FromRole="Pedido" ToRole="EstadoPedido" />
+          <NavigationProperty Name="InvitacionPedido" Relationship="Self.FK_InvitacionPedido_Pedido" FromRole="Pedido" ToRole="InvitacionPedido" />
+          <NavigationProperty Name="InvitacionPedidoGustoEmpanadaUsuario" Relationship="Self.FK_InvitacionPedidoGustoEmpanadaUsuario_Pedido" FromRole="Pedido" ToRole="InvitacionPedidoGustoEmpanadaUsuario" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_Pedido_Usuario" FromRole="Pedido" ToRole="Usuario" />
+          <NavigationProperty Name="GustoEmpanada" Relationship="Self.GustoEmpanadaDisponiblePedido" FromRole="Pedido" ToRole="GustoEmpanada" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="InvitacionPedido" Relationship="Self.FK_InvitacionPedido_Usuario" FromRole="Usuario" ToRole="InvitacionPedido" />
+          <NavigationProperty Name="InvitacionPedidoGustoEmpanadaUsuario" Relationship="Self.FK_InvitacionPedidoGustoEmpanadaUsuario_Usuario" FromRole="Usuario" ToRole="InvitacionPedidoGustoEmpanadaUsuario" />
+          <NavigationProperty Name="Pedido" Relationship="Self.FK_Pedido_Usuario" FromRole="Usuario" ToRole="Pedido" />
+        </EntityType>
+        <Association Name="FK_Pedido_EstadoPedido">
+          <End Role="EstadoPedido" Type="Self.EstadoPedido" Multiplicity="1" />
+          <End Role="Pedido" Type="Self.Pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EstadoPedido">
+              <PropertyRef Name="IdEstadoPedido" />
+            </Principal>
+            <Dependent Role="Pedido">
+              <PropertyRef Name="IdEstadoPedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvitacionPedidoGustoEmpanadaUsuario_GustoEmpanada">
+          <End Role="GustoEmpanada" Type="Self.GustoEmpanada" Multiplicity="1" />
+          <End Role="InvitacionPedidoGustoEmpanadaUsuario" Type="Self.InvitacionPedidoGustoEmpanadaUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GustoEmpanada">
+              <PropertyRef Name="IdGustoEmpanada" />
+            </Principal>
+            <Dependent Role="InvitacionPedidoGustoEmpanadaUsuario">
+              <PropertyRef Name="IdGustoEmpanada" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvitacionPedido_Pedido">
+          <End Role="Pedido" Type="Self.Pedido" Multiplicity="1" />
+          <End Role="InvitacionPedido" Type="Self.InvitacionPedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pedido">
+              <PropertyRef Name="IdPedido" />
+            </Principal>
+            <Dependent Role="InvitacionPedido">
+              <PropertyRef Name="IdPedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvitacionPedido_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="InvitacionPedido" Type="Self.InvitacionPedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="InvitacionPedido">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvitacionPedidoGustoEmpanadaUsuario_Pedido">
+          <End Role="Pedido" Type="Self.Pedido" Multiplicity="1" />
+          <End Role="InvitacionPedidoGustoEmpanadaUsuario" Type="Self.InvitacionPedidoGustoEmpanadaUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pedido">
+              <PropertyRef Name="IdPedido" />
+            </Principal>
+            <Dependent Role="InvitacionPedidoGustoEmpanadaUsuario">
+              <PropertyRef Name="IdPedido" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvitacionPedidoGustoEmpanadaUsuario_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="InvitacionPedidoGustoEmpanadaUsuario" Type="Self.InvitacionPedidoGustoEmpanadaUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="InvitacionPedidoGustoEmpanadaUsuario">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Pedido_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Pedido" Type="Self.Pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Pedido">
+              <PropertyRef Name="IdUsuarioResponsable" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="GustoEmpanadaDisponiblePedido">
+          <End Role="GustoEmpanada" Type="Self.GustoEmpanada" Multiplicity="*" />
+          <End Role="Pedido" Type="Self.Pedido" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="EstadoPedido" EntityType="Self.EstadoPedido" />
+          <EntitySet Name="GustoEmpanada" EntityType="Self.GustoEmpanada" />
+          <EntitySet Name="InvitacionPedido" EntityType="Self.InvitacionPedido" />
+          <EntitySet Name="InvitacionPedidoGustoEmpanadaUsuario" EntityType="Self.InvitacionPedidoGustoEmpanadaUsuario" />
+          <EntitySet Name="Pedido" EntityType="Self.Pedido" />
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" />
+          <AssociationSet Name="FK_Pedido_EstadoPedido" Association="Self.FK_Pedido_EstadoPedido">
+            <End Role="EstadoPedido" EntitySet="EstadoPedido" />
+            <End Role="Pedido" EntitySet="Pedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvitacionPedidoGustoEmpanadaUsuario_GustoEmpanada" Association="Self.FK_InvitacionPedidoGustoEmpanadaUsuario_GustoEmpanada">
+            <End Role="GustoEmpanada" EntitySet="GustoEmpanada" />
+            <End Role="InvitacionPedidoGustoEmpanadaUsuario" EntitySet="InvitacionPedidoGustoEmpanadaUsuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvitacionPedido_Pedido" Association="Self.FK_InvitacionPedido_Pedido">
+            <End Role="Pedido" EntitySet="Pedido" />
+            <End Role="InvitacionPedido" EntitySet="InvitacionPedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvitacionPedido_Usuario" Association="Self.FK_InvitacionPedido_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="InvitacionPedido" EntitySet="InvitacionPedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvitacionPedidoGustoEmpanadaUsuario_Pedido" Association="Self.FK_InvitacionPedidoGustoEmpanadaUsuario_Pedido">
+            <End Role="Pedido" EntitySet="Pedido" />
+            <End Role="InvitacionPedidoGustoEmpanadaUsuario" EntitySet="InvitacionPedidoGustoEmpanadaUsuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvitacionPedidoGustoEmpanadaUsuario_Usuario" Association="Self.FK_InvitacionPedidoGustoEmpanadaUsuario_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="InvitacionPedidoGustoEmpanadaUsuario" EntitySet="InvitacionPedidoGustoEmpanadaUsuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Pedido_Usuario" Association="Self.FK_Pedido_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Pedido" EntitySet="Pedido" />
+          </AssociationSet>
+          <AssociationSet Name="GustoEmpanadaDisponiblePedido" Association="Self.GustoEmpanadaDisponiblePedido">
+            <End Role="GustoEmpanada" EntitySet="GustoEmpanada" />
+            <End Role="Pedido" EntitySet="Pedido" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="C_TPModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="EstadoPedido">
+            <EntityTypeMapping TypeName="C_TPModel.EstadoPedido">
+              <MappingFragment StoreEntitySet="EstadoPedido">
+                <ScalarProperty Name="IdEstadoPedido" ColumnName="IdEstadoPedido" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GustoEmpanada">
+            <EntityTypeMapping TypeName="C_TPModel.GustoEmpanada">
+              <MappingFragment StoreEntitySet="GustoEmpanada">
+                <ScalarProperty Name="IdGustoEmpanada" ColumnName="IdGustoEmpanada" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InvitacionPedido">
+            <EntityTypeMapping TypeName="C_TPModel.InvitacionPedido">
+              <MappingFragment StoreEntitySet="InvitacionPedido">
+                <ScalarProperty Name="IdInvitacionPedido" ColumnName="IdInvitacionPedido" />
+                <ScalarProperty Name="IdPedido" ColumnName="IdPedido" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Token" ColumnName="Token" />
+                <ScalarProperty Name="Completado" ColumnName="Completado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InvitacionPedidoGustoEmpanadaUsuario">
+            <EntityTypeMapping TypeName="C_TPModel.InvitacionPedidoGustoEmpanadaUsuario">
+              <MappingFragment StoreEntitySet="InvitacionPedidoGustoEmpanadaUsuario">
+                <ScalarProperty Name="IdInvitacionPedidoGustoEmpanadaUsuario" ColumnName="IdInvitacionPedidoGustoEmpanadaUsuario" />
+                <ScalarProperty Name="IdPedido" ColumnName="IdPedido" />
+                <ScalarProperty Name="IdGustoEmpanada" ColumnName="IdGustoEmpanada" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pedido">
+            <EntityTypeMapping TypeName="C_TPModel.Pedido">
+              <MappingFragment StoreEntitySet="Pedido">
+                <ScalarProperty Name="IdPedido" ColumnName="IdPedido" />
+                <ScalarProperty Name="IdUsuarioResponsable" ColumnName="IdUsuarioResponsable" />
+                <ScalarProperty Name="NombreNegocio" ColumnName="NombreNegocio" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="IdEstadoPedido" ColumnName="IdEstadoPedido" />
+                <ScalarProperty Name="PrecioUnidad" ColumnName="PrecioUnidad" />
+                <ScalarProperty Name="PrecioDocena" ColumnName="PrecioDocena" />
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+                <ScalarProperty Name="FechaModificacion" ColumnName="FechaModificacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuario">
+            <EntityTypeMapping TypeName="C_TPModel.Usuario">
+              <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="GustoEmpanadaDisponiblePedido" TypeName="C_TPModel.GustoEmpanadaDisponiblePedido" StoreEntitySet="GustoEmpanadaDisponiblePedido">
+            <EndProperty Name="GustoEmpanada">
+              <ScalarProperty Name="IdGustoEmpanada" ColumnName="IdGustoEmpanada" />
+            </EndProperty>
+            <EndProperty Name="Pedido">
+              <ScalarProperty Name="IdPedido" ColumnName="IdPedido" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

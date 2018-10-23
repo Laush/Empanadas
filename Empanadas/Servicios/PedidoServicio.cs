@@ -11,17 +11,22 @@ namespace Empanadas.Models
         // la inicializo y no necesito un constructor, es privada para que no la modifique nadie mas 
         private static List<Pedido> Lista = new List<Pedido>();
 
+        private Entities MiBD = new Entities();
+
         public void Agregar(Pedido p)
         {
 
-            Lista.Add(p);
+           // Lista.Add(p);
+
+            MiBD.Pedido.Add(p);
+            MiBD.SaveChanges();
 
 
         }
 
         public List<Pedido> Listar()
         {
-            return Lista;
+            return MiBD.Pedido.ToList();
 
         }
 //futuro CRUD

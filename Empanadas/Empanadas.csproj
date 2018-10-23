@@ -43,7 +43,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -88,6 +96,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="2018_2C_TP.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>2018_2C_TP.Context.cs</LastGenOutput>
+      <DependentUpon>2018_2C_TP.edmx</DependentUpon>
+    </Content>
+    <Content Include="2018_2C_TP.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>2018_2C_TP.edmx</DependentUpon>
+      <LastGenOutput>2018_2C_TP.cs</LastGenOutput>
+    </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\fondo.jpeg" />
@@ -97,6 +115,13 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <EntityDeploy Include="2018_2C_TP.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>2018_2C_TP.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="2018_2C_TP.edmx.diagram">
+      <DependentUpon>2018_2C_TP.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -107,16 +132,48 @@
     <Content Include="Views\Shared\_UsuarioLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="2018_2C_TP.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>2018_2C_TP.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="2018_2C_TP.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>2018_2C_TP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="2018_2C_TP.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>2018_2C_TP.edmx</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PedidosController.cs" />
+    <Compile Include="EstadoPedido.cs">
+      <DependentUpon>2018_2C_TP.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Pedido.cs" />
-    <Compile Include="Models\PedidoServicio.cs" />
+    <Compile Include="GustoEmpanada.cs">
+      <DependentUpon>2018_2C_TP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="InvitacionPedido.cs">
+      <DependentUpon>2018_2C_TP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="InvitacionPedidoGustoEmpanadaUsuario.cs">
+      <DependentUpon>2018_2C_TP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Pedido.cs">
+      <DependentUpon>2018_2C_TP.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Servicios\PedidoServicio.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Usuario.cs">
+      <DependentUpon>2018_2C_TP.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -140,6 +197,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
