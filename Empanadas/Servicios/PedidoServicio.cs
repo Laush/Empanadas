@@ -15,13 +15,8 @@ namespace Empanadas.Models
 
         public void Agregar(Pedido p)
         {
-
-           // Lista.Add(p);
-
             MiBD.Pedido.Add(p);
             MiBD.SaveChanges();
-
-
         }
 
         public List<Pedido> Listar()
@@ -29,38 +24,13 @@ namespace Empanadas.Models
             return MiBD.Pedido.ToList();
 
         }
-//futuro CRUD
-/*
-        public void Eliminar(int id)
-        {
-            Lista.RemoveAll(p => p.idPedido == id);
-        }
 
+        //listar pedido segun usuario ue ingreso
+        /* public List<Pedido> ListarPedidiosPorUsuario(int id)
+         {
+             return MiBD.Pedido.Where(t => t.IdUsuario == id).OrderBy(t => t.Nombre).ToList();  //muestro pedidos por orden ascendente
+         }
+         */
 
-        public Pedido ObtenerPorId(int id)
-        {
-            Pedido pedidoEncontrado = null;
-
-            foreach (Pedido p in Lista)
-            {
-                if (p.idPedido.Equals(id))
-                {
-                    pedidoEncontrado = p;
-                }
-            }
-
-            return pedidoEncontrado;
-        }
-
-        public void Modificar(Pedido p)
-        {
-
-            Lista.RemoveAll(p1 => p1.idPedido == p.idPedido);
-            Lista.Add(p);
-
-
-
-
-        }*/
     }
 }
