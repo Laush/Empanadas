@@ -5,9 +5,10 @@ nav {
     font-weight: bold;
 }
 
-nav.navbar { /* cambiar el color de fondo a la barra */
-    background-color: transparent;
-}
+    nav.navbar { /* cambiar el color de fondo a la barra */
+        background-color: rgba(0,0,0,0.5);
+        border:none;
+    }
 
 .navbar-default .navbar-header .navbar-brand { /* empanadas ya */
     color: white;
@@ -17,8 +18,13 @@ nav.navbar { /* cambiar el color de fondo a la barra */
     color: white;
 }
 
+#logout {
+    margin-top: -10%;
+    margin-left: 160%;
+}
+
 div.jumbotron {
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0,0,0,0.6);
     color: white;
     font-weight: bold;
 }
@@ -28,6 +34,8 @@ body {
     background-image: url("/Content/fondo.jpeg");
 
 }
+
+
 
 footer {
     color: white;

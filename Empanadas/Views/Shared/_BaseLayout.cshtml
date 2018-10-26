@@ -6,21 +6,24 @@
 <!DOCTYPE html>
 <html>
 <head>
+    @*Styles.Render("~/Content/themes/base/css", "~/Content/css")*@
+    @*Scripts.Render("~/bundles/modernizr")*@
+    @RenderSection("HeadSection")
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pedidos de Empanadas</title>
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/Estilo.css" rel="stylesheet" type="text/css" />
-
     <link rel="fondo" href="~/Content/fondo.jpeg" />
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
     <script src="~/Scripts/ModalScript.js"></script>
 </head>
 <body>
-
+    
     <div class="container">
         <!-- COMIENZA NAVBAR -->
+        
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -31,27 +34,26 @@
                         <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand" href="#">Empanadas YA <span class="glyphicon glyphicon-cutlery"></span></a>
-
+                    @RenderSection("NavSection")
                 </div>
                 <!--   <div id="navbar" class="navbar-collapse collapse">
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Lista de Pedidos</a></li>
-            <li><a href="#">Iniciar Pedido</a></li>
-            <li><a href="../navbar-static-top/">LogOut</a></li>
-        </ul>
-    </div><!--/.nav-collapse -->
-               
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Lista de Pedidos</a></li>
+                    <li><a href="#">Iniciar Pedido</a></li>
+                    <li><a href="../navbar-static-top/">LogOut</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+
             </div><!--/.container-fluid -->
         </nav>
         <!-- Fin NAVBAR -->
 
-        <div class="jumbotron">
-            <!-- COMIENZA CONTENIDO DE CADA PAGINA -->
 
-            @RenderSection("Body")
-        </div>
+        @RenderBody()
 
-        <hr />
+
+
+
         <footer>
             <p>&copy; @DateTime.Now.Year - Empanadas Ya!</p>
         </footer>
