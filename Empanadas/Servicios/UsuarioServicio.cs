@@ -10,6 +10,8 @@ namespace Empanadas.Servicios
 
         private Entities MiBD = new Entities();
 
+        public int devolverIdUsuario { get; set; }
+
         public List<Usuario> ListarUsuarios()
         {
             return MiBD.Usuario.ToList();
@@ -17,6 +19,7 @@ namespace Empanadas.Servicios
 
         public Usuario ObtenerUsuario(int id)
         {
+            // para usar el usuario en otro lugar 
             return MiBD.Usuario.FirstOrDefault(u => u.IdUsuario == id);
         }
 

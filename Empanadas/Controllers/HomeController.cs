@@ -9,7 +9,7 @@ namespace Empanadas.Controllers
 {
     public class HomeController : Controller
     {
-        UsuarioServicio us = new UsuarioServicio();
+        UsuarioServicio servicioUsuario = new UsuarioServicio();
 
         // GET: Home
         public ActionResult Index()//logueado, va a index con Usuariolayout, texto de presentacion
@@ -27,11 +27,13 @@ namespace Empanadas.Controllers
         [HttpPost]
         public ActionResult Login(Usuario usu)
         {
-            if (us.VerificarUsuarioRegistrado(usu))
+            if (servicioUsuario.VerificarUsuarioRegistrado(usu))
             {
-                if (us.VerificarContraseniaLogin(usu))
+                if (servicioUsuario.VerificarContraseniaLogin(usu))
                 {
-                    return RedirectToAction("Index", "Home");
+                    
+                    // int id = usu.IdUsuario;
+                    return RedirectToAction("Listar", "Pedidos");
                 }
             }
             ViewBag.ErrorLogin = "Usuario y/o Contrasenia invalidos";

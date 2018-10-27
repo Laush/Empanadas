@@ -1,4 +1,5 @@
 ﻿using Empanadas.Models;
+using Empanadas.Servicios;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,25 +11,30 @@ namespace Empanadas.Controllers
     public class PedidosController : Controller
     {
 
-        PedidoServicio sp = new PedidoServicio();
-        // GET: Pedidos
+        PedidoServicio servicioPedido = new PedidoServicio();
+        UsuarioServicio servicioUsuario = new UsuarioServicio();
+        
 
         public ActionResult Listar()
         {
-            List<Pedido> pedidosList = sp.Listar();
+            List<Pedido> pedidosList = servicioPedido.Listar();
             return View(pedidosList);
         }
 
         // metodo que agrega pedido desde cero
         public ActionResult Iniciar()
         {
-            return View();
+            int IdUsuarioLogin = servicioUsuario.devolverIdUsuario;
+            Pedido pedido = new Pedido();
+            pedido.IdUsuarioResponsable = IdUsuarioLogin;
+
+            return View(pedido);
         }
 
         [HttpPost]
         public ActionResult Iniciar(Pedido p)
         {
-            sp.Agregar(p);
+            servicioPedido.Agregar(p);
 
             return RedirectToAction("Listar", "Pedidos");
 
