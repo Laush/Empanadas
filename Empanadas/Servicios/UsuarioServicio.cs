@@ -10,41 +10,24 @@ namespace Empanadas.Servicios
 
         private Entities MiBD = new Entities();
 
-        public int devolverIdUsuario { get; set; }
+          public int devolverIdUsuario { get; set; }
 
-        public List<Usuario> ListarUsuarios()
+        public Usuario VerificarExistenciaUsuario(Usuario u)
         {
-            return MiBD.Usuario.ToList();
+            var user = MiBD.Usuario.Where(us => us.Email.Equals(u.Email) && us.Password.Equals(u.Password)).FirstOrDefault();
+
+            return user;
         }
 
-        public Usuario ObtenerUsuario(int id)
+        public Usuario BuscarUsuarioPorMail(string mail)
         {
-            // para usar el usuario en otro lugar 
-            return MiBD.Usuario.FirstOrDefault(u => u.IdUsuario == id);
+            var usuarioBuscado = MiBD.Usuario.Where(us => us.Email.Equals(mail)).FirstOrDefault();
+            return usuarioBuscado;
         }
 
-        //verifico que el usuario esté registrado en el sistema
-        public bool VerificarUsuarioRegistrado(Usuario usuario)
+        public Usuario GetById(int id)
         {
-            var UsuarioRegistrado = MiBD.Usuario.Where(u => u.Email == usuario.Email).FirstOrDefault();
-            if (UsuarioRegistrado != null)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        //verifico que la contraseña ingresada sea correcta
-        public bool VerificarContraseniaLogin(Usuario usuario)
-        {
-            Usuario usuarioContraseniasCoincidentes = MiBD.Usuario.Where(u => u.Password == usuario.Password && u.Email == usuario.Email).FirstOrDefault();
-            if (usuarioContraseniasCoincidentes != null)
-            {
-                // Session["usuarioLogueado"] = usuarioContraseniasCoincidentes; //guardo la variable de sesión del usuario logueado
-                //  Session["idUsuario"] = usuarioContraseniasCoincidentes.IdUsuario;
-                return true;
-            }
-            return false;
+            return MiBD.Usuario.FirstOrDefault(x => x.IdUsuario == id);
         }
 
     }

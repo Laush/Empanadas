@@ -10,18 +10,25 @@ namespace Empanadas.Controllers
 {
     public class PedidosController : Controller
     {
-
         PedidoServicio servicioPedido = new PedidoServicio();
         UsuarioServicio servicioUsuario = new UsuarioServicio();
-        
 
         public ActionResult Listar()
         {
-            List<Pedido> pedidosList = servicioPedido.Listar();
-            return View(pedidosList);
+            var usuarioLogueado = Session["Usuario"] as Usuario;
+            if (usuarioLogueado != null)
+            {
+                return View(servicioPedido.GetPedidosByUsuario(usuarioLogueado.IdUsuario));
+            }
+            Session["RedireccionLogin"] = "Pedidos/Listar";
+            return RedirectToAction("Login", "Home");
+
+            //asi estaba antes..traia toda a lista
+            //  List<Pedido> pedidosList = servicioPedido.Listar();
+            //  return View(pedidosList);
         }
 
-        // metodo que agrega pedido desde cero
+        // metodo que agrega pedido desde cero// falta continuarlo...
         public ActionResult Iniciar()
         {
             int IdUsuarioLogin = servicioUsuario.devolverIdUsuario;

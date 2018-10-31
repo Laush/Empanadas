@@ -1,7 +1,9 @@
-﻿using Empanadas.Servicios;
+﻿using Empanadas.Models;
+using Empanadas.Servicios;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
@@ -10,34 +12,92 @@ namespace Empanadas.Controllers
     public class HomeController : Controller
     {
         UsuarioServicio servicioUsuario = new UsuarioServicio();
+        PedidoServicio servicioPedido = new PedidoServicio();
 
         // GET: Home
-        public ActionResult Index()//logueado, va a index con Usuariolayout, texto de presentacion
+        public ActionResult Index()
         {
-            //lista de pedidos
+            var usuarioLogueado = Session["Usuario"] as Usuario;
+            if (usuarioLogueado != null)
+            {
+                var model = this.servicioPedido.GetPedidosByUsuario(usuarioLogueado.IdUsuario);
+                ViewBag.PedidosUsuario = servicioPedido.GetPedidosByUsuario(usuarioLogueado.IdUsuario);
 
-            return View();
+                // esto  es de otro ejemplo pero a futuro puede servir 
+                /*  foreach (var item in model)
+                  {
+                      Pedido carpetaDeLaTarea = carpetaService.GetCarpetaById(item.IdCarpeta);
+                      item.NombreCarpeta = carpetaDeLaTarea != null ? carpetaDeLaTarea.Nombre : string.Empty;
+                  }*/
+                return View(model);
+            }
+            return RedirectToAction("Login");
         }
+
 
         //formulario de login
-        public ActionResult Login() //sin loguear, va a index logout con baselayout
+        public ActionResult Login()
         {
-            return View();
-        }
-        [HttpPost]
-        public ActionResult Login(Usuario usu)
-        {
-            if (servicioUsuario.VerificarUsuarioRegistrado(usu))
+            if (Request.Cookies.AllKeys.Contains("usuarioSesion") && Request.Cookies["usuarioSesion"].Values.Count > 0)
             {
-                if (servicioUsuario.VerificarContraseniaLogin(usu))
+                var cookie = Request.Cookies["usuarioSesion"].Value;
+                if (cookie != null && !string.IsNullOrWhiteSpace(cookie))
                 {
-                    
-                    // int id = usu.IdUsuario;
-                    return RedirectToAction("Listar", "Pedidos");
+                    byte[] decryted = Convert.FromBase64String(string.IsNullOrWhiteSpace(cookie) ? string.Empty : cookie);
+                    var result = Int32.Parse(System.Text.Encoding.Unicode.GetString(decryted));
+
+                    var usuario = servicioUsuario.GetById(result);
+                    if (usuario != null)
+                    {
+                        Session["Usuario"] = usuario;
+                        return RedirectToAction("Listar", "Pedidos");
+                    }
+                    else
+                    {
+                        return View();
+                    }
                 }
             }
-            ViewBag.ErrorLogin = "Usuario y/o Contrasenia invalidos";
-            return View("Login");
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Login(Usuario u)
+        {
+           // bool recuerdame = Request.Form["Recordame"] == "on";
+            var user = servicioUsuario.VerificarExistenciaUsuario(u);
+            if (user != null)
+            {
+                Session["Usuario"] = user;
+                // para un futuro recordar al usuario al loguearse
+                /*
+                   string result = string.Empty;
+                   Usuario usuarioCookie = servicioUsuario.BuscarUsuarioPorMail(u.Email);
+
+                  if (recuerdame)
+                   {
+                       byte[] encryted = System.Text.Encoding.Unicode.GetBytes(Convert.ToString(usuarioCookie.IdUsuario));
+                       result = Convert.ToBase64String(encryted);
+                       Response.Cookies["usuarioSesion"].Value = result;
+                   }
+                   */
+                if (Session["RedireccionLogin"] != null)
+                {
+                    String accionSesion = (String)Session["RedireccionLogin"];
+                    String pattern = "/";
+                    String[] accion = Regex.Split(accionSesion, pattern);
+                    Session.Remove("RedireccionLogin");
+                    return RedirectToAction(accion[1], accion[0]);
+                }
+                return RedirectToAction("Listar", "Pedidos");
+
+            }
+            else
+            {
+                ViewBag.ErrorLogin = " Usuario y/o Contraseña Invalidos";
+                return View();
+            }
         }
 
         public ActionResult Logout()
