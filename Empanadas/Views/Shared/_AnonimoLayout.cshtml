@@ -1,6 +1,7 @@
 ﻿
 @{
     ViewBag.Title = "_AnonimoLayout";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
 
 }
 
@@ -10,64 +11,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pedidos de Empanadas</title>
-    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/Estilo.css" rel="stylesheet" type="text/css" />
+    @section HeadSection{
+        <title>Pedidos de Empanadas</title>
+    }
 
-
-    <link rel="fondo" href="~/Content/fondo.jpeg" />
-    <script src="~/Scripts/modernizr-2.6.2.js"></script>
-    <script src="~/Scripts/ModalScript.js"></script>
 </head>
 <body>
+    @section NavSection{
+    }
+    <div class="jumbotron">
+        <!-- COMIENZA CONTENIDO DE CADA PAGINA -->
 
-    <div class="container">
-        <!-- COMIENZA NAVBAR -->
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="/Home/Index">Empanadas YA <span class="glyphicon glyphicon-cutlery"></span></a>
-                    <!--  <a class="navbar-brand" href="#">Lista de Pedidos</a>
-                             <a class="navbar-brand" href="#">Iniciar Pedido</a> -->
+        @RenderSection("BodySection")
 
-                </div>
+    </div>
 
-                <div id="navbar" class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav navbar-right"></ul>
 
-                </div><!--/.nav-collapse -->
-            </div><!--/.container-fluid -->
-        </nav>
-        <!-- Fin NAVBAR -->
-
-        <div class="jumbotron">
-            <!-- COMIENZA CONTENIDO DE CADA PAGINA -->
-
-            @RenderSection("Body")
-        </div>
-
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Empanadas Ya!</p>
-        </footer>
-    </div><!-- /container -->
-
-    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
-    <script src="~/Content/js/app.js"></script>
 
 </body>
 </html>
-
 
 
 
