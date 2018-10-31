@@ -18,16 +18,16 @@
 </head>
 <body>
     @section NavSection{
-            <a class="navbar-brand" href="/Pedidos/Listar">Lista de Pedidos</a>
-            <a class="navbar-brand" href="/Pedidos/Iniciar">Iniciar Pedido</a>
-            <a class="navbar-brand" href="/Home/Login" id="logout">LogOut <span class="glyphicon glyphicon-log-in"></span></a>
+        <a class="navbar-brand" href="/Pedidos/Listar">Lista de Pedidos</a>
+        <a class="navbar-brand" href="/Pedidos/Iniciar">Iniciar Pedido</a>
+        <a class="navbar-brand" href="/Home/Login" id="logout"><span class="glyphicon glyphicon-log-in">&nbsp;Salir</span></a>
 
     }
-            <div class="jumbotron">
-                <!-- COMIENZA CONTENIDO DE CADA PAGINA -->
-                @RenderBody()
-                
-            </div>
+    <div class="jumbotron">
+        <!-- COMIENZA CONTENIDO DE CADA PAGINA -->
+        @RenderBody()
+
+    </div>
 
     <hr />
 

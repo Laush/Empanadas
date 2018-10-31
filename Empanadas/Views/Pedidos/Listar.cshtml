@@ -6,41 +6,44 @@
 
 @model List<Pedido>
 
-    <table class="table-bordered">
+<table class="table table-condensed">
+    <thead class="thead-inverse">
         <tr>
-            <td class="table-primary">IdPed</td>
-            <td>IdUsu</td>
+            <td>IdP</td>
+            <td>IdU</td>
             <td>Nombre</td>
-            <td>Descrip</td>
+            <td>Descripcion</td>
             <td>IdEstPed</td>
-            <td>PrecioxUni</td>
-            <td>PrecioxDoc</td>
-            <td>FechCreacion</td>
-            <td>FechModif</td>
+            <td>Preciox1</td>
+            <td>Preciox12</td>
+            <td>FCreacion</td>
+            <td>FModif</td>
             <td></td>
             <td></td>
         </tr>
-        @foreach (Pedido p in Model)
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
         {
-        <tr class="table-primary">
-            <td>@p.IdPedido</td>
-            <td>@p.IdUsuarioResponsable</td>
-            <td>@p.NombreNegocio</td>
-            <td>@p.Descripcion</td>
-            <td>@p.IdEstadoPedido</td>
-            <td>@p.PrecioUnidad</td>
-            <td>@p.PrecioDocena</td>
-            <td>@p.FechaCreacion</td>
-            <td>@p.FechaModificacion</td>
-            <td><a href="#"><span class="glyphicon glyphicon-pencil"></span></a></td>
-            <td><a href="#"><span class="glyphicon glyphicon-remove"></span></a></td>
-
-        </tr>
+            <tr>
+                <td>@p.IdPedido</td>
+                <td>@p.IdUsuarioResponsable</td>
+                <td>@p.NombreNegocio</td>
+                <td style="width:300px;">@p.Descripcion</td>
+                <td>@p.IdEstadoPedido</td>
+                <td>@p.PrecioUnidad</td>
+                <td>@p.PrecioDocena</td>
+                <td>@p.FechaCreacion</td>
+                <td>@p.FechaModificacion</td>
+                <td><a style="color:white;" href="#"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                <td><a style="color:white;" href="#"><span class="glyphicon glyphicon-remove"></span></a></td>
+            </tr>
         }
+    </tbody>
+</table>
+<form class="form-inline my-2 my-lg-0" action="/Pedidos/Iniciar/">
+    <button class="btn btn-warning my-2 my-sm-0" type="submit">Nuevo Pedido</button>
+</form>
 
-    </table>
-    <a class="linkss" href="/Pedidos/Iniciar/"> Nuevo pedido</a>
-    <br>
- 
 
 
