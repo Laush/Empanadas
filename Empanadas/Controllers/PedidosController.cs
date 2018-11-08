@@ -29,13 +29,17 @@ namespace Empanadas.Controllers
         }
 
         // metodo que agrega pedido desde cero// falta continuarlo...
+        [HttpGet]
         public ActionResult Iniciar()
         {
-            int IdUsuarioLogin = servicioUsuario.devolverIdUsuario;
-            Pedido pedido = new Pedido();
-            pedido.IdUsuarioResponsable = IdUsuarioLogin;
+            /*  int IdUsuarioLogin = servicioUsuario.devolverIdUsuario;
+              Pedido pedido = new Pedido();
+              pedido.IdUsuarioResponsable = IdUsuarioLogin;
 
-            return View(pedido);
+              ViewBag.ListaGusto = servicioPedido.ObtenerGustosDeEmpanada();
+              return View(pedido);*/
+            ViewBag.ListaGusto = servicioPedido.ObtenerGustosDeEmpanada();
+            return View();
         }
 
         [HttpPost]
@@ -45,6 +49,16 @@ namespace Empanadas.Controllers
 
             return RedirectToAction("Listar", "Pedidos");
 
+        }
+
+
+        public ActionResult Eliminar(int id)
+        {
+            var sp = new PedidoServicio();
+            sp.Eliminar(id);
+
+          //  servicioPedido.Eliminar(p.IdPedido);
+            return RedirectToAction("Listar", "Pedidos");
         }
     }
 }

@@ -8,36 +8,49 @@
 @model Pedido
 
 <html>
-    <head>
+<head>
+</head>
+<body>
+    <h2>Iniciar Pedido</h2>
+    <div class="container">
+        <form action="/Pedidos/Iniciar" method="Post">
+            <div class="row">
+                <div class="col-md-6">
+                    Id: @Html.TextBoxFor(p => p.IdPedido, new { @class = "form-control" })
+                    IdUsu: @Html.TextBoxFor(p => p.IdUsuarioResponsable, new { @class = "form-control" })
+                    Descripcion: @Html.TextBoxFor(p => p.Descripcion, new { @class = "form-control" })
+                    IdEstadoPed: @Html.TextBoxFor(p => p.IdEstadoPedido, new { @class = "form-control" })
+                    Nombre Negocio: @Html.TextBoxFor(p => p.NombreNegocio, new { @class = "form-control" })
 
 
-    </head>
-    <body>
-        <h2>Iniciar Pedido</h2>
-        <div class="container">
-            <form action="/Pedidos/Iniciar" method="Post">
-                <div class="row">
-                    <div class="col-md-6">
-                        @*   Id: @Html.TextBoxFor(p => p.IdPedido, new { @class = "form-control" })*@
-                        IdUsu: @Html.TextBoxFor(p => p.IdUsuarioResponsable, new { @class = "form-control" })
-                        Nombre Negocio: @Html.TextBoxFor(p => p.NombreNegocio, new { @class = "form-control" })
-                        Descripcion: @Html.TextBoxFor(p => p.Descripcion, new { @class = "form-control" })
-                        IdEstadoPed: @Html.TextBoxFor(p => p.IdEstadoPedido, new { @class = "form-control" })
-                    </div>
-                    <div class="col-md-6">
-                        Precio x Unidad: @Html.TextBoxFor(p => p.PrecioUnidad, new { @class = "form-control" })
-                        Precio x Docena: @Html.TextBoxFor(p => p.PrecioDocena, new { @class = "form-control" })
-                        FechaCreacion: @Html.TextBoxFor(p => p.FechaCreacion, new { @class = "form-control" })
-                        FechaModif: @Html.TextBoxFor(p => p.FechaModificacion, new { @class = "form-control" })
-                    </div>
+                    <select id="IdGustosSeleccionados" name="IdGustosSeleccionados" multiple="multiple">
+                        <option value="1">Seleccione</option>
+                        <option value="0">Otros</option>
+                        @foreach (GustoEmpanada item in ((List<GustoEmpanada>)ViewBag.ListaGusto))
+                        {
+                            <option value="@item.IdGustoEmpanada">@item.Nombre</option>
+                        }
+                    </select>
+
+
+                    @*Gustos de empanadas disponibles: @Html.DropDownListFor(p => p.GustoEmpanada, new SelectList(ViewBag.ListaGusto, "IdGustoEmpanada", "Nombre")) *@
                 </div>
-                <br>
-                <input type="submit" class="form-control" text="Guardar" />
-            </form>
-            <a class="linkss" href="#"> Cancelar</a>
-        </div>
-    </body>
+                <div class="col-md-6">
+                    Precio x Unidad: @Html.TextBoxFor(p => p.PrecioUnidad, new { @class = "form-control" })
+                    Precio x Docena: @Html.TextBoxFor(p => p.PrecioDocena, new { @class = "form-control" })
+                    FechaCreacion: @Html.TextBoxFor(p => p.FechaCreacion, new { @class = "form-control" })
+                    FechaModif: @Html.TextBoxFor(p => p.FechaModificacion, new { @class = "form-control" })
+                    <!--ESto luego debera traerlo con una consulta???-->
+
+                </div>
+            </div>
+            <br>
+            <input type="submit" class="form-control" text="Guardar" />
+        </form>
+        <a class="linkss" href="#"> Cancelar</a>
+    </div>
+</body>
 
 </html>
-    
+
 

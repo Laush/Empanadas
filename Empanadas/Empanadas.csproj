@@ -165,6 +165,7 @@
     <Compile Include="InvitacionPedidoGustoEmpanadaUsuario.cs">
       <DependentUpon>2018_2C_TP.tt</DependentUpon>
     </Compile>
+    <Compile Include="Partials\Pedido.cs" />
     <Compile Include="Pedido.cs">
       <DependentUpon>2018_2C_TP.tt</DependentUpon>
     </Compile>

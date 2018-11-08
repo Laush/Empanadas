@@ -5,42 +5,53 @@
 }
 
 @model List<Pedido>
-
-<table class="table table-condensed">
-    <thead class="thead-inverse">
-        <tr>
-            <td>IdP</td>
-            <td>IdU</td>
-            <td>Nombre</td>
-            <td>Descripcion</td>
-            <td>IdEstPed</td>
-            <td>Preciox1</td>
-            <td>Preciox12</td>
-            <td>FCreacion</td>
-            <td>FModif</td>
-            <td></td>
-            <td></td>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var p in Model)
-        {
+<div class="table-responsive">
+    <table class="table table-condensed">
+        <thead class="thead-inverse">
             <tr>
-                <td>@p.IdPedido</td>
-                <td>@p.IdUsuarioResponsable</td>
-                <td>@p.NombreNegocio</td>
-                <td style="width:300px;">@p.Descripcion</td>
-                <td>@p.IdEstadoPedido</td>
-                <td>@p.PrecioUnidad</td>
-                <td>@p.PrecioDocena</td>
-                <td>@p.FechaCreacion</td>
-                <td>@p.FechaModificacion</td>
-                <td><a style="color:white;" href="#"><span class="glyphicon glyphicon-pencil"></span></a></td>
-                <td><a style="color:white;" href="#"><span class="glyphicon glyphicon-remove"></span></a></td>
+                <td>IdP</td>
+                <td>IdU</td>
+                <td>Nombre</td>
+                <!-- <td>Descripcion</td>-->
+                <td>IdEstPed</td>
+                <td>Preciox1</td>
+                <td>Preciox12</td>
+                <td>FCreacion</td>
+                <td>GustosDisponibles</td>
+                <td>Invitados</td>
+                <!-- <td>FModif</td>-->
+                <td></td>
+                <td></td>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td>@p.IdPedido</td>
+                    <td>@p.IdUsuarioResponsable</td>
+                    <td>@p.NombreNegocio</td>
+                    <!-- <td style="width:300px;">p.Descripcion</td>-->
+                    <td>@p.IdEstadoPedido</td>
+                    <td>@p.PrecioUnidad</td>
+                    <td>@p.PrecioDocena</td>
+                    <td>@p.FechaCreacion.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        @foreach (GustoEmpanada g in p.GustoEmpanada)
+                        {
+                            @Html.Raw(g.Nombre + " ");
+                        }
+                    </td>
+                    <td></td>
+                    <!--  <td>p.FechaModificacion</td>-->
+                    <td><a style="color:white;" href="#"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                    <td><a style="color:white;" href="/Pedidos/Eliminar/@p.IdPedido"><span class="glyphicon glyphicon-remove"></span></a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
 <form class="form-inline my-2 my-lg-0" action="/Pedidos/Iniciar/">
     <button class="btn btn-warning my-2 my-sm-0" type="submit">Nuevo Pedido</button>
 </form>

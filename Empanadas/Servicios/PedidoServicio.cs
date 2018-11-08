@@ -7,33 +7,47 @@ namespace Empanadas.Models
 {
     public class PedidoServicio
     {
+        private Entities MiBD = new Entities();
 
-            // la inicializo y no necesito un constructor, es privada para que no la modifique nadie mas 
-            private static List<Pedido> Lista = new List<Pedido>();
-
-            private Entities MiBD = new Entities();
-           //si se desea abtraer el servicio se pasa a aclases repository para que no dependan las consultas de la base
-           //  private readonly PedidoRepository  pedRepo = new PedidoRepository();
-
-            public void Agregar(Pedido p)
+        public void Agregar(Pedido p)
+        {
+            p.FechaCreacion = DateTime.Now;
+            foreach (int gId in p.IdGustosSeleccionados)
             {
-                MiBD.Pedido.Add(p);
-                MiBD.SaveChanges();
+                GustoEmpanada gEmpanadaDisponible = MiBD.GustoEmpanada.FirstOrDefault(o => o.IdGustoEmpanada == gId);
+                p.GustoEmpanada.Add(gEmpanadaDisponible);
             }
-
-            public List<Pedido> Listar()
-            {
-                return MiBD.Pedido.ToList();
-
-            }
-            //listar pedido segun usuario que ingreso
-            public List<Pedido> GetPedidosByUsuario(int idUsuario)
-            {
-                //return pedRepo.GetPedidossByUsuario(idUsuario);
-                return MiBD.Pedido.Where(x => x.IdUsuarioResponsable == idUsuario).OrderBy(x => x.FechaCreacion).ToList();
-            }
-
-
-
+            MiBD.Pedido.Add(p);
+            MiBD.SaveChanges();
         }
+
+        public List<Pedido> Listar()
+        {
+            return MiBD.Pedido.ToList();
+        }
+
+        //listar pedido segun usuario que ingreso //orden descendente
+        public List<Pedido> GetPedidosByUsuario(int idUsuario)
+        {
+            return MiBD.Pedido.Include("GustoEmpanada").Where(x => x.IdUsuarioResponsable == idUsuario).OrderByDescending(x => x.FechaCreacion).ToList();
+        }
+
+        public void Eliminar(int id)
+        {
+            Pedido pedEl = MiBD.Pedido.FirstOrDefault(p => p.IdPedido == id);
+            MiBD.Pedido.Remove(pedEl);
+            MiBD.SaveChanges();
+        }
+
+        public Pedido ObtenerPorId(int id)
+        {
+            return MiBD.Pedido.FirstOrDefault(p => p.IdPedido == id);
+        }
+
+        public List<GustoEmpanada> ObtenerGustosDeEmpanada()
+        {
+            return MiBD.GustoEmpanada.ToList();
+        }
+
     }
+}
