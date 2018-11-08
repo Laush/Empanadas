@@ -12,6 +12,7 @@ namespace Empanadas.Controllers
     {
         PedidoServicio servicioPedido = new PedidoServicio();
         UsuarioServicio servicioUsuario = new UsuarioServicio();
+        private Entities MiBD = new Entities();
 
         public ActionResult Listar()
         {
@@ -28,17 +29,20 @@ namespace Empanadas.Controllers
             //  return View(pedidosList);
         }
 
-        // metodo que agrega pedido desde cero// falta continuarlo...
+        // falta que agregue invitados por token
         [HttpGet]
         public ActionResult Iniciar()
         {
             /*  int IdUsuarioLogin = servicioUsuario.devolverIdUsuario;
               Pedido pedido = new Pedido();
               pedido.IdUsuarioResponsable = IdUsuarioLogin;
-
               ViewBag.ListaGusto = servicioPedido.ObtenerGustosDeEmpanada();
               return View(pedido);*/
+
+            int idUsuarioReponsable = Convert.ToInt32(Session["usuarioID"]);
             ViewBag.ListaGusto = servicioPedido.ObtenerGustosDeEmpanada();
+            ViewBag.listadoDeUsuarios = new MultiSelectList(MiBD.Usuario.Where(m => m.IdUsuario != idUsuarioReponsable).ToList(), "IdUsuario", "Email");
+
             return View();
         }
 
@@ -46,9 +50,7 @@ namespace Empanadas.Controllers
         public ActionResult Iniciar(Pedido p)
         {
             servicioPedido.Agregar(p);
-
             return RedirectToAction("Listar", "Pedidos");
-
         }
 
 
@@ -56,8 +58,6 @@ namespace Empanadas.Controllers
         {
             var sp = new PedidoServicio();
             sp.Eliminar(id);
-
-          //  servicioPedido.Eliminar(p.IdPedido);
             return RedirectToAction("Listar", "Pedidos");
         }
     }

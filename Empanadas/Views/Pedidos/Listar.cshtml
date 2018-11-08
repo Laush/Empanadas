@@ -3,19 +3,22 @@
     ViewBag.Title = "Listar";
     Layout = "~/Views/Shared/_UsuarioLayout.cshtml";
 }
-
+@*@model IEnumerable<Empanadas.Models.InvitacionPedido>*@
 @model List<Pedido>
+
 <div class="table-responsive">
     <table class="table table-condensed">
         <thead class="thead-inverse">
             <tr>
-                <td>IdP</td>
+                <!-- <td>IdP</td>
                 <td>IdU</td>
+                <td>Descripcion</td>-->
                 <td>Nombre</td>
-                <!-- <td>Descripcion</td>-->
-                <td>IdEstPed</td>
-                <td>Preciox1</td>
-                <td>Preciox12</td>
+
+                <td>Estado</td>
+                <td>Rol</td>
+                <!-- <td>Preciox1</td>
+                 <td>Preciox12</td>-->
                 <td>FCreacion</td>
                 <td>GustosDisponibles</td>
                 <td>Invitados</td>
@@ -28,13 +31,24 @@
             @foreach (var p in Model)
             {
                 <tr>
-                    <td>@p.IdPedido</td>
-                    <td>@p.IdUsuarioResponsable</td>
+                    @* <td>@p.IdPedido</td>*@
+                    @* <td>@p.IdUsuarioResponsable</td>
+                        <td>@p.Descripcion</td>*@
                     <td>@p.NombreNegocio</td>
-                    <!-- <td style="width:300px;">p.Descripcion</td>-->
-                    <td>@p.IdEstadoPedido</td>
-                    <td>@p.PrecioUnidad</td>
-                    <td>@p.PrecioDocena</td>
+
+                    <td>@p.EstadoPedido.Nombre</td>
+                    <td>
+                        @if (p.IdUsuarioResponsable == Convert.ToInt32(@Session["usuarioID"]))
+                        {
+                            @:Responsable
+                        }
+                        else
+                        {
+                            @:Invitado
+                        }
+                    </td>
+                    @*  <td>@p.PrecioUnidad</td>
+                        <td>@p.PrecioDocena</td>*@
                     <td>@p.FechaCreacion.ToString("dd/MM/yyyy")</td>
                     <td>
                         @foreach (GustoEmpanada g in p.GustoEmpanada)
@@ -42,7 +56,12 @@
                             @Html.Raw(g.Nombre + " ");
                         }
                     </td>
-                    <td></td>
+                    <td>
+                        @foreach (InvitacionPedido i in p.InvitacionPedido)
+                        {
+                            @Html.Raw(i.Usuario.Email + " ");
+                        }
+                    </td>
                     <!--  <td>p.FechaModificacion</td>-->
                     <td><a style="color:white;" href="#"><span class="glyphicon glyphicon-pencil"></span></a></td>
                     <td><a style="color:white;" href="/Pedidos/Eliminar/@p.IdPedido"><span class="glyphicon glyphicon-remove"></span></a></td>
@@ -55,6 +74,9 @@
 <form class="form-inline my-2 my-lg-0" action="/Pedidos/Iniciar/">
     <button class="btn btn-warning my-2 my-sm-0" type="submit">Nuevo Pedido</button>
 </form>
+
+
+
 
 
 
