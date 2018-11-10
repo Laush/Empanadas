@@ -24,6 +24,11 @@ namespace Empanadas.Servicios
             var usuarioBuscado = MiBD.Usuario.Where(us => us.Email.Equals(mail)).FirstOrDefault();
             return usuarioBuscado;
         }
+        
+        public List<Usuario> ObtenerTodosLosUsuarios()
+        {
+            return MiBD.Usuario.ToList();
+        }
 
         public Usuario GetById(int id)
         {

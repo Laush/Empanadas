@@ -40,12 +40,22 @@
                     FechaModif: @Html.TextBoxFor(p => p.FechaModificacion, new { @class = "form-control" })
                     <br>
                     Invitados:
-                    <select id="IdInvitados" name="IdInvitados" multiple="multiple" class="form-control">
-                        @foreach (var item in ViewBag.listadoDeUsuarios as MultiSelectList)
+                    <select id="IdUsuariosInvitados" name="IdUsuariosInvitados" multiple="multiple" class="form-control">
+                       
+                        @foreach (Usuario item in ((List<Usuario>)ViewBag.ListaUsuario))
                         {
-                            <option value="@item.Value">@item.Text</option>
+                            <option value="@item.IdUsuario">@item.Email</option>
                         }
                     </select>
+                    @*
+        <select id="IdInvitados" name="IdInvitados" multiple="multiple" class="form-control">
+            @foreach (var item in ViewBag.listadoDeUsuarios as MultiSelectList)
+            {
+                <option value="@item.Value">@item.Text</option>
+            }
+
+        </select>
+                    *@
                 </div>
             </div>
             <br>

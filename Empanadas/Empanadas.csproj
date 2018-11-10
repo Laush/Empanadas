@@ -166,6 +166,7 @@
       <DependentUpon>2018_2C_TP.tt</DependentUpon>
     </Compile>
     <Compile Include="Partials\Pedido.cs" />
+    <Compile Include="Partials\Usuario.cs" />
     <Compile Include="Pedido.cs">
       <DependentUpon>2018_2C_TP.tt</DependentUpon>
     </Compile>

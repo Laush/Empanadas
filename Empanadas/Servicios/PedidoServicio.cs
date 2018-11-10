@@ -17,7 +17,13 @@ namespace Empanadas.Models
                 GustoEmpanada gEmpanadaDisponible = MiBD.GustoEmpanada.FirstOrDefault(o => o.IdGustoEmpanada == gId);
                 p.GustoEmpanada.Add(gEmpanadaDisponible);
             }
-
+            /*
+            foreach (int uId in p.IdUsuariosInvitados)
+            {
+                Usuario uInvitados = MiBD.Usuario.FirstOrDefault(o => o.IdUsuario == uId);
+                p.Usuario.Add(uInvitados);
+              
+            }*/
             //falta hacer lo mismo con los mails de los invitados
 
             MiBD.Pedido.Add(p);
