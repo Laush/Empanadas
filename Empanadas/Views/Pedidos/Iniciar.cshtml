@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Iniciar";
     Layout = "~/Views/Shared/_UsuarioLayout.cshtml";
 }
@@ -25,10 +24,12 @@
                     <select id="IdGustosSeleccionados" name="IdGustosSeleccionados" multiple="multiple" class="form-control">
                         <option value="1">Seleccione</option>
                         <option value="0">Otros</option>
-                        @foreach (GustoEmpanada item in ((List<GustoEmpanada>)ViewBag.ListaGusto))
-                        {
+                        @foreach (GustoEmpanada item in ((List
+                        <GustoEmpanada>
+                            )ViewBag.ListaGusto))
+                            {
                             <option value="@item.IdGustoEmpanada">@item.Nombre</option>
-                        }
+                            }
                     </select>
 
 
@@ -41,20 +42,22 @@
                     <br>
                     Invitados:
                     <select id="IdUsuariosInvitados" name="IdUsuariosInvitados" multiple="multiple" class="form-control">
-                       
-                        @foreach (Usuario item in ((List<Usuario>)ViewBag.ListaUsuario))
-                        {
+
+                        @foreach (Usuario item in ((List
+                        <Usuario>
+                            )ViewBag.ListaUsuario))
+                            {
                             <option value="@item.IdUsuario">@item.Email</option>
-                        }
+                            }
                     </select>
                     @*
-        <select id="IdInvitados" name="IdInvitados" multiple="multiple" class="form-control">
-            @foreach (var item in ViewBag.listadoDeUsuarios as MultiSelectList)
-            {
-                <option value="@item.Value">@item.Text</option>
-            }
+                    <select id="IdInvitados" name="IdInvitados" multiple="multiple" class="form-control">
+                        @foreach (var item in ViewBag.listadoDeUsuarios as MultiSelectList)
+                        {
+                        <option value="@item.Value">@item.Text</option>
+                        }
 
-        </select>
+                    </select>
                     *@
                 </div>
             </div>

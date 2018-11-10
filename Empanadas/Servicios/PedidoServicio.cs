@@ -17,14 +17,13 @@ namespace Empanadas.Models
                 GustoEmpanada gEmpanadaDisponible = MiBD.GustoEmpanada.FirstOrDefault(o => o.IdGustoEmpanada == gId);
                 p.GustoEmpanada.Add(gEmpanadaDisponible);
             }
-            /*
-            foreach (int uId in p.IdUsuariosInvitados)
-            {
-                Usuario uInvitados = MiBD.Usuario.FirstOrDefault(o => o.IdUsuario == uId);
-                p.Usuario.Add(uInvitados);
-              
-            }*/
-            //falta hacer lo mismo con los mails de los invitados
+            // tenesmo que tener un invitacion pedido con los mails seleccionados 
+
+            // InvitacionPedido invPedido = MiBD.InvitacionPedido.FirstOrDefault(o => o.IdInvitacionPedido == p.InvitacionPedido);
+
+
+
+
 
             MiBD.Pedido.Add(p);
             MiBD.SaveChanges();
@@ -57,10 +56,10 @@ namespace Empanadas.Models
             return MiBD.GustoEmpanada.ToList();
         }
 
-        /* public List<Usuario> ObtenerUsuarios(Usuario id)
-         {        
-             return MiBD.Usuario.Where(m => m.IdUsuario != id).ToList();          
-         }*/
+        public List<Usuario> ObtenerUsuarios(Usuario u)
+        {
+            return MiBD.Usuario.Where(m => m.IdUsuario != u.IdUsuario).ToList();
+        }
 
     }
 }
