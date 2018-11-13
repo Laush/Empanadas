@@ -190,6 +190,7 @@
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Pedidos\Iniciar.cshtml" />
     <Content Include="Views\Pedidos\Listar.cshtml" />
+    <Content Include="Views\Pedidos\Eliminar.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

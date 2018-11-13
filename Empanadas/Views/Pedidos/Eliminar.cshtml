@@ -1,0 +1,28 @@
+﻿@{
+    Layout = "~/Views/Shared/_UsuarioLayout.cshtml";
+}
+@model Pedido
+
+<div class="container text-center">
+
+    @using (Html.BeginForm("Eliminar", "Pedidos", FormMethod.Post))
+    {
+        @Html.HiddenFor(x => x.IdPedido)
+        <div class="form-group">
+            <div class="row">
+                <label>
+                    ¿Está seguro de que desea eliminar el pedido @Model.NombreNegocio ?<br />
+                    Actualmente posee @ViewBag.Cantidad invitaciones confirmadas
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <input class="btn btn-warning my-2 my-sm-0" value="Eliminar" type="submit" />
+        </div>
+
+    }
+    <br />
+    <a style="color:white;" href="/Pedidos/Listar">Cancelar</a>
+</div>
+
+

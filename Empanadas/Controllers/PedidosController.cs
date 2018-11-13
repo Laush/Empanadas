@@ -19,21 +19,18 @@ namespace Empanadas.Controllers
 
         public ActionResult Listar()
         {
-
+            //para listar segun quien se logueo
             var usuarioLogueado = Session["Usuario"] as Usuario;
             if (usuarioLogueado != null)
             {
                 return View(servicioPedido.GetPedidosByUsuario(usuarioLogueado.IdUsuario));
             }
 
-
-
             Session["RedireccionLogin"] = "Pedidos/Listar";
             return RedirectToAction("Login", "Home");
-
         }
 
-        // falta que agregue invitados por token
+        //*****// falta que agregue invitados por token
         [HttpGet]
         public ActionResult Iniciar()
         {
@@ -49,9 +46,6 @@ namespace Empanadas.Controllers
             pedido.FechaCreacion = fecha;
             pedido.FechaModificacion = fecha;
 
-
-
-
             ViewBag.ListaGusto = servicioPedido.ObtenerGustosDeEmpanada();
             ViewBag.ListaUsuario = servicioUsuario.ObtenerTodosLosUsuarios();
             ViewBag.listadoDeUsuarios = new MultiSelectList(MiBD.Usuario.Where(m => m.IdUsuario != usuarioLogueado.IdUsuario).ToList(), "IdUsuario", "Email");
@@ -66,11 +60,18 @@ namespace Empanadas.Controllers
             return RedirectToAction("Listar", "Pedidos");
         }
 
-
+        [HttpGet]
         public ActionResult Eliminar(int id)
         {
-            var sp = new PedidoServicio();
-            sp.Eliminar(id);
+            ViewBag.Cantidad = servicioPedido.ObtenerInvitacionesConfirmadas(id);
+            return View(servicioPedido.ObtenerPorId(id));
+        }
+
+        [HttpPost]
+        public ActionResult Eliminar(Pedido p)
+        {
+            TempData["mensaje"] = "Pedido " + servicioPedido.ObtenerPorId(p.IdPedido).NombreNegocio + " ha sido eliminado exitosamente";
+            servicioPedido.Eliminar(p.IdPedido);
             return RedirectToAction("Listar", "Pedidos");
         }
     }

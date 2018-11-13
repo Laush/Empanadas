@@ -1,12 +1,22 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Listar";
     Layout = "~/Views/Shared/_UsuarioLayout.cshtml";
+
 }
 @*@model IEnumerable<Empanadas.Models.InvitacionPedido>*@
 @model List<Pedido>
 
 <div class="table-responsive">
+
+    @if (TempData["mensaje"] != null)
+    {
+        <div class="container text-center">
+            <div class="alert alert-warning alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <h4>  <strong>@TempData["mensaje"]</strong> </h4>
+            </div>
+        </div>
+    }
     <table class="table table-condensed">
         <thead class="thead-inverse">
             <tr>
@@ -64,7 +74,10 @@
                     </td>
                     <!--  <td>p.FechaModificacion</td>-->
                     <td><a style="color:white;" href="#"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                    <td><a style="color:white;" href="#"><span class="glyphicon glyphicon-check"></span></a></td>
                     <td><a style="color:white;" href="/Pedidos/Eliminar/@p.IdPedido"><span class="glyphicon glyphicon-remove"></span></a></td>
+
+
                 </tr>
             }
         </tbody>
@@ -74,6 +87,8 @@
 <form class="form-inline my-2 my-lg-0" action="/Pedidos/Iniciar/">
     <button class="btn btn-warning my-2 my-sm-0" type="submit">Nuevo Pedido</button>
 </form>
+
+
 
 
 
