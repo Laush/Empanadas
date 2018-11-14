@@ -70,5 +70,42 @@ namespace Empanadas.Models
             return MiBD.InvitacionPedido.Where(c => c.IdPedido == id)
                 .Where(c => c.Completado == true).Count();
         }
+
+        //CAMBIO DE ESTADO DE UN PEDIDO
+        public void cerrarPedido(Pedido pedido)
+        {
+            Pedido p = MiBD.Pedido.Find(pedido.IdPedido);
+            p.FechaModificacion = DateTime.Now;
+            p.IdEstadoPedido = 2;
+            MiBD.SaveChanges();
+
+            //Envía un mail a cada invitado
+            /*  foreach (var idUsuario in pedido.UsuariosSeleccionados)
+              {
+                  var invitacion = db.InvitacionPedido.Where(m => m.IdPedido == p.IdPedido)
+                                                      .Where(m => m.IdUsuario == idUsuario)
+                                                      .First();
+                  SendMailPedidoCerrado(invitacion, pedido);
+              }
+              */
+
+        }
+
+        public void Modificar(Pedido j)
+        {
+            Pedido p = MiBD.Pedido.Find(j.IdPedido);
+            p.NombreNegocio = j.NombreNegocio;
+            p.Descripcion = j.Descripcion;
+            p.PrecioUnidad = j.PrecioUnidad;
+            p.PrecioDocena = j.PrecioDocena;
+            p.FechaModificacion = DateTime.Now;
+            foreach (var idGusto in j.GustoEmpanada)
+            {
+                GustoEmpanada gustoEmpanadaDisponible = MiBD.GustoEmpanada.Find(idGusto);
+                p.GustoEmpanada.Add(gustoEmpanadaDisponible);
+            }
+            MiBD.SaveChanges();
+        }
+
     }
 }

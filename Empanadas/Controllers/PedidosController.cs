@@ -3,6 +3,7 @@ using Empanadas.Servicios;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -10,7 +11,7 @@ namespace Empanadas.Controllers
 {
     public class PedidosController : Controller
     {
-        public const int ESTADO_ABIERTO = 1;
+        //  public const int ESTADO_ABIERTO = 1;
 
         PedidoServicio servicioPedido = new PedidoServicio();
         UsuarioServicio servicioUsuario = new UsuarioServicio();
@@ -57,7 +58,12 @@ namespace Empanadas.Controllers
         public ActionResult Iniciar(Pedido p)
         {
             servicioPedido.Agregar(p);
-            return RedirectToAction("Listar", "Pedidos");
+            return RedirectToAction("Iniciado", new { id = p.IdPedido });
+        }
+        //*****//no muestra el nombre del negocio
+        public ActionResult Iniciado(Pedido p)
+        {
+            return View(p);
         }
 
         [HttpGet]
@@ -74,5 +80,41 @@ namespace Empanadas.Controllers
             servicioPedido.Eliminar(p.IdPedido);
             return RedirectToAction("Listar", "Pedidos");
         }
+        //*****// no me modifica los gustos  
+        // GET: Editar
+        public ActionResult Editar(int id)
+        {
+            //si el estado es cerrado no deja editar               
+            if (MiBD.Pedido.Find(id).IdEstadoPedido == 1)
+            {
+                ViewBag.ListaUsuario = servicioUsuario.ObtenerTodosLosUsuarios();
+                ViewBag.ListaGusto = servicioPedido.ObtenerGustosDeEmpanada();
+                return View(MiBD.Pedido.Find(id));
+            }
+            else
+            {
+                return RedirectToAction("Listar", "Pedidos");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Editar(Pedido pedido, string btnConfirmar)
+        {
+            if (ModelState.IsValid)
+            {
+                if (btnConfirmar == "confirmar")
+                {
+                    servicioPedido.cerrarPedido(pedido);
+                }
+                servicioPedido.Modificar(pedido);
+                return RedirectToAction("Listar");
+            }
+            else
+            {
+                return View(pedido);
+            }
+        }
+
+
     }
 }

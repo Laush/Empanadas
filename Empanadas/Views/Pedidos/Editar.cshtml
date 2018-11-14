@@ -1,0 +1,65 @@
+﻿@{
+    ViewBag.Title = "Iniciar";
+    Layout = "~/Views/Shared/_UsuarioLayout.cshtml";
+}
+
+
+@model Pedido
+
+<html>
+<head>
+</head>
+<body>
+    <h2>EDITAR Pedido</h2>
+    <div class="container">
+        <form action="/Pedidos/Editar" method="Post">
+            <div class="row">
+                <div class="col-md-6">
+                    Id: @Html.TextBoxFor(p => p.IdPedido, new { @class = "form-control" })
+                    IdUsu: @Html.TextBoxFor(p => p.IdUsuarioResponsable, new { @class = "form-control" })
+                    Descripcion: @Html.TextBoxFor(p => p.Descripcion, new { @class = "form-control" })
+                    IdEstadoPed: @Html.TextBoxFor(p => p.IdEstadoPedido, new { @class = "form-control" })
+                    Nombre Negocio: @Html.TextBoxFor(p => p.NombreNegocio, new { @class = "form-control" })
+                    <br>
+                    <select id="IdGustosSeleccionados" name="IdGustosSeleccionados" multiple="multiple" class="form-control">
+                        <option value="1">Seleccione</option>
+                        <option value="0">Otros</option>
+                        @foreach (GustoEmpanada item in ((List<GustoEmpanada>)ViewBag.ListaGusto))
+                        {
+                            <option value="@item.IdGustoEmpanada">@item.Nombre</option>
+                        }
+                    </select>
+
+
+                </div>
+                <div class="col-md-6">
+                    Precio x Unidad: @Html.TextBoxFor(p => p.PrecioUnidad, new { @class = "form-control" })
+                    Precio x Docena: @Html.TextBoxFor(p => p.PrecioDocena, new { @class = "form-control" })
+                    FechaCreacion: @Html.TextBoxFor(p => p.FechaCreacion, new { @class = "form-control" })
+                    FechaModif: @Html.TextBoxFor(p => p.FechaModificacion, new { @class = "form-control" })
+                    <br>
+                    Invitados:
+                    <select id="IdUsuariosInvitados" name="IdUsuariosInvitados" multiple="multiple" class="form-control">
+
+                        @foreach (Usuario item in ((List
+                        <Usuario>
+                            )ViewBag.ListaUsuario))
+                        {
+                            <option value="@item.IdUsuario">@item.Email</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="center-align pt-1">
+                <button type="submit" class="btn btn-warning my-2 my-sm-0" name="btnConfirmar" id="btnConfirmar" onclick="Confirmar()" value="confirmar">Confirmar</button>
+            </div>
+        </form>
+
+
+        <a class="linkss" href="#"> Cancelar</a>
+    </div>
+</body>
+
+</html>
+
