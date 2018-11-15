@@ -18,13 +18,15 @@ namespace Empanadas.Controllers
         private Entities MiBD = new Entities();
 
 
+
         public ActionResult Listar()
         {
             //para listar segun quien se logueo
             var usuarioLogueado = Session["Usuario"] as Usuario;
             if (usuarioLogueado != null)
             {
-                return View(servicioPedido.GetPedidosByUsuario(usuarioLogueado.IdUsuario));
+                ViewBag.ListaPedidos = servicioPedido.ObtenerPedidosByUsuario(usuarioLogueado);
+                return View(usuarioLogueado);
             }
 
             Session["RedireccionLogin"] = "Pedidos/Listar";
@@ -57,7 +59,7 @@ namespace Empanadas.Controllers
         [HttpPost]
         public ActionResult Iniciar(Pedido p)
         {
-            servicioPedido.Agregar(p);
+            servicioPedido.Agregar(p);// tal vez a futuro haya que mandare por parametro el usuariologueado para k no lo incluya en la lista de invitados
             return RedirectToAction("Iniciado", new { id = p.IdPedido });
         }
         //*****//no muestra el nombre del negocio

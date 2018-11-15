@@ -17,9 +17,12 @@ namespace Empanadas.Models
                 GustoEmpanada gEmpanadaDisponible = MiBD.GustoEmpanada.FirstOrDefault(o => o.IdGustoEmpanada == gId);
                 p.GustoEmpanada.Add(gEmpanadaDisponible);
             }
-            // tenemos que tener un invitacion pedido con los mails seleccionados
-            // InvitacionPedido invPedido = MiBD.InvitacionPedido.FirstOrDefault(o => o.IdInvitacionPedido == p.InvitacionPedido);
 
+            foreach (int invitadoId in p.IdUsuariosInvitados)
+            {
+                InvitacionPedido iDisponibe = MiBD.InvitacionPedido.FirstOrDefault(x => x.IdUsuario == invitadoId);
+                p.InvitacionPedido.Add(iDisponibe);
+            }
             MiBD.Pedido.Add(p);
             MiBD.SaveChanges();
         }
@@ -29,21 +32,44 @@ namespace Empanadas.Models
             return MiBD.Pedido.ToList();
         }
 
-        public List<Pedido> GetPedidosByUsuario(int idUsuario)
+        public List<Pedido> ObtenerPedidosByUsuario(Usuario usu)
         {
-            return MiBD.Pedido.Include("GustoEmpanada").Where(x => x.IdUsuarioResponsable == idUsuario).OrderByDescending(x => x.FechaCreacion).ToList();
+            //Asi estaba antes// return MiBD.Pedido.Include("GustoEmpanada").Where(x => x.IdUsuarioResponsable == idUsuario).OrderByDescending(x => x.FechaCreacion).ToList();
+
+            //con esta consulta me muestra todos(los k no tienen mail tmb)
+            //pero no marca bien el rol de invitado 
+            // return MiBD.Pedido.Include("GustoEmpanada").Where(x => x.IdUsuarioResponsable.Equals(usu.IdUsuario)).OrderByDescending(p => p.FechaCreacion).ToList();
+
+            ///con esta consulta me muestra solo los que tienen invitados(mails cargados)
+            ////ATENCION: si no selecciono mi propio mail no aparece en mi lista
+            var query =
+               (from p in MiBD.Pedido
+                join ep in MiBD.EstadoPedido on p.IdEstadoPedido equals ep.IdEstadoPedido
+                join ip in MiBD.InvitacionPedido on p.IdPedido equals ip.IdPedido
+                 where ip.IdUsuario == usu.IdUsuario 
+                orderby p.FechaCreacion descending
+                select
+                    p).ToList();
+             return query;
+        }
+
+        public Boolean PedidoUsuarioResponsableIsTrue(int idPedido, Usuario usuario)
+        {
+            var query = (from p in MiBD.Pedido
+                         where p.IdUsuarioResponsable == usuario.IdUsuario &&
+                                p.IdPedido == idPedido
+                         select p).ToList();
+
+            if (query.Count > 0)
+            {
+                return true;
+            }
+            return false;
         }
 
         public void Eliminar(int id)
         {
-            // var invitaciones = Context.InvitacionPedido.Where(i => i.IdPedido == id).ToList();
-            // Context.InvitacionPedido.RemoveRange(invitaciones);
-            // Context.SaveChanges();
-
-            // var gustosPedido = Context.InvitacionPedidoGustoEmpanadaUsuario.Where(i => i.IdPedido == id).ToList();
-            // Context.InvitacionPedidoGustoEmpanadaUsuario.RemoveRange(gustosPedido);
-            // Context.SaveChanges();
-
+           //falta eliminar las invitaciones
             Pedido ped = MiBD.Pedido.FirstOrDefault(pedido => pedido.IdPedido == id);
             ped.GustoEmpanada.Clear();
             MiBD.Pedido.Remove(ped);
@@ -53,6 +79,11 @@ namespace Empanadas.Models
         public Pedido ObtenerPorId(int id)
         {
             return MiBD.Pedido.FirstOrDefault(p => p.IdPedido == id);
+        }
+
+        public Usuario ObtenerUsuarioPorId(int id)
+        {
+            return MiBD.Usuario.FirstOrDefault(p => p.IdUsuario == id);
         }
 
         public List<GustoEmpanada> ObtenerGustosDeEmpanada()
@@ -78,16 +109,6 @@ namespace Empanadas.Models
             p.FechaModificacion = DateTime.Now;
             p.IdEstadoPedido = 2;
             MiBD.SaveChanges();
-
-            //Envía un mail a cada invitado
-            /*  foreach (var idUsuario in pedido.UsuariosSeleccionados)
-              {
-                  var invitacion = db.InvitacionPedido.Where(m => m.IdPedido == p.IdPedido)
-                                                      .Where(m => m.IdUsuario == idUsuario)
-                                                      .First();
-                  SendMailPedidoCerrado(invitacion, pedido);
-              }
-              */
 
         }
 

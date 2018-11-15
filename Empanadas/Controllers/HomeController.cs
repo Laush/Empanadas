@@ -18,17 +18,13 @@ namespace Empanadas.Controllers
         public ActionResult Index()
         {
             var usuarioLogueado = Session["Usuario"] as Usuario;
+            // Usuario usuarioLogueado = new Usuario();
+            usuarioLogueado = servicioPedido.ObtenerUsuarioPorId(Convert.ToInt32(Session["Usuario"]));
             if (usuarioLogueado != null)
             {
-                var model = this.servicioPedido.GetPedidosByUsuario(usuarioLogueado.IdUsuario);
-                ViewBag.PedidosUsuario = servicioPedido.GetPedidosByUsuario(usuarioLogueado.IdUsuario);
+                var model = this.servicioPedido.ObtenerPedidosByUsuario(usuarioLogueado);
+                ViewBag.PedidosUsuario = servicioPedido.ObtenerPedidosByUsuario(usuarioLogueado);
 
-                // esto  es de otro ejemplo pero a futuro puede servir 
-                /*  foreach (var item in model)
-                  {
-                      Pedido carpetaDeLaTarea = carpetaService.GetCarpetaById(item.IdCarpeta);
-                      item.NombreCarpeta = carpetaDeLaTarea != null ? carpetaDeLaTarea.Nombre : string.Empty;
-                  }*/
                 return View(model);
             }
             return RedirectToAction("Login");
@@ -65,7 +61,7 @@ namespace Empanadas.Controllers
         [HttpPost]
         public ActionResult Login(Usuario u)
         {
-           // bool recuerdame = Request.Form["Recordame"] == "on";
+            // bool recuerdame = Request.Form["Recordame"] == "on";
             var user = servicioUsuario.VerificarExistenciaUsuario(u);
             if (user != null)
             {

@@ -27,9 +27,9 @@
                         @foreach (GustoEmpanada item in ((List
                         <GustoEmpanada>
                             )ViewBag.ListaGusto))
-                            {
+                        {
                             <option value="@item.IdGustoEmpanada">@item.Nombre</option>
-                            }
+                        }
                     </select>
 
 
@@ -46,18 +46,18 @@
                         @foreach (Usuario item in ((List
                         <Usuario>
                             )ViewBag.ListaUsuario))
-                            {
+                        {
                             <option value="@item.IdUsuario">@item.Email</option>
-                            }
+                        }
                     </select>
                     @*
-                    <select id="IdInvitados" name="IdInvitados" multiple="multiple" class="form-control">
-                        @foreach (var item in ViewBag.listadoDeUsuarios as MultiSelectList)
-                        {
-                        <option value="@item.Value">@item.Text</option>
-                        }
+                        <select id="IdInvitados" name="IdInvitados" multiple="multiple" class="form-control">
+                            @foreach (var item in ViewBag.listadoDeUsuarios as MultiSelectList)
+                            {
+                            <option value="@item.Value">@item.Text</option>
+                            }
 
-                    </select>
+                        </select>
                     *@
                 </div>
             </div>
@@ -69,4 +69,3 @@
 </body>
 
 </html>
-

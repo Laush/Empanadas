@@ -9,6 +9,6 @@ namespace Empanadas
     {
         public int[] IdGustosSeleccionados { get; set; }
 
-        // public int[] IdUsuariosInvitados { get; set; }
+        public int[] IdUsuariosInvitados { get; set; }
     }
 }
