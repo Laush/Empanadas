@@ -11,20 +11,29 @@ namespace Empanadas.Models
 
         public void Agregar(Pedido p)
         {
+
             p.FechaCreacion = DateTime.Now;
+
+
             foreach (int gId in p.IdGustosSeleccionados)
             {
                 GustoEmpanada gEmpanadaDisponible = MiBD.GustoEmpanada.FirstOrDefault(o => o.IdGustoEmpanada == gId);
                 p.GustoEmpanada.Add(gEmpanadaDisponible);
-            }
-
-            foreach (int invitadoId in p.IdUsuariosInvitados)
-            {
-                InvitacionPedido iDisponibe = MiBD.InvitacionPedido.FirstOrDefault(x => x.IdUsuario == invitadoId);
-                p.InvitacionPedido.Add(iDisponibe);
-                
+                MiBD.SaveChanges();
             }
             MiBD.Pedido.Add(p);
+            foreach (int invitadoId in p.IdUsuariosInvitados)
+            {
+                InvitacionPedido InPedido = new InvitacionPedido();
+                InPedido.IdPedido = p.IdPedido;
+                InPedido.IdUsuario = invitadoId;
+                InPedido.Token = Guid.NewGuid();
+                InPedido.Completado = false;
+                MiBD.InvitacionPedido.Add(InPedido);
+                MiBD.SaveChanges();
+
+            }
+
             MiBD.SaveChanges();
         }
 
@@ -33,7 +42,7 @@ namespace Empanadas.Models
             return MiBD.Pedido.ToList();
         }
 
-        public List<Pedido> ObtenerPedidosByUsuario(Usuario usu)
+        public List<InvitacionPedido> ObtenerPedidosByUsuario(Usuario usu)
         {
             //Asi estaba antes// return MiBD.Pedido.Include("GustoEmpanada").Where(x => x.IdUsuarioResponsable == idUsuario).OrderByDescending(x => x.FechaCreacion).ToList();
 
@@ -45,13 +54,16 @@ namespace Empanadas.Models
             ////ATENCION: si no selecciono mi propio mail no aparece en mi lista
             var query =
                (from p in MiBD.Pedido
-                join ep in MiBD.EstadoPedido on p.IdEstadoPedido equals ep.IdEstadoPedido
+                    //  join ep in MiBD.EstadoPedido on p.IdEstadoPedido equals ep.IdEstadoPedido
                 join ip in MiBD.InvitacionPedido on p.IdPedido equals ip.IdPedido
-                 where ip.IdUsuario == usu.IdUsuario
+                where p.IdUsuarioResponsable == usu.IdUsuario
+                || ip.IdUsuario == usu.IdUsuario
                 orderby p.FechaCreacion descending
                 select
-                    p).ToList();
-             return query;
+                    ip).ToList();
+            return query;
+
+
         }
 
         public Boolean PedidoUsuarioResponsableIsTrue(int idPedido, Usuario usuario)
@@ -70,7 +82,7 @@ namespace Empanadas.Models
 
         public void Eliminar(int id)
         {
-           //falta eliminar las invitaciones
+            //falta eliminar las invitaciones
             Pedido ped = MiBD.Pedido.FirstOrDefault(pedido => pedido.IdPedido == id);
             ped.GustoEmpanada.Clear();
             MiBD.Pedido.Remove(ped);

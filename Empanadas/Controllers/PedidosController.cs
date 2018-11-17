@@ -63,6 +63,8 @@ namespace Empanadas.Controllers
             servicioPedido.Agregar(p);// tal vez a futuro haya que mandare por parametro el usuariologueado para k no lo incluya en la lista de invitados
             return RedirectToAction("Iniciado", new { id = p.IdPedido });
         }
+
+
         //*****//no muestra el nombre del negocio
         public ActionResult Iniciado(Pedido p)
         {
@@ -127,12 +129,12 @@ namespace Empanadas.Controllers
             i.Pedido.IdPedido = p.IdPedido;
             return View(i);
         }
-      
+
         [HttpPost]
         public ActionResult Elegir(InvitacionPedidoGustoEmpanadaUsuario i)
         {
             List<InvitacionPedidoGustoEmpanadaUsuario> lista = servicioGustos.listarGustosConCantidad(i.IdPedido);
-            return View("ListaFiltrada",lista);
+            return View("ListaFiltrada", lista);
         }
 
 
