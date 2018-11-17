@@ -7,8 +7,8 @@
       <Diagram DiagramId="1535716c13b64101b1f65c2422b0717b" Name="Diagram1">
         <EntityTypeShape EntityType="C_TPModel.EstadoPedido" Width="1.5" PointX="0.75" PointY="3" IsExpanded="true" />
         <EntityTypeShape EntityType="C_TPModel.GustoEmpanada" Width="1.5" PointX="0.75" PointY="9.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="C_TPModel.InvitacionPedido" Width="1.5" PointX="3" PointY="5.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="C_TPModel.InvitacionPedidoGustoEmpanadaUsuario" Width="1.5" PointX="6" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="C_TPModel.InvitacionPedido" Width="1.875" PointX="3.125" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="C_TPModel.InvitacionPedidoGustoEmpanadaUsuario" Width="3.25" PointX="6" PointY="5.375" IsExpanded="true" />
         <EntityTypeShape EntityType="C_TPModel.Pedido" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="C_TPModel.Usuario" Width="1.5" PointX="0.75" PointY="5.5" IsExpanded="true" />
         <AssociationConnector Association="C_TPModel.FK_Pedido_EstadoPedido" ManuallyRouted="false" />

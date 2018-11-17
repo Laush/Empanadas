@@ -1,0 +1,78 @@
+﻿@{
+    ViewBag.Title = "Elegir";
+    Layout = "~/Views/Shared/_UsuarioLayout.cshtml";
+    List<InvitacionPedidoGustoEmpanadaUsuario> listaGustos = ViewBag.ListaGustos;
+}
+
+
+@model InvitacionPedidoGustoEmpanadaUsuario
+
+<html>
+<head>
+</head>
+<body>
+    <h2>Iniciar Pedido</h2>
+    <div class="container">
+        <form action="/Pedidos/Elegir" method="Post">
+            <div class="row">
+                <div class="col-md-6">
+                    @Html.HiddenFor(p => p.IdPedido, new { @class = "form-control" })
+                    @Html.HiddenFor(p => p.Pedido.IdUsuarioResponsable, new { @class = "form-control" })
+                    Descripcion: @Html.TextBoxFor(p => p.Pedido.Descripcion, new { @class = "form-control" })
+                    @Html.HiddenFor(p => p.Pedido.EstadoPedido, new { @class = "form-control" })
+                    Nombre Negocio: @Html.TextBoxFor(p => p.Pedido.NombreNegocio, new { @class = "form-control" })
+                    <br>
+                    
+
+                </div>
+                <div class="col-md-6">
+                    Precio x Unidad: @Html.TextBoxFor(p => p.Pedido.PrecioUnidad, new { @class = "form-control" })
+                    Precio x Docena: @Html.TextBoxFor(p => p.Pedido.PrecioDocena, new { @class = "form-control" })
+                    <br>
+                    
+                    
+                </div>
+
+                <div>
+                    Seleccionar Gustos:
+                    <table class="table table-condensed">
+                        <thead class="thead-inverse">
+                            <tr>
+                                <td>GustosDisponibles</td>
+                                <td>Cantidad</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @*Puedo hacer un array en esta tabla para no usar viewBag *@
+                            @foreach (InvitacionPedidoGustoEmpanadaUsuario g in (List<InvitacionPedidoGustoEmpanadaUsuario>)listaGustos)
+                            {
+                            <tr>
+                                <td>@g.GustoEmpanada.Nombre</td>
+                                <td>@Html.TextBoxFor(p => p.Cantidad, new { @class = "form-control" })</td>
+                                @*<td><a style="color:white;" href="/Pedidos/Eliminar/@g.Pedido.IdPedido"><span class="glyphicon glyphicon-remove"></span></a></td>*@
+
+                            </tr>
+                            }
+
+
+
+
+
+                        </tbody>
+                    </table>
+
+
+
+
+                </div>
+
+            </div>
+            <br>
+            <input class="btn btn-warning my-2 my-sm-0" type="submit" class="form-control" value="Agregar" />
+        </form>
+       
+    </div>
+</body>
+
+</html>
+

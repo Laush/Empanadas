@@ -15,6 +15,7 @@ namespace Empanadas.Controllers
 
         PedidoServicio servicioPedido = new PedidoServicio();
         UsuarioServicio servicioUsuario = new UsuarioServicio();
+        GustoEmpanadaServicio servicioGustos = new GustoEmpanadaServicio();
         private Entities MiBD = new Entities();
 
 
@@ -116,6 +117,30 @@ namespace Empanadas.Controllers
                 return View(pedido);
             }
         }
+
+        [HttpGet]
+        public ActionResult Elegir(int id)
+        {
+            Pedido p = servicioPedido.ObtenerPorId(id);
+            ViewBag.ListaGustos = servicioGustos.listarGustosConCantidad(id);
+            InvitacionPedidoGustoEmpanadaUsuario i = servicioGustos.ObtenerInvitacionPedidoUsuarioGustoPorIdPedido(id);
+            i.Pedido.IdPedido = p.IdPedido;
+            return View(i);
+        }
+      
+        [HttpPost]
+        public ActionResult Elegir(InvitacionPedidoGustoEmpanadaUsuario i)
+        {
+            List<InvitacionPedidoGustoEmpanadaUsuario> lista = servicioGustos.listarGustosConCantidad(i.IdPedido);
+            return View("ListaFiltrada",lista);
+        }
+
+
+
+
+
+
+
 
 
     }

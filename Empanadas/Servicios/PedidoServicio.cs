@@ -22,6 +22,7 @@ namespace Empanadas.Models
             {
                 InvitacionPedido iDisponibe = MiBD.InvitacionPedido.FirstOrDefault(x => x.IdUsuario == invitadoId);
                 p.InvitacionPedido.Add(iDisponibe);
+                
             }
             MiBD.Pedido.Add(p);
             MiBD.SaveChanges();
@@ -46,7 +47,7 @@ namespace Empanadas.Models
                (from p in MiBD.Pedido
                 join ep in MiBD.EstadoPedido on p.IdEstadoPedido equals ep.IdEstadoPedido
                 join ip in MiBD.InvitacionPedido on p.IdPedido equals ip.IdPedido
-                 where ip.IdUsuario == usu.IdUsuario 
+                 where ip.IdUsuario == usu.IdUsuario
                 orderby p.FechaCreacion descending
                 select
                     p).ToList();

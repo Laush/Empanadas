@@ -35,41 +35,41 @@
         <tbody>
             @foreach (Pedido p in ViewBag.ListaPedidos)
             {
-                <tr>
-                    <td>@p.NombreNegocio</td>
-                    <td>@p.EstadoPedido.Nombre</td>
+            <tr>
+                <td>@p.NombreNegocio</td>
+                <td>@p.EstadoPedido.Nombre</td>
 
-                    @if (p.IdUsuarioResponsable == Model.IdUsuario)
+                @if (p.IdUsuarioResponsable == Model.IdUsuario)
+                {
+                    <td>Responsable</td>
+                }
+                else
+                {
+                    <td>Invitado</td>
+                    <!--<td><a href="/Pedidos/Elegir/p.IdPedido" >Elegir Gustos</a></td>-->
+                }
+
+
+                <td>@p.FechaCreacion.ToString("dd/MM/yyyy")</td>
+                <td>
+                    @foreach (GustoEmpanada g in p.GustoEmpanada)
                     {
-                        <td>Responsable</td>
+                        @Html.Raw(g.Nombre + " ");
                     }
-                    else
+                </td>
+                <td>
+                    @foreach (InvitacionPedido i in p.InvitacionPedido)
                     {
-                        <td>Invitado</td>
-                        <!--<td><a href="/Pedidos/Elegir/p.IdPedido" >Elegir Gustos</a></td>-->
+                        @Html.Raw(i.Usuario.Email + " ");
                     }
+                </td>
 
+                <td><a style="color:white;" href="/Pedidos/Editar/@p.IdPedido"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                <td><a style="color:white;" href="#"><span class="glyphicon glyphicon-check"></span></a></td>
+                <td><a style="color:white;" href="/Pedidos/Eliminar/@p.IdPedido"><span class="glyphicon glyphicon-remove"></span></a></td>
+                <td><a style="color:white;" href="/Pedidos/Elegir/@p.IdPedido">Elegir gusto</a></td>
 
-                    <td>@p.FechaCreacion.ToString("dd/MM/yyyy")</td>
-                    <td>
-                        @foreach (GustoEmpanada g in p.GustoEmpanada)
-                        {
-                            @Html.Raw(g.Nombre + " ");
-                        }
-                    </td>
-                    <td>
-                        @foreach (InvitacionPedido i in p.InvitacionPedido)
-                        {
-                            @Html.Raw(i.Usuario.Email + " ");
-                        }
-                    </td>
-
-                    <td><a style="color:white;" href="/Pedidos/Editar/@p.IdPedido"><span class="glyphicon glyphicon-pencil"></span></a></td>
-                    <td><a style="color:white;" href="#"><span class="glyphicon glyphicon-check"></span></a></td>
-                    <td><a style="color:white;" href="/Pedidos/Eliminar/@p.IdPedido"><span class="glyphicon glyphicon-remove"></span></a></td>
-
-
-                </tr>
+            </tr>
             }
         </tbody>
     </table>

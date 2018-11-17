@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewBag.Title = "ListaFiltrada";
+    Layout = "~/Views/Shared/_UsuarioLayout.cshtml";
+}
+@model List<InvitacionPedidoGustoEmpanadaUsuario>
+
+<h2>ListaFiltrada</h2>
+
+<div class="table-responsive">
+
+    
+    <table class="table table-condensed">
+        <thead class="thead-inverse">
+            <tr>
+                <td>GustosDisponibles</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (InvitacionPedidoGustoEmpanadaUsuario i in Model)
+            {
+                <tr>
+                    <td>@i.GustoEmpanada.Nombre</td>
+                    <td>@i.Cantidad</td>
+
+                </tr>
+            }
+
+        </tbody>
+    </table>
+
+</div>
+<form class="form-inline my-2 my-lg-0" action="/Pedidos/Iniciar/">
+    <button class="btn btn-warning my-2 my-sm-0" type="submit">Nuevo Pedido</button>
+</form>
