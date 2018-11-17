@@ -58,16 +58,16 @@
                     }
                 </td>
                 <td>
+
                     @foreach (InvitacionPedido i in p.InvitacionPedido)
                     {
-                        @Html.Raw(i.Usuario.Email + " ");
+                     @Html.Raw(i.Usuario.Email + " ");
                     }
                 </td>
 
-                <td><a style="color:white;" href="/Pedidos/Editar/@p.IdPedido"><span class="glyphicon glyphicon-pencil"></span></a></td>
-                <td><a style="color:white;" href="#"><span class="glyphicon glyphicon-check"></span></a></td>
+                <td><a style="color:white;" href="/Pedidos/Editar/@p.IdPedido"><span class="glyphicon glyphicon-pencil"></span></a></td> 
                 <td><a style="color:white;" href="/Pedidos/Eliminar/@p.IdPedido"><span class="glyphicon glyphicon-remove"></span></a></td>
-                <td><a style="color:white;" href="/Pedidos/Elegir/@p.IdPedido">Elegir gusto</a></td>
+                <td><a style="color:white;" href="/Pedidos/Elegir/@p.IdPedido"><span class="glyphicon glyphicon-check"></span></a></td>
 
             </tr>
             }
