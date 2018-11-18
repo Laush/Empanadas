@@ -16,6 +16,7 @@
         <form action="/Pedidos/Elegir" method="Post">
             <div class="row">
                 <div class="col-md-6">
+          
                     @Html.HiddenFor(p => p.IdPedido, new { @class = "form-control" })
                     @Html.HiddenFor(p => p.Pedido.IdUsuarioResponsable, new { @class = "form-control" })
                     Descripcion: @Html.TextBoxFor(p => p.Pedido.Descripcion, new { @class = "form-control" })

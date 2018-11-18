@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Empanadas.Servicios;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,20 +9,31 @@ namespace Empanadas.Models
     public class PedidoServicio
     {
         private Entities MiBD = new Entities();
+        private GustoEmpanadaServicio srvGustoEmpanda = new GustoEmpanadaServicio();
 
         public void Agregar(Pedido p)
         {
 
-            p.FechaCreacion = DateTime.Now;
-
+            MiBD.Pedido.Add(p);
+            MiBD.SaveChanges();
 
             foreach (int gId in p.IdGustosSeleccionados)
             {
                 GustoEmpanada gEmpanadaDisponible = MiBD.GustoEmpanada.FirstOrDefault(o => o.IdGustoEmpanada == gId);
                 p.GustoEmpanada.Add(gEmpanadaDisponible);
                 MiBD.SaveChanges();
+                
+                // agregamos el pedido en InvitacionPedidoGustoEmpanadaUsuario
+                InvitacionPedidoGustoEmpanadaUsuario InvitacionCompleta = new InvitacionPedidoGustoEmpanadaUsuario();
+                InvitacionCompleta.IdPedido = p.IdPedido;
+                InvitacionCompleta.IdGustoEmpanada = srvGustoEmpanda.ObtenerPorId(gId).IdGustoEmpanada;
+                InvitacionCompleta.IdUsuario = p.IdUsuarioResponsable;
+                InvitacionCompleta.Cantidad = 0;
+
+                MiBD.InvitacionPedidoGustoEmpanadaUsuario.Add(InvitacionCompleta);
+                MiBD.SaveChanges();
             }
-            MiBD.Pedido.Add(p);
+            
             foreach (int invitadoId in p.IdUsuariosInvitados)
             {
                 InvitacionPedido InPedido = new InvitacionPedido();
@@ -33,6 +45,9 @@ namespace Empanadas.Models
                 MiBD.SaveChanges();
 
             }
+
+            
+            
 
             MiBD.SaveChanges();
         }
