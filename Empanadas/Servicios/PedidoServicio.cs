@@ -44,14 +44,9 @@ namespace Empanadas.Models
 
         public List<InvitacionPedido> ObtenerPedidosByUsuario(Usuario usu)
         {
-            //Asi estaba antes// return MiBD.Pedido.Include("GustoEmpanada").Where(x => x.IdUsuarioResponsable == idUsuario).OrderByDescending(x => x.FechaCreacion).ToList();
+            // return MiBD.Pedido.Include("GustoEmpanada").Where(x => x.IdUsuarioResponsable == idUsuario).OrderByDescending(x => x.FechaCreacion).ToList();
 
-            //con esta consulta me muestra todos(los k no tienen mail tmb)
-            //pero no marca bien el rol de invitado 
             // return MiBD.Pedido.Include("GustoEmpanada").Where(x => x.IdUsuarioResponsable.Equals(usu.IdUsuario)).OrderByDescending(p => p.FechaCreacion).ToList();
-
-            ///con esta consulta me muestra solo los que tienen invitados(mails cargados)
-            ////ATENCION: si no selecciono mi propio mail no aparece en mi lista
             var query =
                (from p in MiBD.Pedido
                     //  join ep in MiBD.EstadoPedido on p.IdEstadoPedido equals ep.IdEstadoPedido
@@ -66,28 +61,38 @@ namespace Empanadas.Models
 
         }
 
-        public Boolean PedidoUsuarioResponsableIsTrue(int idPedido, Usuario usuario)
-        {
-            var query = (from p in MiBD.Pedido
-                         where p.IdUsuarioResponsable == usuario.IdUsuario &&
-                                p.IdPedido == idPedido
-                         select p).ToList();
+        /*   public Boolean PedidoUsuarioResponsableIsTrue(int idPedido, Usuario usuario)
+           {
+               var query = (from p in MiBD.Pedido
+                            where p.IdUsuarioResponsable == usuario.IdUsuario &&
+                                   p.IdPedido == idPedido
+                            select p).ToList();
 
-            if (query.Count > 0)
-            {
-                return true;
-            }
-            return false;
-        }
+               if (query.Count > 0)
+               {
+                   return true;
+               }
+               return false;
+           }*/
 
         public void Eliminar(int id)
         {
-            //falta eliminar las invitaciones
-            Pedido ped = MiBD.Pedido.FirstOrDefault(pedido => pedido.IdPedido == id);
-            ped.GustoEmpanada.Clear();
-            MiBD.Pedido.Remove(ped);
+            var invitaciones = MiBD.InvitacionPedido.Where(i => i.IdPedido == id).ToList();
+            MiBD.InvitacionPedido.RemoveRange(invitaciones);
+            MiBD.SaveChanges();
+
+            var gustosPedido = MiBD.InvitacionPedidoGustoEmpanadaUsuario.Where(i => i.IdPedido == id).ToList();
+            MiBD.InvitacionPedidoGustoEmpanadaUsuario.RemoveRange(gustosPedido);
+            MiBD.SaveChanges();
+
+            Pedido pedidoEliminar = MiBD.Pedido.FirstOrDefault(pedido => pedido.IdPedido == id);
+
+            pedidoEliminar.GustoEmpanada.Clear();
+
+            MiBD.Pedido.Remove(pedidoEliminar);
             MiBD.SaveChanges();
         }
+
 
         public Pedido ObtenerPorId(int id)
         {

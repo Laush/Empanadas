@@ -15,11 +15,12 @@
         <form action="/Pedidos/Iniciar" method="Post">
             <div class="row">
                 <div class="col-md-6">
-                    Id: @Html.TextBoxFor(p => p.IdPedido, new { @class = "form-control" })
-                    IdUsu: @Html.TextBoxFor(p => p.IdUsuarioResponsable, new { @class = "form-control" })
-                    Descripcion: @Html.TextBoxFor(p => p.Descripcion, new { @class = "form-control" })
-                    IdEstadoPed: @Html.TextBoxFor(p => p.IdEstadoPedido, new { @class = "form-control" })
+                    @Html.HiddenFor(p => p.IdPedido, new { @class = "form-control" })
+                    @Html.HiddenFor(p => p.IdUsuarioResponsable, new { @class = "form-control" })
                     Nombre Negocio: @Html.TextBoxFor(p => p.NombreNegocio, new { @class = "form-control" })
+                    Descripcion: @Html.TextBoxFor(p => p.Descripcion, new { @class = "form-control" })
+                    @Html.HiddenFor(p => p.IdEstadoPedido, new { @class = "form-control" })
+                    Gustos:
                     <br>
                     <select id="IdGustosSeleccionados" name="IdGustosSeleccionados" multiple="multiple" class="form-control">
                         <option value="1">Seleccione</option>
@@ -37,9 +38,9 @@
                 <div class="col-md-6">
                     Precio x Unidad: @Html.TextBoxFor(p => p.PrecioUnidad, new { @class = "form-control" })
                     Precio x Docena: @Html.TextBoxFor(p => p.PrecioDocena, new { @class = "form-control" })
-                    FechaCreacion: @Html.TextBoxFor(p => p.FechaCreacion, new { @class = "form-control" })
-                    FechaModif: @Html.TextBoxFor(p => p.FechaModificacion, new { @class = "form-control" })
-                    <br>
+                    @Html.HiddenFor(p => p.FechaCreacion, new { @class = "form-control" })
+                    @Html.HiddenFor(p => p.FechaModificacion, new { @class = "form-control" })
+
                     Invitados:
                     <select id="IdUsuariosInvitados" name="IdUsuariosInvitados" multiple="multiple" class="form-control">
 
@@ -50,21 +51,17 @@
                             <option value="@item.IdUsuario">@item.Email</option>
                         }
                     </select>
-                    @*
-                        <select id="IdInvitados" name="IdInvitados" multiple="multiple" class="form-control">
-                            @foreach (var item in ViewBag.listadoDeUsuarios as MultiSelectList)
-                            {
-                            <option value="@item.Value">@item.Text</option>
-                            }
 
-                        </select>
-                    *@
                 </div>
             </div>
             <br>
-            <input class="btn btn-warning my-2 my-sm-0" type="submit" class="form-control" text="Guardar" />
+            <input class="btn btn-warning my-2 my-sm-0" type="submit" text="Guardar" />
         </form>
-        <a class="linkss" href="#"> Cancelar</a>
+
+        <br>
+        <form action="/Pedidos/Listar/">
+            <button class="btn btn-warning my-2 my-sm-0" type="submit">Cancelar</button>
+        </form>
     </div>
 </body>
 

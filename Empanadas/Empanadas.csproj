@@ -196,6 +196,7 @@
     <Content Include="Views\Pedidos\Iniciado.cshtml" />
     <Content Include="Views\Pedidos\Elegir.cshtml" />
     <Content Include="Views\Pedidos\ListaFiltrada.cshtml" />
+    <Content Include="Views\Pedidos\Detalle.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -38,23 +38,27 @@ namespace Empanadas.Controllers
         [HttpGet]
         public ActionResult Iniciar()
         {
-            //int idUsuarioReponsable = Convert.ToInt32(Session["IdUsuario"] as Usuario);
             var usuarioLogueado = Session["Usuario"] as Usuario;
-            DateTime fecha = DateTime.Now;
-            Pedido pedido = new Pedido();
+            if (usuarioLogueado != null)
+            {
+                DateTime fecha = DateTime.Now;
+                Pedido pedido = new Pedido();
 
-            pedido.IdUsuarioResponsable = usuarioLogueado.IdUsuario;
-            pedido.IdEstadoPedido = 1;
-            pedido.PrecioUnidad = 15;
-            pedido.PrecioDocena = 200;
-            pedido.FechaCreacion = fecha;
-            pedido.FechaModificacion = fecha;
+                pedido.IdUsuarioResponsable = usuarioLogueado.IdUsuario;
+                pedido.IdEstadoPedido = 1;
+                pedido.PrecioUnidad = 15;
+                pedido.PrecioDocena = 200;
+                pedido.FechaCreacion = fecha;
+                pedido.FechaModificacion = fecha;
 
-            ViewBag.ListaGusto = servicioPedido.ObtenerGustosDeEmpanada();
-            ViewBag.ListaUsuario = servicioUsuario.ObtenerTodosLosUsuarios();
-            ViewBag.listadoDeUsuarios = new MultiSelectList(MiBD.Usuario.Where(m => m.IdUsuario != usuarioLogueado.IdUsuario).ToList(), "IdUsuario", "Email");
+                ViewBag.ListaGusto = servicioPedido.ObtenerGustosDeEmpanada();
+                ViewBag.ListaUsuario = servicioUsuario.ObtenerTodosLosUsuarios();
+                ViewBag.listadoDeUsuarios = new MultiSelectList(MiBD.Usuario.Where(m => m.IdUsuario != usuarioLogueado.IdUsuario).ToList(), "IdUsuario", "Email");
 
-            return View(pedido);
+                return View(pedido);
+            }
+            Session["RedireccionLogin"] = "Pedidos/Iniciar";
+            return RedirectToAction("Login", "Home");
         }
 
         [HttpPost]
@@ -71,11 +75,22 @@ namespace Empanadas.Controllers
             return View(p);
         }
 
+        public ActionResult Detalle(Pedido p)
+        {
+            return View(p);
+        }
+
         [HttpGet]
         public ActionResult Eliminar(int id)
         {
-            ViewBag.Cantidad = servicioPedido.ObtenerInvitacionesConfirmadas(id);
-            return View(servicioPedido.ObtenerPorId(id));
+            var usuarioLogueado = Session["Usuario"] as Usuario;
+            if (usuarioLogueado != null)
+            {
+                ViewBag.Cantidad = servicioPedido.ObtenerInvitacionesConfirmadas(id);
+                return View(servicioPedido.ObtenerPorId(id));
+            }
+            Session["RedireccionLogin"] = "Pedidos/Listar";
+            return RedirectToAction("Login", "Home");
         }
 
         [HttpPost]
@@ -89,7 +104,7 @@ namespace Empanadas.Controllers
         // GET: Editar
         public ActionResult Editar(int id)
         {
-            //si el estado es cerrado no deja editar               
+
             if (MiBD.Pedido.Find(id).IdEstadoPedido == 1)
             {
                 ViewBag.ListaUsuario = servicioUsuario.ObtenerTodosLosUsuarios();
@@ -97,11 +112,11 @@ namespace Empanadas.Controllers
                 return View(MiBD.Pedido.Find(id));
             }
             else
-            {
-                return RedirectToAction("Listar", "Pedidos");
+            { //si el estado es cerrado no deja editar y va a detalle
+                return RedirectToAction("Detalle", "Pedidos");
             }
         }
-
+        //*** no edita los gustos**//
         [HttpPost]
         public ActionResult Editar(Pedido pedido, string btnConfirmar)
         {

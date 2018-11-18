@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "Detalle";
+    Layout = "~/Views/Shared/_UsuarioLayout.cshtml";
+}
+
+
+@model Pedido
+
+<html>
+<head>
+</head>
+<body>
+    <h2>VISTA DETALLE</h2>
+    <h4>Este pedido esta cerrado</h4>
+    <div class="container">
+        <form action="/Pedidos/Listar">
+            <div class="row">
+                <div class="col-md-6">
+                    Id:
+                    IdUsu:
+                    Descripcion:
+                    IdEstadoPed:
+                    Nombre Negocio:
+                    Gustos:
+
+
+                </div>
+                <div class="col-md-6">
+                    Precio x Unidad:
+                    Precio x Docena:
+                    FechaCreacion:
+                    FechaModif:
+                    Invitados:
+                </div>
+            </div>
+            <br>
+            <div class="center-align pt-1">
+                <button type="submit" class="btn btn-warning my-2 my-sm-0">Ir a Lista Pedidos</button>
+            </div>
+        </form>
+
+    </div>
+</body>
+
+</html>
+
+
