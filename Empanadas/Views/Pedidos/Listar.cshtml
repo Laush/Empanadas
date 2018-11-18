@@ -35,41 +35,50 @@
         <tbody>
             @foreach (InvitacionPedido p in ViewBag.ListaPedidos)
             {
-                <tr>
-                    <td>@p.Pedido.NombreNegocio</td>
-                    <td>@p.Pedido.EstadoPedido.Nombre</td>
+            <tr>
+                <td>@p.Pedido.NombreNegocio</td>
+                <td>@p.Pedido.EstadoPedido.Nombre</td>
 
-                    @if (p.Pedido.IdUsuarioResponsable == Model.IdUsuario)
+                @if (p.Pedido.IdUsuarioResponsable == Model.IdUsuario)
+                {
+                    <td>Responsable</td>
+                }
+                else
+                {
+                    <td>Invitado</td>
+                    <!--<td><a href="/Pedidos/Elegir/p.IdPedido" >Elegir Gustos</a></td>-->
+                }
+
+
+                <td>@p.Pedido.FechaCreacion.ToString("dd/MM/yyyy")</td>
+                <td>
+                    @foreach (GustoEmpanada g in p.Pedido.GustoEmpanada)
                     {
-                        <td>Responsable</td>
+                        @Html.Raw(g.Nombre + " ");
                     }
-                    else
+                </td>
+                <td>
+
+                    @foreach (InvitacionPedido i in p.Pedido.InvitacionPedido)
                     {
-                        <td>Invitado</td>
-                        <!--<td><a href="/Pedidos/Elegir/p.IdPedido" >Elegir Gustos</a></td>-->
+                        @Html.Raw(i.Usuario.Email + " ");
                     }
+                </td>
 
-
-                    <td>@p.Pedido.FechaCreacion.ToString("dd/MM/yyyy")</td>
-                    <td>
-                        @foreach (GustoEmpanada g in p.Pedido.GustoEmpanada)
-                        {
-                            @Html.Raw(g.Nombre + " ");
-                        }
-                    </td>
-                    <td>
-
-                        @foreach (InvitacionPedido i in p.Pedido.InvitacionPedido)
-                        {
-                            @Html.Raw(i.Usuario.Email + " ");
-                        }
-                    </td>
-
+                <!--cambio laush-->
+                @if (p.Pedido.IdEstadoPedido == 2 || p.Pedido.IdUsuarioResponsable != Model.IdUsuario)
+                {
+                    <td><a style="color:white;" href="/Pedidos/Detalle/@p.Pedido.IdPedido"><span class="glyphicon glyphicon-eye-open"></span></a></td>
+                }
+                else
+                {
                     <td><a style="color:white;" href="/Pedidos/Editar/@p.Pedido.IdPedido"><span class="glyphicon glyphicon-pencil"></span></a></td>
-                    <td><a style="color:white;" href="/Pedidos/Eliminar/@p.Pedido.IdPedido"><span class="glyphicon glyphicon-remove"></span></a></td>
-                    <td><a style="color:white;" href="/Pedidos/Elegir/@p.IdPedido"><span class="glyphicon glyphicon-check"></span></a></td>
+                }
+                <!--cambio laush fin-->
+                <td><a style="color:white;" href="/Pedidos/Eliminar/@p.Pedido.IdPedido"><span class="glyphicon glyphicon-remove"></span></a></td>
+                <td><a style="color:white;" href="/Pedidos/Elegir/@p.IdPedido"><span class="glyphicon glyphicon-check"></span></a></td>
 
-                </tr>
+            </tr>
             }
         </tbody>
     </table>

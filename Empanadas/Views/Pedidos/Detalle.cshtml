@@ -3,34 +3,32 @@
     Layout = "~/Views/Shared/_UsuarioLayout.cshtml";
 }
 
-
 @model Pedido
 
 <html>
 <head>
 </head>
 <body>
-    <h2>VISTA DETALLE</h2>
-    <h4>Este pedido esta cerrado</h4>
+    <h2>Detalle del pedido </h2>
+
     <div class="container">
         <form action="/Pedidos/Listar">
             <div class="row">
                 <div class="col-md-6">
-                    Id:
-                    IdUsu:
-                    Descripcion:
-                    IdEstadoPed:
-                    Nombre Negocio:
-                    Gustos:
-
+                    Nombre Negocio:@Model.NombreNegocio
+                    <br>
+                    Descripcion:@Model.Descripcion
+                    <br>
+                    IdEstadoPed:@Model.EstadoPedido.Nombre
 
                 </div>
                 <div class="col-md-6">
-                    Precio x Unidad:
-                    Precio x Docena:
-                    FechaCreacion:
-                    FechaModif:
-                    Invitados:
+                    Precio x Unidad:@Model.PrecioUnidad
+                    <br>
+                    Precio x Docena:@Model.PrecioDocena
+                    <br>
+                    FechaCreacion:@Model.FechaCreacion
+                    <br>
                 </div>
             </div>
             <br>

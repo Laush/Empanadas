@@ -11,7 +11,6 @@ namespace Empanadas.Controllers
 {
     public class PedidosController : Controller
     {
-        //  public const int ESTADO_ABIERTO = 1;
 
         PedidoServicio servicioPedido = new PedidoServicio();
         UsuarioServicio servicioUsuario = new UsuarioServicio();
@@ -34,7 +33,7 @@ namespace Empanadas.Controllers
             return RedirectToAction("Login", "Home");
         }
 
-        //*****// falta que agregue invitados por token
+   //*****// falta que agregue invitados por token
         [HttpGet]
         public ActionResult Iniciar()
         {
@@ -69,15 +68,22 @@ namespace Empanadas.Controllers
         }
 
 
-        //*****//no muestra el nombre del negocio
+     //*****//no muestra el nombre del negocio
         public ActionResult Iniciado(Pedido p)
         {
             return View(p);
         }
 
-        public ActionResult Detalle(Pedido p)
+        public ActionResult Detalle(int id)
         {
-            return View(p);
+            var usuarioLogueado = Session["Usuario"] as Usuario;
+            if (usuarioLogueado != null)
+            {
+                return View(servicioPedido.ObtenerPorId(id));
+            }
+            Session["RedireccionLogin"] = "Pedidos/Listar";
+            return RedirectToAction("Login", "Home");
+
         }
 
         [HttpGet]
@@ -151,13 +157,6 @@ namespace Empanadas.Controllers
             List<InvitacionPedidoGustoEmpanadaUsuario> lista = servicioGustos.listarGustosConCantidad(i.IdPedido);
             return View("ListaFiltrada", lista);
         }
-
-
-
-
-
-
-
 
 
     }
