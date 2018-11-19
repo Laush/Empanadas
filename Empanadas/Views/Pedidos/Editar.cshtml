@@ -30,7 +30,7 @@
                         }
                     </select>
 
-                    Desea agregar más ?
+                    ¿ Desea agregar más ?
                     <select id="IdGustosSeleccionados" name="IdGustosSeleccionados" multiple="multiple" class="form-control">
 
                         @foreach (GustoEmpanada item in ((List<GustoEmpanada>)ViewBag.ListaDeGustos))
@@ -43,15 +43,22 @@
                 <div class="col-md-6">
                     Precio x Unidad: @Html.TextBoxFor(p => p.PrecioUnidad, new { @class = "form-control" })
                     Precio x Docena: @Html.TextBoxFor(p => p.PrecioDocena, new { @class = "form-control" })
-                    FechaCreacion: @Html.TextBoxFor(p => p.FechaCreacion, new { @class = "form-control" })
+                    @Html.HiddenFor(p => p.FechaCreacion, new { @class = "form-control" })
                     @Html.HiddenFor(p => p.FechaModificacion, new { @class = "form-control" })
-                    
+
                     Invitados:
+                    <select id="lele" name="lele" multiple="multiple" class="form-control">
+
+                        @foreach (Usuario item in ((List<Usuario>)ViewBag.ListaUsuario))
+                        {
+                            <option value="@item.IdUsuario">@item.Email</option>
+                        }
+                    </select>
+
+                    ¿Desea agregar invitados? 
                     <select id="IdUsuariosInvitados" name="IdUsuariosInvitados" multiple="multiple" class="form-control">
 
-                        @foreach (Usuario item in ((List
-                        <Usuario>
-                            )ViewBag.ListaUsuario))
+                        @foreach (Usuario item in ((List<Usuario>)ViewBag.ListaDeUsuarios))
                         {
                             <option value="@item.IdUsuario">@item.Email</option>
                         }

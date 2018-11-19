@@ -63,14 +63,11 @@ namespace Empanadas.Models
 
             // return MiBD.Pedido.Include("GustoEmpanada").Where(x => x.IdUsuarioResponsable.Equals(usu.IdUsuario)).OrderByDescending(p => p.FechaCreacion).ToList();
             var query =
-               (from p in MiBD.Pedido
-                    //  join ep in MiBD.EstadoPedido on p.IdEstadoPedido equals ep.IdEstadoPedido
+               (from p in MiBD.Pedido             
                 join ip in MiBD.InvitacionPedido on p.IdPedido equals ip.IdPedido
-                where p.IdUsuarioResponsable == usu.IdUsuario
-                || ip.IdUsuario == usu.IdUsuario
+                where p.IdUsuarioResponsable == usu.IdUsuario || ip.IdUsuario == usu.IdUsuario           
                 orderby p.FechaCreacion descending
-                select
-                    ip).ToList();
+                select ip).ToList();
             return query;
 
 

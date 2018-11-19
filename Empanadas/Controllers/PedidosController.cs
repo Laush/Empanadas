@@ -124,6 +124,7 @@ namespace Empanadas.Controllers
             if (MiBD.Pedido.Find(id).IdEstadoPedido == 1)
             {
                 ViewBag.ListaUsuario = servicioUsuario.ObtenerUsuariosPorPedido(p.IdPedido);
+                ViewBag.ListaDeUsuarios = servicioUsuario.ObtenerTodosLosUsuarios();
                 ViewBag.ListaGusto = servicioGustos.ListarGustos(p.IdPedido);
                 ViewBag.ListaDeGustos = servicioPedido.ObtenerGustosDeEmpanada();
                 return View(MiBD.Pedido.Find(id));
