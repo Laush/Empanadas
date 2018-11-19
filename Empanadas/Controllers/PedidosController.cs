@@ -63,12 +63,21 @@ namespace Empanadas.Controllers
         [HttpPost]
         public ActionResult Iniciar(Pedido p)
         {
-            servicioPedido.Agregar(p);// tal vez a futuro haya que mandare por parametro el usuariologueado para k no lo incluya en la lista de invitados
-            return RedirectToAction("Iniciado", new { id = p.IdPedido });
+            // servicioPedido.Agregar(p);// tal vez a futuro haya que mandare por parametro el usuariologueado para k no lo incluya en la lista de invitados
+            //  return RedirectToAction("Iniciado", new { id = p.IdPedido });
+            if (ModelState.IsValid)
+            {
+                servicioPedido.Agregar(p);
+                return RedirectToAction("Iniciado", new { id = p.IdPedido });
+            }
+            else
+            {
+                return View(p);
+            }
         }
 
 
-     //*****//no muestra el nombre del negocio
+        //*****//no muestra el nombre del negocio
         public ActionResult Iniciado(Pedido p)
         {
             return View(p);

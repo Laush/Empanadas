@@ -15,7 +15,8 @@
     <AssemblyName>Empanadas</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
-    <Use64BitIISExpress>false</Use64BitIISExpress>
+    <Use64BitIISExpress>
+    </Use64BitIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -181,6 +182,7 @@
     <Compile Include="InvitacionPedidoGustoEmpanadaUsuario.cs">
       <DependentUpon>2018_2C_TP.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PedidoMetaData.cs" />
     <Compile Include="Partials\Pedido.cs" />
     <Compile Include="Partials\Usuario.cs" />
     <Compile Include="Pedido.cs">
@@ -228,7 +230,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
