@@ -57,7 +57,7 @@
                         @Html.Raw(g.Nombre + " ");
                     }
                 </td>
-                <td>
+                <td style="font-size:medium;">
 
                     @foreach (InvitacionPedido i in p.Pedido.InvitacionPedido)
                     {
@@ -72,7 +72,7 @@
                 }
                 else
                 {
-                    <td><a style="color:white;" href="/Pedidos/Editar/@p.Pedido.IdPedido"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                    <td><a style="color:white;" href="/Pedidos/Editar/@p.IdPedido"><span class="glyphicon glyphicon-pencil"></span></a></td>
                 }
                 <!--cambio laush fin-->
                 <td><a style="color:white;" href="/Pedidos/Eliminar/@p.Pedido.IdPedido"><span class="glyphicon glyphicon-remove"></span></a></td>

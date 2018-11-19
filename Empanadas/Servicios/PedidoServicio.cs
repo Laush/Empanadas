@@ -153,10 +153,11 @@ namespace Empanadas.Models
             p.PrecioUnidad = j.PrecioUnidad;
             p.PrecioDocena = j.PrecioDocena;
             p.FechaModificacion = DateTime.Now;
-            foreach (var idGusto in j.GustoEmpanada)
+            foreach (var idGusto in j.IdGustosSeleccionados)
             {
                 GustoEmpanada gustoEmpanadaDisponible = MiBD.GustoEmpanada.Find(idGusto);
                 p.GustoEmpanada.Add(gustoEmpanadaDisponible);
+                MiBD.SaveChanges();
             }
             MiBD.SaveChanges();
         }

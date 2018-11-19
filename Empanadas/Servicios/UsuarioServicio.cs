@@ -35,5 +35,14 @@ namespace Empanadas.Servicios
             return MiBD.Usuario.FirstOrDefault(x => x.IdUsuario == id);
         }
 
+        public List<Usuario> ObtenerUsuariosPorPedido(int idPedido)
+        {
+            var list = (from u in MiBD.Usuario
+                        join i in MiBD.InvitacionPedido on u.IdUsuario equals i.IdUsuario
+                        join p in MiBD.Pedido on i.IdPedido equals p.IdPedido
+                        where p.IdPedido == idPedido
+                        select u).ToList();
+            return list;
+        }
     }
 }
