@@ -9,7 +9,7 @@
 
 <div class="table-responsive">
 
-    
+
     <table class="table table-condensed">
         <thead class="thead-inverse">
             <tr>
@@ -20,8 +20,8 @@
             @foreach (InvitacionPedidoGustoEmpanadaUsuario i in Model)
             {
                 <tr>
-                    <td>@i.GustoEmpanada.Nombre</td>
-                    <td>@i.Cantidad</td>
+                    <td id="GustosEmpanada">@i.GustoEmpanada.Nombre</td>
+                    <td id="Cantidad">@i.Cantidad</td>
                     <td><a style="color:white;" href="/Pedidos/Eliminar/@i.IdPedido"><span class="glyphicon glyphicon-remove"></span></a></td>
 
                 </tr>
@@ -30,5 +30,9 @@
         </tbody>
     </table>
 
+    <input class="btn btn-warning my-2 my-sm-0" type="button" value="Confirmar" id="Confirmar" />
+    <a class="btn btn-warning my-2 my-sm-0" href="/Pedidos/Listar/">Volver</a>
+    <script type="text/javascript" src="~/Scripts/script.js"></script>
+
 </div>
-<a  class="btn btn-warning my-2 my-sm-0" href="/Pedidos/Listar/">Volver</a>
+

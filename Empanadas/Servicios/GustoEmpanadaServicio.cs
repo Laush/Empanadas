@@ -45,7 +45,7 @@ namespace Empanadas.Servicios
         }
 
 
-            public List<InvitacionPedidoGustoEmpanadaUsuario> listarGustosConCantidad(int idPedido)
+         public List<InvitacionPedidoGustoEmpanadaUsuario> listarGustosConCantidad(int idPedido)
         {
             var listGustos = (from InvitacionPedidoGustoEmpanadaUsuario iv in MiBD.InvitacionPedidoGustoEmpanadaUsuario
                               join p in MiBD.Pedido on iv.IdPedido equals p.IdPedido
