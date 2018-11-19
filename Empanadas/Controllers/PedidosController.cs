@@ -35,7 +35,7 @@ namespace Empanadas.Controllers
 
    //*****// falta que agregue invitados por token
         [HttpGet]
-        public ActionResult Iniciar()
+        public ActionResult Iniciar(int? id)
         {
             var usuarioLogueado = Session["Usuario"] as Usuario;
             if (usuarioLogueado != null)
@@ -53,6 +53,11 @@ namespace Empanadas.Controllers
                 ViewBag.ListaGusto = servicioPedido.ObtenerGustosDeEmpanada();
                 ViewBag.ListaUsuario = servicioUsuario.ObtenerTodosLosUsuarios();
                 ViewBag.listadoDeUsuarios = new MultiSelectList(MiBD.Usuario.Where(m => m.IdUsuario != usuarioLogueado.IdUsuario).ToList(), "IdUsuario", "Email");
+
+                if(id != null)
+                {
+                    return View(MiBD.Pedido.Find(id));
+                }
 
                 return View(pedido);
             }
@@ -117,14 +122,18 @@ namespace Empanadas.Controllers
         }
         //*****// no me modifica los gustos  
         // GET: Editar
-        public ActionResult Editar(int id)
+        public ActionResult Editar(int idPedido)
         {
-
-            if (MiBD.Pedido.Find(id).IdEstadoPedido == 1)
+            Pedido p = servicioPedido.ObtenerPorId(idPedido);
+            if (MiBD.Pedido.Find(p.IdPedido).IdEstadoPedido == 1)
             {
                 ViewBag.ListaUsuario = servicioUsuario.ObtenerTodosLosUsuarios();
-                ViewBag.ListaGusto = servicioPedido.ObtenerGustosDeEmpanada();
-                return View(MiBD.Pedido.Find(id));
+                foreach (int gId in p.IdGustosSeleccionados)
+                {
+                    ViewBag.ListaGusto = servicioGustos.ObtenerPorId(gId);
+                }
+                
+                return View(p);
             }
             else
             { //si el estado es cerrado no deja editar y va a detalle
