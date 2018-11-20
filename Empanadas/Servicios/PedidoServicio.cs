@@ -10,7 +10,7 @@ namespace Empanadas.Models
     {
         private Entities MiBD = new Entities();
         private GustoEmpanadaServicio srvGustoEmpanda = new GustoEmpanadaServicio();
-
+        private UsuarioServicio srvUsuario = new UsuarioServicio();
         public void Agregar(Pedido p)
         {
 
@@ -156,6 +156,16 @@ namespace Empanadas.Models
                 p.GustoEmpanada.Add(gustoEmpanadaDisponible);
                 MiBD.SaveChanges();
             }
+            /*
+            foreach (var idIn in j.IdUsuariosInvitados)
+            {
+                //    Usuario u = srvUsuario.ObtenerPorId(idIn);
+                //    InvitacionPedido i = srvGustoEmpanda.ObtenerInvitacionPorPedido(p.IdPedido);
+                //    p.InvitacionPedido.Add(i);
+                p.IdUsuarioResponsable = idIn;
+                MiBD.SaveChanges();
+            }*/
+            
             MiBD.SaveChanges();
         }
 

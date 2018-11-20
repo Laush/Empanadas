@@ -44,5 +44,10 @@ namespace Empanadas.Servicios
                         select u).ToList();
             return list;
         }
+
+        public Usuario ObtenerPorId(int id)
+        {
+            return MiBD.Usuario.FirstOrDefault(u => u.IdUsuario == id);
+        }
     }
 }

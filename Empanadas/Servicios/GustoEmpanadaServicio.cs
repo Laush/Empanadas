@@ -44,8 +44,16 @@ namespace Empanadas.Servicios
             return MiBD.InvitacionPedidoGustoEmpanadaUsuario.FirstOrDefault(i => i.IdPedido == idPedido);
         }
 
+        public InvitacionPedido ObtenerInvitacionPorPedido(int idPedido)
+        {
+            var invitacion = (from i in MiBD.InvitacionPedido
+                              join p in MiBD.Pedido on i.IdPedido equals p.IdPedido
+                              where i.IdPedido == idPedido
+                              select i).SingleOrDefault();
+            return invitacion;
+        }
 
-         public List<InvitacionPedidoGustoEmpanadaUsuario> ListarGustos(int idPedido)
+        public List<InvitacionPedidoGustoEmpanadaUsuario> ListarGustos(int idPedido)
         {
             var listGustos = (from InvitacionPedidoGustoEmpanadaUsuario iv in MiBD.InvitacionPedidoGustoEmpanadaUsuario
                               join p in MiBD.Pedido on iv.IdPedido equals p.IdPedido

@@ -51,7 +51,7 @@
 
 
                 <td>@p.Pedido.FechaCreacion.ToString("dd/MM/yyyy")</td>
-                <td>
+                <td style="font-size:medium;">
                     @foreach (GustoEmpanada g in p.Pedido.GustoEmpanada)
                     {
                         @Html.Raw(g.Nombre + " ");
