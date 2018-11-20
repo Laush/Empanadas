@@ -18,7 +18,6 @@ namespace Empanadas.Controllers
         public ActionResult Index()
         {
             var usuarioLogueado = Session["Usuario"] as Usuario;
-            // Usuario usuarioLogueado = new Usuario();
             usuarioLogueado = servicioPedido.ObtenerUsuarioPorId(Convert.ToInt32(Session["Usuario"]));
             if (usuarioLogueado != null)
             {

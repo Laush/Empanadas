@@ -33,9 +33,9 @@ namespace Empanadas.Controllers
             return RedirectToAction("Login", "Home");
         }
 
-   //*****// falta que agregue invitados por token
+        //*****// falta que agregue invitados por token
         [HttpGet]
-        public ActionResult Iniciar()
+        public ActionResult Iniciar(int? id)
         {
             var usuarioLogueado = Session["Usuario"] as Usuario;
             if (usuarioLogueado != null)
@@ -45,14 +45,19 @@ namespace Empanadas.Controllers
 
                 pedido.IdUsuarioResponsable = usuarioLogueado.IdUsuario;
                 pedido.IdEstadoPedido = 1;
-                pedido.PrecioUnidad = 15;
-                pedido.PrecioDocena = 200;
+                // pedido.PrecioUnidad = 15;
+                // pedido.PrecioDocena = 200;
                 pedido.FechaCreacion = fecha;
                 pedido.FechaModificacion = fecha;
 
                 ViewBag.ListaGusto = servicioPedido.ObtenerGustosDeEmpanada();
                 ViewBag.ListaUsuario = servicioUsuario.ObtenerTodosLosUsuarios();
                 ViewBag.listadoDeUsuarios = new MultiSelectList(MiBD.Usuario.Where(m => m.IdUsuario != usuarioLogueado.IdUsuario).ToList(), "IdUsuario", "Email");
+
+                if (id != null)
+                {
+                    return View(MiBD.Pedido.Find(id));
+                }
 
                 return View(pedido);
             }
