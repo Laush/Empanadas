@@ -17,10 +17,10 @@
                 <div class="col-md-6">
                     @Html.HiddenFor(p => p.IdPedido, new { @class = "form-control" })
                     @Html.HiddenFor(p => p.IdUsuarioResponsable, new { @class = "form-control" })
-                    @*laush*@       @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                           @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                    @*laush*@   Nombre Negocio: @Html.TextBoxFor(p => p.NombreNegocio, new { @class = "form-control", required = true, placeholder = "Campo es obligatorio." })
-                    @*laush*@        @Html.ValidationMessageFor(model => model.NombreNegocio, "", new { @class = "text-danger" })
+                       Nombre Negocio: @Html.TextBoxFor(p => p.NombreNegocio, new { @class = "form-control", required = true, placeholder = "Campo es obligatorio." })
+                           @Html.ValidationMessageFor(model => model.NombreNegocio, "", new { @class = "text-danger" })
 
                     Descripcion: @Html.TextBoxFor(p => p.Descripcion, new { @class = "form-control" })
                     @Html.HiddenFor(p => p.IdEstadoPedido, new { @class = "form-control" })

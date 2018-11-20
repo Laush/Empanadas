@@ -46,7 +46,7 @@
                 else
                 {
                     <td>Invitado</td>
-                    <!--<td><a href="/Pedidos/Elegir/p.IdPedido" >Elegir Gustos</a></td>-->
+
                 }
 
 
@@ -65,7 +65,7 @@
                     }
                 </td>
 
-                <!--cambio laush-->
+
                 @if (p.Pedido.IdEstadoPedido == 2 || p.Pedido.IdUsuarioResponsable != Model.IdUsuario)
                 {
                     <td><a style="color:white;" href="/Pedidos/Detalle/@p.Pedido.IdPedido"><span class="glyphicon glyphicon-eye-open"></span></a></td>
@@ -74,10 +74,10 @@
                 {
                     <td><a style="color:white;" href="/Pedidos/Editar/@p.IdPedido"><span class="glyphicon glyphicon-pencil"></span></a></td>
                 }
-                <!--cambio laush fin-->
-                <td><a style="color:white;" href="/Pedidos/Eliminar/@p.Pedido.IdPedido"><span class="glyphicon glyphicon-remove"></span></a></td>
+
                 <td><a style="color:white;" href="/Pedidos/Iniciar/@p.Pedido.IdPedido"><span class="glyphicon glyphicon-copyright-mark"></span></a></td>
                 <td><a style="color:white;" href="/Pedidos/Elegir/@p.IdPedido"><span class="glyphicon glyphicon-check"></span></a></td>
+                <td><a style="color:white;" href="/Pedidos/Eliminar/@p.Pedido.IdPedido"><span class="glyphicon glyphicon-remove"></span></a></td>
 
             </tr>
             }

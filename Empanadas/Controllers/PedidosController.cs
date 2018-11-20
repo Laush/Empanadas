@@ -77,7 +77,7 @@ namespace Empanadas.Controllers
         }
 
 
-        //*****//no muestra el nombre del negocio
+      
         public ActionResult Iniciado(Pedido p)
         {
             return View(p);
@@ -115,7 +115,7 @@ namespace Empanadas.Controllers
             servicioPedido.Eliminar(p.IdPedido);
             return RedirectToAction("Listar", "Pedidos");
         }
-        //*****// no me modifica los gustos  
+         
         // GET: Editar
         public ActionResult Editar(int id)
         {
@@ -134,7 +134,7 @@ namespace Empanadas.Controllers
                 return RedirectToAction("Detalle", "Pedidos");
             }
         }
-        //*** no edita los gustos**//
+       
         [HttpPost]
         public ActionResult Editar(Pedido pedido, string btnConfirmar)
         {
