@@ -33,13 +33,13 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (InvitacionPedido p in ViewBag.ListaPedidos)
+            @foreach (Pedido p in ViewBag.ListaPedidos)
             {
             <tr>
-                <td>@p.Pedido.NombreNegocio</td>
-                <td>@p.Pedido.EstadoPedido.Nombre</td>
+                <td>@p.NombreNegocio</td>
+                <td>@p.EstadoPedido.Nombre</td>
 
-                @if (p.Pedido.IdUsuarioResponsable == Model.IdUsuario)
+                @if (p.IdUsuarioResponsable == Model.IdUsuario)
                 {
                     <td>Responsable</td>
                 }
@@ -50,34 +50,41 @@
                 }
 
 
-                <td>@p.Pedido.FechaCreacion.ToString("dd/MM/yyyy")</td>
+                <td>@p.FechaCreacion.ToString("dd/MM/yyyy")</td>
                 <td style="font-size:medium;">
-                    @foreach (GustoEmpanada g in p.Pedido.GustoEmpanada)
+                    @foreach (GustoEmpanada g in p.GustoEmpanada)
                     {
                         @Html.Raw(g.Nombre + " ");
                     }
                 </td>
                 <td style="font-size:medium;">
 
-                    @foreach (InvitacionPedido i in p.Pedido.InvitacionPedido)
+                    @foreach (InvitacionPedido i in p.InvitacionPedido)
                     {
                         @Html.Raw(i.Usuario.Email + " ");
                     }
+                    @* para ver si eligio o no gustos - no funca todavia 
+                        @foreach (Char s in ViewBag.SaberQuienEligioGusto)
+                    {
+                        @Html.Raw(s);
+                    }
+                    *@
+
                 </td>
 
 
-                @if (p.Pedido.IdEstadoPedido == 2 || p.Pedido.IdUsuarioResponsable != Model.IdUsuario)
+                @if (p.IdEstadoPedido == 2 || p.IdUsuarioResponsable != Model.IdUsuario)
                 {
-                    <td><a style="color:white;" href="/Pedidos/Detalle/@p.Pedido.IdPedido"><span class="glyphicon glyphicon-eye-open"></span></a></td>
+                    <td><a style="color:white;" href="/Pedidos/Detalle/@p.IdPedido"><span class="glyphicon glyphicon-eye-open"></span></a></td>
                 }
                 else
                 {
                     <td><a style="color:white;" href="/Pedidos/Editar/@p.IdPedido"><span class="glyphicon glyphicon-pencil"></span></a></td>
                 }
 
-                <td><a style="color:white;" href="/Pedidos/Iniciar/@p.Pedido.IdPedido"><span class="glyphicon glyphicon-copyright-mark"></span></a></td>
+                <td><a style="color:white;" href="/Pedidos/Iniciar/@p.IdPedido"><span class="glyphicon glyphicon-copyright-mark"></span></a></td>
                 <td><a style="color:white;" href="/Pedidos/Elegir/@p.IdPedido"><span class="glyphicon glyphicon-check"></span></a></td>
-                <td><a style="color:white;" href="/Pedidos/Eliminar/@p.Pedido.IdPedido"><span class="glyphicon glyphicon-remove"></span></a></td>
+                <td><a style="color:white;" href="/Pedidos/Eliminar/@p.IdPedido"><span class="glyphicon glyphicon-remove"></span></a></td>
 
             </tr>
             }

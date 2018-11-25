@@ -15,6 +15,8 @@ namespace Empanadas.Controllers
         PedidoServicio servicioPedido = new PedidoServicio();
         UsuarioServicio servicioUsuario = new UsuarioServicio();
         GustoEmpanadaServicio servicioGustos = new GustoEmpanadaServicio();
+        InvitacionPedidoGustoEmpanadaUsuarioServicio servicioInvPedGusUsu = new InvitacionPedidoGustoEmpanadaUsuarioServicio();
+
         private Entities MiBD = new Entities();
 
 
@@ -26,6 +28,7 @@ namespace Empanadas.Controllers
             if (usuarioLogueado != null)
             {
                 ViewBag.ListaPedidos = servicioPedido.ObtenerPedidosByUsuario(usuarioLogueado);
+               // ViewBag.SaberQuienEligioGusto = servicioInvPedGusUsu.saberSiSeEligioGusto(ViewBag.ListaPedidos);
                 return View(usuarioLogueado);
             }
 

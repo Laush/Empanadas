@@ -61,7 +61,7 @@ namespace Empanadas.Models
             return MiBD.Pedido.ToList();
         }
 
-        public List<InvitacionPedido> ObtenerPedidosByUsuario(Usuario usu)
+        public List<Pedido> ObtenerPedidosByUsuario(Usuario usu)
         {
             // return MiBD.Pedido.Include("GustoEmpanada").Where(x => x.IdUsuarioResponsable == idUsuario).OrderByDescending(x => x.FechaCreacion).ToList();
 
@@ -71,7 +71,7 @@ namespace Empanadas.Models
                 join ip in MiBD.InvitacionPedido on p.IdPedido equals ip.IdPedido
                 where p.IdUsuarioResponsable == usu.IdUsuario || ip.IdUsuario == usu.IdUsuario           
                 orderby p.FechaCreacion descending
-                select ip).ToList();
+                select p).Distinct().ToList();
             return query;
 
 
@@ -160,18 +160,23 @@ namespace Empanadas.Models
                 p.GustoEmpanada.Add(gustoEmpanadaDisponible);
                 MiBD.SaveChanges();
             }
+
             /*
             foreach (var idIn in j.IdUsuariosInvitados)
             {
-                //    Usuario u = srvUsuario.ObtenerPorId(idIn);
-                //    InvitacionPedido i = srvGustoEmpanda.ObtenerInvitacionPorPedido(p.IdPedido);
-                //    p.InvitacionPedido.Add(i);
-                p.IdUsuarioResponsable = idIn;
-                MiBD.SaveChanges();
+                InvitacionPedido i = MiBD.InvitacionPedido.Where(o => o.IdUsuario = idIn);
+                p.InvitacionPedido.Add(new InvitacionPedido { i });
             }*/
             
             MiBD.SaveChanges();
         }
+
+
+
+
+
+
+
 
     }
 }

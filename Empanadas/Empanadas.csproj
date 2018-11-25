@@ -194,6 +194,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Servicios\GustoEmpanadaServicio.cs" />
+    <Compile Include="Servicios\InvitacionPedidoGustoEmpanadaUsuarioServicio.cs" />
     <Compile Include="Servicios\InvitacionPedidoServicio.cs" />
     <Compile Include="Servicios\PedidoServicio.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
