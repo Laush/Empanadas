@@ -28,7 +28,7 @@ namespace Empanadas.Controllers
             if (usuarioLogueado != null)
             {
                 ViewBag.ListaPedidos = servicioPedido.ObtenerPedidosByUsuario(usuarioLogueado);
-               // ViewBag.SaberQuienEligioGusto = servicioInvPedGusUsu.saberSiSeEligioGusto(ViewBag.ListaPedidos);
+ //               ViewBag.SaberQuienEligioGusto = servicioInvPedGusUsu.saberSiSeEligioGusto();
                 return View(usuarioLogueado);
             }
 

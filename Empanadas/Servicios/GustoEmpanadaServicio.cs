@@ -59,7 +59,6 @@ namespace Empanadas.Servicios
                               join p in MiBD.Pedido on iv.IdPedido equals p.IdPedido
                               join g in MiBD.GustoEmpanada on iv.IdGustoEmpanada equals g.IdGustoEmpanada
                               where p.IdPedido == idPedido
-
                               select iv
                               ).ToList();
             return listGustos;

@@ -146,8 +146,13 @@ namespace Empanadas.Models
 
         }
 
+
+
+
+        // consultar como modificar pedidos ahora que no guardo en invitacionPedidoGustoEmpa
         public void Modificar(Pedido j)
         {
+            //Pedido p = MiBD.Pedido.Include("InvitacionPedido").First(pedido => pedido.IdPedido == j.IdPedido);
             Pedido p = MiBD.Pedido.Find(j.IdPedido);
             p.NombreNegocio = j.NombreNegocio;
             p.Descripcion = j.Descripcion;
@@ -161,12 +166,14 @@ namespace Empanadas.Models
                 MiBD.SaveChanges();
             }
 
-            /*
+            
             foreach (var idIn in j.IdUsuariosInvitados)
             {
-                InvitacionPedido i = MiBD.InvitacionPedido.Where(o => o.IdUsuario = idIn);
-                p.InvitacionPedido.Add(new InvitacionPedido { i });
-            }*/
+
+                Usuario u = srvUsuario.ObtenerPorId(idIn);
+                InvitacionPedido i = srvGustoEmpanda.ObtenerInvitacionPorPedido(j.IdPedido);
+                p.InvitacionPedido.Add(i);
+            }
             
             MiBD.SaveChanges();
         }
