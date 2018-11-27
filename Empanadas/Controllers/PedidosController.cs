@@ -29,7 +29,7 @@ namespace Empanadas.Controllers
             if (usuarioLogueado != null)
             {
                 ViewBag.ListaPedidos = servicioPedido.ObtenerPedidosByUsuario(usuarioLogueado);
- //               ViewBag.SaberQuienEligioGusto = servicioInvPedGusUsu.saberSiSeEligioGusto();
+                //               ViewBag.SaberQuienEligioGusto = servicioInvPedGusUsu.saberSiSeEligioGusto();
                 return View(usuarioLogueado);
             }
 
@@ -37,7 +37,6 @@ namespace Empanadas.Controllers
             return RedirectToAction("Login", "Home");
         }
 
-        //*****// falta que agregue invitados por token
         [HttpGet]
         public ActionResult Iniciar(int? id)
         {
@@ -46,17 +45,17 @@ namespace Empanadas.Controllers
             {
                 DateTime fecha = DateTime.Now;
                 Pedido pedido = new Pedido();
-
                 pedido.IdUsuarioResponsable = usuarioLogueado.IdUsuario;
                 pedido.IdEstadoPedido = 1;
-                // pedido.PrecioUnidad = 15;
-                // pedido.PrecioDocena = 200;
                 pedido.FechaCreacion = fecha;
                 pedido.FechaModificacion = fecha;
-                
+
                 ViewBag.ListaGusto = servicioPedido.ObtenerGustosDeEmpanada();
                 ViewBag.ListaUsuario = servicioUsuario.ObtenerTodosLosUsuarios();
-                ViewBag.listadoDeUsuarios = new MultiSelectList(MiBD.Usuario.Where(m => m.IdUsuario != usuarioLogueado.IdUsuario).ToList(), "IdUsuario", "Email");
+                //   ViewBag.listadoDeUsuarios = new MultiSelectList(MiBD.Usuario.Where(m => m.IdUsuario != usuarioLogueado.IdUsuario).ToList(), "IdUsuario", "Email");
+
+                //  InvitacionPedido invitacionPedidoDelUsuarioResponsable = new InvitacionPedido();
+                //  invitacionPedidoDelUsuarioResponsable.IdUsuario = usuarioLogueado.IdUsuario;
 
                 if (id != null)
                 {
@@ -68,42 +67,41 @@ namespace Empanadas.Controllers
             Session["RedireccionLogin"] = "Pedidos/Iniciar";
             return RedirectToAction("Login", "Home");
 
-/* //esta version anda e inicia bien los pedidos--pero OJO hay k cambiar la vista Iniciar
-            var pedido = p;
-            pedido.IdEstadoPedido = 1;
-            pedido.FechaCreacion = DateTime.Now;
-            //gustos
-            List<GustoEmpanada> gustosSeleccionados = new List<GustoEmpanada>();
-            foreach (int gId in p.IdGustosSeleccionados)
-            {
-                gustosSeleccionados.Add(MiBD.GustoEmpanada.FirstOrDefault(ge => ge.IdGustoEmpanada == gId));
+            /* //esta version anda e inicia bien los pedidos--pero OJO hay k cambiar la vista Iniciar los viewBag
+                        var pedido = p;
+                        pedido.IdEstadoPedido = 1;
+                        pedido.FechaCreacion = DateTime.Now;
+                        //gustos
+                        List<GustoEmpanada> gustosSeleccionados = new List<GustoEmpanada>();
+                        foreach (int gId in p.IdGustosSeleccionados)
+                        {
+                            gustosSeleccionados.Add(MiBD.GustoEmpanada.FirstOrDefault(ge => ge.IdGustoEmpanada == gId));
 
-            }
-            pedido.GustoEmpanada = gustosSeleccionados;
-            MiBD.Pedido.Add(pedido);
-            //usuarios invitados
-            if (p.IdUsuariosInvitados != null)
-            {
-                foreach (var id in pedido.IdUsuariosInvitados)
-                {
-                    InvitacionPedido invitacion = new InvitacionPedido();
-                    invitacion.IdPedido = pedido.IdPedido;
-                    invitacion.Completado = true;
-                    invitacion.Token = Guid.NewGuid();
-                    invitacion.IdUsuario = id;
-                    MiBD.InvitacionPedido.Add(invitacion);
-                    //EnviarCorreo(invitacion);
-                }*/
-            }
+                        }
+                        pedido.GustoEmpanada = gustosSeleccionados;
+                        MiBD.Pedido.Add(pedido);
+                        //usuarios invitados
+                        if (p.IdUsuariosInvitados != null)
+                        {
+                            foreach (var id in pedido.IdUsuariosInvitados)
+                            {
+                                InvitacionPedido invitacion = new InvitacionPedido();
+                                invitacion.IdPedido = pedido.IdPedido;
+                                invitacion.Completado = true;
+                                invitacion.Token = Guid.NewGuid();
+                                invitacion.IdUsuario = id;
+                                MiBD.InvitacionPedido.Add(invitacion);
+                                //EnviarCorreo(invitacion);
+                            }*/
+        }
 
         [HttpPost]
         public ActionResult Iniciar(Pedido p)
         {
-            // servicioPedido.Agregar(p);// tal vez a futuro haya que mandare por parametro el usuariologueado para k no lo incluya en la lista de invitados
-            //  return RedirectToAction("Iniciado", new { id = p.IdPedido });
             if (ModelState.IsValid)
             {
-                servicioPedido.Agregar(p);
+                var usuarioLogueado = Session["Usuario"] as Usuario;
+                servicioPedido.Agregar(p, usuarioLogueado);
                 return RedirectToAction("Iniciado", new { id = p.IdPedido });
             }
             else
@@ -113,7 +111,7 @@ namespace Empanadas.Controllers
         }
 
 
-      
+
         public ActionResult Iniciado(Pedido p)
         {
             return View(p);
@@ -154,12 +152,12 @@ namespace Empanadas.Controllers
             servicioPedido.Eliminar(p.IdPedido);
             return RedirectToAction("Listar", "Pedidos");
         }
-         
+
         // GET: Editar
         public ActionResult Editar(int id)
         {
             Pedido p = servicioPedido.ObtenerPorId(id);
-           
+
             if (MiBD.Pedido.Find(id).IdEstadoPedido == 1)
             {
                 ViewBag.ListaUsuario = servicioUsuario.ObtenerUsuariosPorPedido(p.IdPedido);
@@ -173,7 +171,7 @@ namespace Empanadas.Controllers
                 return RedirectToAction("Detalle", "Pedidos");
             }
         }
-       
+
         [HttpPost]
         public ActionResult Editar(Pedido pedido, string btnConfirmar)
         {
@@ -193,7 +191,7 @@ namespace Empanadas.Controllers
         }
 
         [HttpGet]
-        public ActionResult Elegir(int id)
+        public ActionResult Elegir(int id) // el id debe ir tipo GUID??
         {
 
             var usuarioLogueado = Session["Usuario"] as Usuario;
@@ -211,7 +209,7 @@ namespace Empanadas.Controllers
              return View(i);*/
         }
 
-        
+
         [HttpPost]
         public ActionResult Elegir(InvitacionPedidoGustoEmpanadaUsuario i)
         {

@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
 
 namespace Empanadas.Models
@@ -12,50 +14,69 @@ namespace Empanadas.Models
         private GustoEmpanadaServicio srvGustoEmpanda = new GustoEmpanadaServicio();
         private UsuarioServicio srvUsuario = new UsuarioServicio();
 
-        public void Agregar(Pedido p)
+        public void Agregar(Pedido p, Usuario idUsuarioReponsable)
         {
-
-            MiBD.Pedido.Add(p);
+            Pedido nuevoPedido = p;
+            nuevoPedido.IdUsuarioResponsable = idUsuarioReponsable.IdUsuario;
+            nuevoPedido.IdEstadoPedido = 1;//al crearlos estado uno
+            nuevoPedido.FechaCreacion = DateTime.Now;
+            MiBD.Pedido.Add(nuevoPedido);
             MiBD.SaveChanges();
 
-            foreach (int gId in p.IdGustosSeleccionados)
+            //ADD GustoEmpanada AL PEDIDO (GustoEmpanadaDisponiblePedido)
+            foreach (var idGusto in nuevoPedido.IdGustosSeleccionados)
             {
-                GustoEmpanada gEmpanadaDisponible = MiBD.GustoEmpanada.FirstOrDefault(o => o.IdGustoEmpanada == gId);
-                p.GustoEmpanada.Add(gEmpanadaDisponible);
+                GustoEmpanada gustoEmpanadaDisponible = MiBD.GustoEmpanada.Find(idGusto);
+                nuevoPedido.GustoEmpanada.Add(gustoEmpanadaDisponible);
                 MiBD.SaveChanges();
-                /*
-                // agregamos el pedido en InvitacionPedidoGustoEmpanadaUsuario
-                InvitacionPedidoGustoEmpanadaUsuario InvitacionCompleta = new InvitacionPedidoGustoEmpanadaUsuario();
-                InvitacionCompleta.IdPedido = p.IdPedido;
-                InvitacionCompleta.IdGustoEmpanada = srvGustoEmpanda.ObtenerPorId(gId).IdGustoEmpanada;
-                InvitacionCompleta.IdUsuario = p.IdUsuarioResponsable;
-                InvitacionCompleta.Cantidad = 0;
-
-                MiBD.InvitacionPedidoGustoEmpanadaUsuario.Add(InvitacionCompleta);
-                MiBD.SaveChanges();*/
             }
-            
-            foreach (int invitadoId in p.IdUsuariosInvitados)
+            //verifico q seleccione usuarios
+            if (p.IdUsuariosInvitados != null)
             {
-                InvitacionPedido InPedido = new InvitacionPedido();
-                InPedido.IdPedido = p.IdPedido;
-                InPedido.IdUsuario = invitadoId;
-                InPedido.Token = Guid.NewGuid();
-                InPedido.Completado = false;
-                MiBD.InvitacionPedido.Add(InPedido);
-                MiBD.SaveChanges();
+                foreach (var idUsuario in nuevoPedido.IdUsuariosInvitados)
+                {
+                    InvitacionPedido nuevaInvitacionPedido = new InvitacionPedido();
+                    nuevaInvitacionPedido.IdPedido = nuevoPedido.IdPedido;
+                    nuevaInvitacionPedido.Completado = true;
+                    nuevaInvitacionPedido.Token = Guid.NewGuid();
+                    nuevaInvitacionPedido.IdUsuario = idUsuario;
+                    MiBD.InvitacionPedido.Add(nuevaInvitacionPedido);
+                    MiBD.SaveChanges();
+                    EnviarEmailInvitados(nuevaInvitacionPedido);
+                }
+            }//end if
 
-            }
-            
+            //AGREGO AL USUARIO RESPONSABLE EN LA INVITACION PEDIDO
+            InvitacionPedido invitacionPedidoDelUsuarioResponsable = new InvitacionPedido();
+            invitacionPedidoDelUsuarioResponsable.IdPedido = nuevoPedido.IdPedido;
+            invitacionPedidoDelUsuarioResponsable.Completado = false;
+            invitacionPedidoDelUsuarioResponsable.Token = Guid.NewGuid();
+            invitacionPedidoDelUsuarioResponsable.IdUsuario = idUsuarioReponsable.IdUsuario;
+            MiBD.InvitacionPedido.Add(invitacionPedidoDelUsuarioResponsable);
             MiBD.SaveChanges();
+            EnviarEmailInvitados(invitacionPedidoDelUsuarioResponsable);
         }
 
-        public List<Pedido> Listar()
+        public void EnviarEmailInvitados(InvitacionPedido invitacion)
         {
-            return MiBD.Pedido.ToList();
+            Usuario usuario = MiBD.Usuario.Find(invitacion.IdUsuario);
+            MailMessage msg = new MailMessage();
+            msg.To.Add(new MailAddress(usuario.Email));
+            msg.From = new MailAddress("empanadas.ya18@gmail.com");
+            msg.Subject = "Bienvenido a Empanadas YA!";
+            //   msg.Body = "Recibiste una invitacion de" + invitacion.Usuario.Email + "Invitacion: " + HttpContext.Current.Request.Url.Authority + " /Pedidos/Elegir/" + invitacion.Token;
+            msg.Body = "Recibiste una invitacion para elegir gustos..... Ingresa aqui--> " + HttpContext.Current.Request.Url.Authority + " /Pedidos/Elegir/" + invitacion.IdPedido;
+            SmtpClient clienteSmtp = new SmtpClient();
+            clienteSmtp.Host = "smtp.gmail.com";
+            clienteSmtp.Port = 587;
+            clienteSmtp.UseDefaultCredentials = false;
+            clienteSmtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+            clienteSmtp.Credentials = new System.Net.NetworkCredential("empanadas.ya18@gmail.com", "empanadas2018");
+            clienteSmtp.EnableSsl = true;
+            clienteSmtp.Send(msg);
+
         }
 
-    
         public void Eliminar(int id)
         {
             var invitaciones = MiBD.InvitacionPedido.Where(i => i.IdPedido == id).ToList();
@@ -74,12 +95,12 @@ namespace Empanadas.Models
             MiBD.SaveChanges();
         }
 
-//obtener pedidos
+        //obtener pedidos
         public Pedido ObtenerPorId(int id)
         {
             return MiBD.Pedido.FirstOrDefault(p => p.IdPedido == id);
         }
- //obtener usuarios
+        //obtener usuarios
         public List<Pedido> ObtenerPedidosByUsuario(Usuario usu)
         {
             // return MiBD.Pedido.Include("GustoEmpanada").Where(x => x.IdUsuarioResponsable == idUsuario).OrderByDescending(x => x.FechaCreacion).ToList();
@@ -116,7 +137,7 @@ namespace Empanadas.Models
             return MiBD.Usuario.Where(m => m.IdUsuario != u.IdUsuario).ToList();
         }
 
- //obtener de gustos
+        //obtener de gustos
         public List<GustoEmpanada> ObtenerGustosDeEmpanada()
         {
             return MiBD.GustoEmpanada.ToList();
@@ -126,7 +147,7 @@ namespace Empanadas.Models
         {
             return MiBD.Pedido.FirstOrDefault(p => p.IdPedido == id).GustoEmpanada.ToList();
         }
-//obtener de invitaciones
+        //obtener de invitaciones
         public int ObtenerInvitacionesConfirmadas(int id)
         {
             return MiBD.InvitacionPedido.Where(c => c.IdPedido == id)
@@ -160,7 +181,7 @@ namespace Empanadas.Models
                 MiBD.SaveChanges();
             }
 
-            
+
             foreach (var idIn in j.IdUsuariosInvitados)
             {
 
@@ -168,16 +189,9 @@ namespace Empanadas.Models
                 InvitacionPedido i = srvGustoEmpanda.ObtenerInvitacionPorPedido(j.IdPedido);
                 p.InvitacionPedido.Add(i);
             }
-            
+
             MiBD.SaveChanges();
         }
-
-
-
-
-
-
-
 
     }
 }

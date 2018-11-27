@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Empanadas.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -9,6 +10,31 @@ namespace Empanadas.Servicios
     {
 
         private Entities MiBD = new Entities();
+
+        public bool Evaluar(ConfirmarGustosModel model)
+        {
+            var invitacion = MiBD.InvitacionPedido.Where(m => m.Token == model.Token).First();
+            //PREGUNTO POR EL ESTADO DEL PEDIDO
+            if (invitacion.Pedido.IdEstadoPedido == 2)
+            {
+                return false;
+            }
+            else
+            {
+                //PREGUNTO POR LOS GUSTOS SELECCIONADOS ESTAN EN EL PEDIDO
+                foreach (var item in model.GustosEmpanadasCantidad)
+                {
+                    if (!invitacion.Pedido.GustoEmpanada.Select(x => x.IdGustoEmpanada).Contains(item.IdGustoEmpanada))
+                    {
+                        return false;
+                    }
+                }
+                //GUARDAR aca o el controlador
+                return true;
+            }
+        }
+
+
 
         /*
         public String saberSiSeEligioGusto(List<Pedido> p)
