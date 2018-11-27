@@ -30,6 +30,21 @@
                     FechaCreacion:@Model.FechaCreacion
                     <br>
                 </div>
+                <br>
+                <div class="col-md-6">
+                   
+                        Gustos Disponibles:
+                        <div id="midiv" class="table-hover">
+
+                            @foreach (var item in ViewBag.Lista as MultiSelectList)
+                            {
+                                @item.Text <br>
+                            }
+                        </div>
+     
+
+                    
+                    </div>
             </div>
             <br>
             <div class="center-align pt-1">

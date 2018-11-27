@@ -15,6 +15,7 @@ namespace Empanadas.Controllers
         PedidoServicio servicioPedido = new PedidoServicio();
         UsuarioServicio servicioUsuario = new UsuarioServicio();
         GustoEmpanadaServicio servicioGustos = new GustoEmpanadaServicio();
+        InvitacionPedidoServicio servicioInvitacion = new InvitacionPedidoServicio();
         InvitacionPedidoGustoEmpanadaUsuarioServicio servicioInvPedGusUsu = new InvitacionPedidoGustoEmpanadaUsuarioServicio();
 
         private Entities MiBD = new Entities();
@@ -52,7 +53,7 @@ namespace Empanadas.Controllers
                 // pedido.PrecioDocena = 200;
                 pedido.FechaCreacion = fecha;
                 pedido.FechaModificacion = fecha;
-
+                
                 ViewBag.ListaGusto = servicioPedido.ObtenerGustosDeEmpanada();
                 ViewBag.ListaUsuario = servicioUsuario.ObtenerTodosLosUsuarios();
                 ViewBag.listadoDeUsuarios = new MultiSelectList(MiBD.Usuario.Where(m => m.IdUsuario != usuarioLogueado.IdUsuario).ToList(), "IdUsuario", "Email");
@@ -66,7 +67,34 @@ namespace Empanadas.Controllers
             }
             Session["RedireccionLogin"] = "Pedidos/Iniciar";
             return RedirectToAction("Login", "Home");
-        }
+
+/* //esta version anda e inicia bien los pedidos--pero OJO hay k cambiar la vista Iniciar
+            var pedido = p;
+            pedido.IdEstadoPedido = 1;
+            pedido.FechaCreacion = DateTime.Now;
+            //gustos
+            List<GustoEmpanada> gustosSeleccionados = new List<GustoEmpanada>();
+            foreach (int gId in p.IdGustosSeleccionados)
+            {
+                gustosSeleccionados.Add(MiBD.GustoEmpanada.FirstOrDefault(ge => ge.IdGustoEmpanada == gId));
+
+            }
+            pedido.GustoEmpanada = gustosSeleccionados;
+            MiBD.Pedido.Add(pedido);
+            //usuarios invitados
+            if (p.IdUsuariosInvitados != null)
+            {
+                foreach (var id in pedido.IdUsuariosInvitados)
+                {
+                    InvitacionPedido invitacion = new InvitacionPedido();
+                    invitacion.IdPedido = pedido.IdPedido;
+                    invitacion.Completado = true;
+                    invitacion.Token = Guid.NewGuid();
+                    invitacion.IdUsuario = id;
+                    MiBD.InvitacionPedido.Add(invitacion);
+                    //EnviarCorreo(invitacion);
+                }*/
+            }
 
         [HttpPost]
         public ActionResult Iniciar(Pedido p)
@@ -96,6 +124,9 @@ namespace Empanadas.Controllers
             var usuarioLogueado = Session["Usuario"] as Usuario;
             if (usuarioLogueado != null)
             {
+                List<GustoEmpanada> InitGustos = servicioPedido.ObtenerGustosPorPedido(id);
+                ViewBag.Lista = new MultiSelectList(InitGustos, "IdGustoEmpanada", "Nombre");
+
                 return View(servicioPedido.ObtenerPorId(id));
             }
             Session["RedireccionLogin"] = "Pedidos/Listar";
@@ -164,13 +195,23 @@ namespace Empanadas.Controllers
         [HttpGet]
         public ActionResult Elegir(int id)
         {
+
+            var usuarioLogueado = Session["Usuario"] as Usuario;
             Pedido p = servicioPedido.ObtenerPorId(id);
-            ViewBag.ListaGustos = servicioGustos.ListarGustos(id);
-            InvitacionPedidoGustoEmpanadaUsuario i = servicioGustos.ObtenerInvitacionPedidoUsuarioGustoPorIdPedido(id);
-            i.Pedido.IdPedido = p.IdPedido;
-            return View(i);
+            InvitacionPedido token = servicioInvitacion.GetInvitacionPedidoPorPedido(id, usuarioLogueado.IdUsuario);
+            ViewBag.Token = token.Token;
+            List<GustoEmpanada> InitGustos = servicioPedido.ObtenerGustosPorPedido(id);
+            ViewBag.Lista = new MultiSelectList(InitGustos, "IdGustoEmpanada", "Nombre");
+            return View(p);
+
+            /* Pedido p = servicioPedido.ObtenerPorId(id);
+             ViewBag.ListaGustos = servicioGustos.ListarGustos(id);
+             InvitacionPedidoGustoEmpanadaUsuario i = servicioGustos.ObtenerInvitacionPedidoUsuarioGustoPorIdPedido(id);
+             i.Pedido.IdPedido = p.IdPedido;
+             return View(i);*/
         }
 
+        
         [HttpPost]
         public ActionResult Elegir(InvitacionPedidoGustoEmpanadaUsuario i)
         {

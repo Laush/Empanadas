@@ -4,11 +4,85 @@
     List<InvitacionPedidoGustoEmpanadaUsuario> listaGustos = ViewBag.ListaGustos;
 }
 
-
-@model InvitacionPedidoGustoEmpanadaUsuario
+@model Pedido
 
 <html>
 <head>
+    <script type="text/javascript">
+
+    var dataArray = [];
+    dataArray.length = 0;
+    var tablaArray = [];
+    tablaArray.length = 0;
+
+    $('select').selectpicker();
+    function changeOption(select) {
+        $("#cantidad").fadeIn();
+        $("#btncantidad").fadeIn();
+    }
+    function agregar() {
+        $("#midiv").fadeOut();
+        var idgusto = $("#cboGustos").val();
+        var gusto = getSelectedText("cboGustos");
+        var cantidad = $("#cantidad").val();
+        if (!include(dataArray, idgusto)) {
+            dataArray.push({
+                IdGustoEmpanada: idgusto,
+                Cantidad: cantidad
+            });
+
+            tablaArray.push({
+                Gusto: gusto,
+                Cantidad: cantidad
+            });
+
+            createTable();
+        }
+        else {
+            $("#midiv").fadeIn();
+        }
+    }
+
+    function include(arr, obj) {
+        var flag = false;
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i].IdGustoEmpanada == obj) {
+                flag = true;
+            }
+        }
+        return flag;
+    }
+
+    function getSelectedText(elementId) {
+        var elt = document.getElementById(elementId);
+
+        if (elt.selectedIndex == -1)
+            return null;
+
+        return elt.options[elt.selectedIndex].text;
+    }
+
+    function createTable() {
+
+        var tbody = '';
+        var theader = '<table class="table table-striped"> <tr><th>Gusto</th><th>Cantidad</th></tr>\n';
+        for (var i = 0; i < tablaArray.length; i++) {
+            tbody += '<tr>';
+            tbody += '<td>';
+            tbody += tablaArray[i].Gusto;
+            tbody += '</td>'
+            tbody += '<td>';
+            tbody += tablaArray[i].Cantidad;
+            tbody += '</td>'
+            tbody += '</tr>\n';
+        }
+
+        var tfooter = '</table>';
+        document.getElementById('midiv').innerHTML = theader + tbody + tfooter;
+        $("#midiv").fadeIn();
+    }
+
+    </script>
 </head>
 <body>
     <h2>Iniciar Pedido</h2>
@@ -16,20 +90,20 @@
         <form action="/Pedidos/Elegir" method="Post">
             <div class="row">
                 <div class="col-md-6">
-          
+
                     @Html.HiddenFor(p => p.IdPedido, new { @class = "form-control" })
-                    @Html.HiddenFor(p => p.Pedido.IdUsuarioResponsable, new { @class = "form-control" })
-                    Descripcion: @Html.TextBoxFor(p => p.Pedido.Descripcion, new { @class = "form-control" })
-                    @Html.HiddenFor(p => p.Pedido.EstadoPedido, new { @class = "form-control" })
-                    Nombre Negocio: @Html.TextBoxFor(p => p.Pedido.NombreNegocio, new { @class = "form-control" })
+                    @Html.HiddenFor(p => p.IdUsuarioResponsable, new { @class = "form-control" })
+                    Descripcion: @Html.TextBoxFor(p => p.Descripcion, new { @class = "form-control" })
+                    @Html.HiddenFor(p => p.EstadoPedido, new { @class = "form-control" })
+                    Nombre Negocio: @Html.TextBoxFor(p => p.NombreNegocio, new { @class = "form-control" })
                     <br>
 
 
                 </div>
                 <div class="col-md-6">
-                    
-                    Precio x Unidad: @Html.TextBoxFor(p => p.Pedido.PrecioUnidad, new { @class = "form-control" })
-                    Precio x Docena: @Html.TextBoxFor(p => p.Pedido.PrecioDocena, new { @class = "form-control" })
+
+                    Precio x Unidad: @Html.TextBoxFor(p => p.PrecioUnidad, new { @class = "form-control" })
+                    Precio x Docena: @Html.TextBoxFor(p => p.PrecioDocena, new { @class = "form-control" })
                     <br>
 
 
@@ -37,36 +111,44 @@
 
                 <div>
                     Seleccionar Gustos:
-                    <table class="table table-condensed">
-                        <thead class="thead-inverse">
-                            <tr>
-                                <td>GustosDisponibles</td>
-                                <td>Cantidad</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @*Puedo hacer un array en esta tabla para no usar viewBag *@
-                            @foreach (InvitacionPedidoGustoEmpanadaUsuario g in (List<InvitacionPedidoGustoEmpanadaUsuario>)listaGustos)
-                            {
-                                <tr>
-                                    <td>@g.GustoEmpanada.Nombre</td>
-                                    <td>@Html.TextBoxFor(p => p.Cantidad, new { @class = "form-control" })</td>
-                                    @*<td><a style="color:white;" href="/Pedidos/Eliminar/@g.Pedido.IdPedido"><span class="glyphicon glyphicon-remove"></span></a></td>*@
-
-                                </tr>
-                            }
-
-
-
-
-
-                        </tbody>
-                    </table>
-
-
-
+     
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <select class="selectpicker" id="cboGustos" onchange="changeOption(this)" data-live-search="true" title="Seleccione gustos.." name="GustoDeEmpanadaSeleccionados">
+                                            @foreach (var item in ViewBag.Lista as MultiSelectList)
+                                            {
+                                                <option value="@item.Value">@item.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input class="form-control" style="display:none" id="cantidad" placeholder="ingrese cantidad" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-warning" style="display:none" id="btncantidad" onclick="agregar()">Agregar</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div id="midiv" class="table-hover" style="display:none; color:black;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                 </div>
+
+            </div>
+
+  
+
+
+
+
+</div>
 
             </div>
             <br>
