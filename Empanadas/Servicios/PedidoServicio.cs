@@ -143,6 +143,7 @@ namespace Empanadas.Models
             return MiBD.GustoEmpanada.ToList();
         }
 
+
         public List<GustoEmpanada> ObtenerGustosPorPedido(int id)
         {
             return MiBD.Pedido.FirstOrDefault(p => p.IdPedido == id).GustoEmpanada.ToList();
@@ -180,16 +181,12 @@ namespace Empanadas.Models
                 p.GustoEmpanada.Add(gustoEmpanadaDisponible);
                 MiBD.SaveChanges();
             }
-
-
-            foreach (var idIn in j.IdUsuariosInvitados)
-            {
-
-                Usuario u = srvUsuario.ObtenerPorId(idIn);
-                InvitacionPedido i = srvGustoEmpanda.ObtenerInvitacionPorPedido(j.IdPedido);
-                p.InvitacionPedido.Add(i);
-            }
-
+            /*  foreach (var idIn in j.IdUsuariosInvitados)
+              {
+                  Usuario u = srvUsuario.ObtenerPorId(idIn);
+                  InvitacionPedido i = srvGustoEmpanda.ObtenerInvitacionPorPedido(j.IdPedido);
+                  p.InvitacionPedido.Add(i);
+              }*/
             MiBD.SaveChanges();
         }
 

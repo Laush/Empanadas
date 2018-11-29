@@ -21,23 +21,21 @@
                     @Html.HiddenFor(p => p.IdEstadoPedido, new { @class = "form-control" })
                     Nombre Negocio: @Html.TextBoxFor(p => p.NombreNegocio, new { @class = "form-control" })
 
-                    Gustos Seleccionados:
-                    
-                    <select class="form-control" id="lala" title="Seleccione gustos.." name="lala">
+                    Gustos:
+
+                    <select class="selectpicker" multiple data-live-search="true" title="Seleccione gustos.." name="IdGustosSeleccionados">
+
+                        @foreach (var item in Model.GustoEmpanada)
+                        {
+                            <option value="@item.IdGustoEmpanada" selected>@item.Nombre</option>
+                        }
                         @foreach (var item in ViewBag.Lista as MultiSelectList)
                         {
                             <option value="@item.Value">@item.Text</option>
                         }
                     </select>
 
-                    ¿Desea agregar gustos?
-                    <select id="IdGustosSeleccionados" name="IdGustosSeleccionados" multiple="multiple" class="form-control">
 
-                        @foreach (GustoEmpanada item in ((List<GustoEmpanada>)ViewBag.ListaDeGustos))
-                        {
-                            <option value="@item.IdGustoEmpanada">@item.Nombre</option>
-                        }
-                    </select>
 
                 </div>
                 <div class="col-md-6">
@@ -47,34 +45,39 @@
                     @Html.HiddenFor(p => p.FechaModificacion, new { @class = "form-control" })
 
                     Invitados:
-                    <select id="lele" name="lele" multiple="multiple" class="form-control">
-
-                        @foreach (Usuario item in ((List<Usuario>)ViewBag.ListaUsuario))
+                    <select class="selectpicker" multiple data-live-search="true" title="Seleccione invitados.." name="IdUsuariosInvitados">
+                        @foreach (var item in ViewBag.Mailseleccionados as MultiSelectList)
                         {
-                            <option value="@item.IdUsuario">@item.Email</option>
+                            <option value="@item.Value" selected>@item.Text</option>
+                        }
+                        @foreach (var item in ViewBag.Mails as MultiSelectList)
+                        {
+                            <option value="@item.Value">@item.Text</option>
                         }
                     </select>
 
-                    ¿Desea agregar invitados? 
-                    <select id="IdUsuariosInvitados" name="IdUsuariosInvitados" multiple="multiple" class="form-control">
 
-                        @foreach (Usuario item in ((List<Usuario>)ViewBag.ListaDeUsuarios))
-                        {
-                            <option value="@item.IdUsuario">@item.Email</option>
-                        }
-                    </select>
                 </div>
             </div>
             <br>
-            <div class="center-align pt-1">
-                <button type="submit" class="btn btn-warning my-2 my-sm-0" name="btnConfirmar" id="btnConfirmar" onclick="Confirmar()" value="confirmar">Confirmar</button>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-2 col-lg-offset-3">
+
+                        <input type="submit" value="Cancelar" id="btnCancelar" class="btn btn-block btn-warning" />
+                    </div>
+                    <div class="col-md-2">
+                        <input type="submit" value="Guardar" id="btnGuardar" name="btnGuardar" class="btn btn-block btn-warning" />
+                    </div>
+                    <div class="col-md-2">
+                        <input type="submit" value="Confirmar" id="btnConfirmar"
+                               onclick="return confirm('¿Está seguro que desea Confirmar el pedido? Una vez confirmado no se podrá modificar.')" name="btnConfirmar" class="btn btn-block btn-warning" />
+                    </div>
+                </div>
             </div>
         </form>
 
-
-        <a class="linkss" href="/Pedidos/Listar"> Cancelar</a>
     </div>
 </body>
 
 </html>
-

@@ -26,7 +26,7 @@
                     @Html.HiddenFor(p => p.IdEstadoPedido, new { @class = "form-control" })
                     Gustos:
                     <br>
-                    <select id="IdGustosSeleccionados" name="IdGustosSeleccionados" multiple="multiple" class="form-control">
+                    <select class="selectpicker" id="IdGustosSeleccionados" name="IdGustosSeleccionados" multiple="multiple" class="form-control">
                         <option value="1">Seleccione</option>
                         <option value="0">Otros</option>
                         @foreach (GustoEmpanada item in ((List
@@ -46,7 +46,7 @@
                     @Html.HiddenFor(p => p.FechaModificacion, new { @class = "form-control" })
 
                     Invitados:
-                    <select id="IdUsuariosInvitados" name="IdUsuariosInvitados" multiple="multiple" class="form-control">
+                    <select class="selectpicker" id="IdUsuariosInvitados" name="IdUsuariosInvitados" multiple="multiple" class="form-control">
 
                         @foreach (Usuario item in ((List
                         <Usuario>
@@ -62,7 +62,7 @@
             <input class="btn btn-warning my-2 my-sm-0" type="submit" text="Guardar" />
         </form>
 
-        <br>
+   
         <form action="/Pedidos/Listar/">
             <button class="btn btn-warning my-2 my-sm-0" type="submit">Cancelar</button>
         </form>
@@ -70,3 +70,5 @@
 </body>
 
 </html>
+
+

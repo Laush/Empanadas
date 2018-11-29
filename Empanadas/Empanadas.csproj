@@ -120,6 +120,7 @@
       <DependentUpon>2018_2C_TP.edmx</DependentUpon>
       <LastGenOutput>2018_2C_TP.cs</LastGenOutput>
     </Content>
+    <Content Include="Content\bootstrap-select.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\fondo.jpeg" />
@@ -127,6 +128,7 @@
     <Content Include="Content\Estilo.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\bootstrap-select.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <EntityDeploy Include="2018_2C_TP.edmx">

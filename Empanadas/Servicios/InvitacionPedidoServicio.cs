@@ -25,23 +25,40 @@ namespace Empanadas.Servicios
             return null;
         }
 
-       /* public bool ValidarGustos(ConfirmarGusto datos)
+        public List<Usuario> ObtenerGustosConfirmados(int idPedido)
         {
-            try
+            List<InvitacionPedido> invitacionesDelUsuario = MiBD.InvitacionPedido.Include("Pedido")
+              .Where(o => o.IdPedido == idPedido).ToList();
+            List<Usuario> usuarios = MiBD.Usuario.ToList();
+            int i = 0;
+            foreach (InvitacionPedido item in invitacionesDelUsuario)
             {
-                var estadoPedido = MiBD.InvitacionPedido.Where(i => i.Token == datos.Token).FirstOrDefault();
-
-                if (estadoPedido.Pedido.IdEstadoPedido == 2)
+                if (usuarios[i].IdUsuario != item.IdUsuario)
                 {
-                    return false;
+                    usuarios.RemoveAt(i);
+                    i++;
                 }
-                return true;
             }
-            catch
-            {
-                return false;
-            }
-        }*/
+            return usuarios;
+        }
+
+        /* public bool ValidarGustos(ConfirmarGusto datos)
+         {
+             try
+             {
+                 var estadoPedido = MiBD.InvitacionPedido.Where(i => i.Token == datos.Token).FirstOrDefault();
+
+                 if (estadoPedido.Pedido.IdEstadoPedido == 2)
+                 {
+                     return false;
+                 }
+                 return true;
+             }
+             catch
+             {
+                 return false;
+             }
+         }*/
 
     }
 }

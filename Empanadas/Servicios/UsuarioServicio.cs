@@ -10,7 +10,7 @@ namespace Empanadas.Servicios
 
         private Entities MiBD = new Entities();
 
-          public int devolverIdUsuario { get; set; }
+        public int devolverIdUsuario { get; set; }
 
         public Usuario VerificarExistenciaUsuario(Usuario u)
         {
@@ -24,7 +24,7 @@ namespace Empanadas.Servicios
             var usuarioBuscado = MiBD.Usuario.Where(us => us.Email.Equals(mail)).FirstOrDefault();
             return usuarioBuscado;
         }
-        
+
         public List<Usuario> ObtenerTodosLosUsuarios()
         {
             return MiBD.Usuario.ToList();
@@ -48,6 +48,11 @@ namespace Empanadas.Servicios
         public Usuario ObtenerPorId(int id)
         {
             return MiBD.Usuario.FirstOrDefault(u => u.IdUsuario == id);
+        }
+
+        public List<Usuario> ObtenerMailsUsuarios()
+        {
+            return MiBD.Usuario.ToList();
         }
     }
 }

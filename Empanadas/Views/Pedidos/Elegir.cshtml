@@ -91,35 +91,26 @@
 <body>
     <h2>Iniciar Pedido</h2>
     <div class="container">
-        <form action="/Pedidos/Elegir" method="Post">
+    <form action="/Pedidos/Elegir" method="Post">
             <div class="row">
                 <div class="col-md-6">
-
                     @Html.HiddenFor(p => p.IdPedido, new { @class = "form-control" })
                     @Html.HiddenFor(p => p.IdUsuarioResponsable, new { @class = "form-control" })
                     Descripcion: @Html.TextBoxFor(p => p.Descripcion, new { @class = "form-control" })
                     @Html.HiddenFor(p => p.EstadoPedido, new { @class = "form-control" })
                     Nombre Negocio: @Html.TextBoxFor(p => p.NombreNegocio, new { @class = "form-control" })
                     <br>
-
-
                 </div>
                 <div class="col-md-6">
-
                     Precio x Unidad: @Html.TextBoxFor(p => p.PrecioUnidad, new { @class = "form-control" })
                     Precio x Docena: @Html.TextBoxFor(p => p.PrecioDocena, new { @class = "form-control" })
                     <br>
-
-
                 </div>
-
-                <div>
-                    Seleccionar Gustos:
-
+             
                     <div class="form-group">
                         <div class="row">
                             <div class="col-md-3">
-                                <select class="selectpicker" id="cboGustos" onchange="changeOption(this)" data-live-search="true" title="Seleccione gustos.." name="GustoDeEmpanadaSeleccionados">
+                                <select class="selectpicker" id="cboGustos" onchange="changeOption(this)" data-live-search="true" title="Seleccione GUSTOS.." name="GustoDeEmpanadaSeleccionados">
                                     @foreach (var item in ViewBag.Lista as MultiSelectList)
                                     {
                                         <option value="@item.Value">@item.Text</option>
@@ -133,7 +124,7 @@
                                 <button type="button" class="btn btn-warning" style="display:none" id="btncantidad" onclick="agregar()">Agregar</button>
                             </div>
                         </div>
-                    </div>
+
                     <div class="form-group">
                         <div class="row">
                             <div class="col-md-3">
@@ -166,12 +157,9 @@
             </table>
             <input class="btn btn-warning my-2 my-sm-0" type="button" value="Confirmar" id="Confirmar" />
 
-
-
-
     </div>
     <br>
-    <input class="btn btn-warning my-2 my-sm-0" type="submit" value="Agregar" />
+
     <a class="btn btn-warning my-2 my-sm-0" href="/Pedidos/Listar">Cancelar</a>
     </form>
 

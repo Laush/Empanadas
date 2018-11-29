@@ -156,44 +156,81 @@ namespace Empanadas.Controllers
         // GET: Editar
         public ActionResult Editar(int id)
         {
-            Pedido p = servicioPedido.ObtenerPorId(id);
+            // Pedido p = servicioPedido.ObtenerPorId(id);
+            //ViewBag.ListaUsuario = servicioUsuario.ObtenerUsuariosPorPedido(p.IdPedido);
+            //ViewBag.ListaDeUsuarios = servicioUsuario.ObtenerTodosLosUsuarios();
+            //List<GustoEmpanada> InitGustos = servicioPedido.ObtenerGustosPorPedido(id);
+            //ViewBag.Lista = new MultiSelectList(InitGustos, "IdGustoEmpanada", "Nombre");
+            //ViewBag.ListaDeGustos = servicioPedido.ObtenerGustosDeEmpanada();
+            //return View(MiBD.Pedido.Find(id));
+            var usuarioLogueado = Session["Usuario"] as Usuario;
+            Pedido pedido = servicioPedido.ObtenerPorId(id);
 
-            if (MiBD.Pedido.Find(id).IdEstadoPedido == 1)
+            List<GustoEmpanada> InitGustos = servicioPedido.ObtenerGustosDeEmpanada();
+
+            foreach (GustoEmpanada item in pedido.GustoEmpanada)
             {
-                ViewBag.ListaUsuario = servicioUsuario.ObtenerUsuariosPorPedido(p.IdPedido);
-                ViewBag.ListaDeUsuarios = servicioUsuario.ObtenerTodosLosUsuarios();
-                List<GustoEmpanada> InitGustos = servicioPedido.ObtenerGustosPorPedido(id);
-                ViewBag.Lista = new MultiSelectList(InitGustos, "IdGustoEmpanada", "Nombre");
-                //ViewBag.ListaGusto = servicioGustos.ListarGustos(p.IdPedido);
-                ViewBag.ListaDeGustos = servicioPedido.ObtenerGustosDeEmpanada();
-                return View(MiBD.Pedido.Find(id));
+                InitGustos.Remove(item);
             }
-            else
-            { //si el estado es cerrado no deja editar y va a detalle
-                return RedirectToAction("Detalle", "Pedidos");
+
+            List<Usuario> mails = servicioUsuario.ObtenerMailsUsuarios();
+            List<Usuario> mailsNuevos = new List<Usuario>();
+
+            for (int i = 0; i < mails.Count; i++)
+            {
+                foreach (InvitacionPedido item in pedido.InvitacionPedido)
+                {
+                    if (mails[i].IdUsuario == item.IdUsuario && item.IdUsuario != usuarioLogueado.IdUsuario)
+                    {
+                        mailsNuevos.Add(mails[i]);
+                        mails.Remove(mails[i]);
+                        break;
+                    }
+                }
             }
+            //esto es a futuro para mostrar el si o no de lo sk ya confirmaron
+            //  List<Usuario> gustosElegidos = servicioInvitacionPedido.ObtenerGustosConfirmados(id);
+            //   ViewBag.GustosElegidos = gustosElegidos;
+            ViewBag.Lista = new MultiSelectList(InitGustos, "IdGustoEmpanada", "Nombre");
+            ViewBag.Mails = new MultiSelectList(mails, "IdUsuario", "Email");
+            ViewBag.Mailseleccionados = new MultiSelectList(mailsNuevos, "IdUsuario", "Email");
+
+            return View(pedido);
+
         }
 
         [HttpPost]
-        public ActionResult Editar(Pedido pedido, string btnConfirmar)
+        public ActionResult Editar(Pedido pedido, string btnConfirmar, string btnCancelar)
         {
             if (ModelState.IsValid)
             {
-                if (btnConfirmar == "confirmar")
+
+                if (btnCancelar == "Cancelar")
+                {
+                    return RedirectToAction("Listar");
+                }
+
+                if (btnConfirmar == "Confirmar")
                 {
                     servicioPedido.cerrarPedido(pedido);
                 }
                 servicioPedido.Modificar(pedido);
                 return RedirectToAction("Listar");
+
+
             }
             else
             {
                 return View(pedido);
             }
+
+       
         }
 
+
+
         [HttpGet]
-        public ActionResult Elegir(int id) // el id debe ir tipo GUID??
+        public ActionResult Elegir(int id)
         {
 
             var usuarioLogueado = Session["Usuario"] as Usuario;
