@@ -37,7 +37,7 @@ namespace Empanadas.Models
                 {
                     InvitacionPedido nuevaInvitacionPedido = new InvitacionPedido();
                     nuevaInvitacionPedido.IdPedido = nuevoPedido.IdPedido;
-                    nuevaInvitacionPedido.Completado = true;
+                    nuevaInvitacionPedido.Completado = false;
                     nuevaInvitacionPedido.Token = Guid.NewGuid();
                     nuevaInvitacionPedido.IdUsuario = idUsuario;
                     MiBD.InvitacionPedido.Add(nuevaInvitacionPedido);
@@ -113,7 +113,7 @@ namespace Empanadas.Models
                  select p).Distinct().ToList();
              return query;*/
 
-            //otra version--no duplica pero debes seleccionar al responsable tambien
+            //otra version
 
             List<Pedido> pedidosResultado = new List<Pedido>();
             List<InvitacionPedido> imvitacionesDelUsuario = MiBD.InvitacionPedido.Include("Pedido")

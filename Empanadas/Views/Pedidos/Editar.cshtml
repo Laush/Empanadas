@@ -20,13 +20,13 @@
                     Descripcion: @Html.TextBoxFor(p => p.Descripcion, new { @class = "form-control" })
                     @Html.HiddenFor(p => p.IdEstadoPedido, new { @class = "form-control" })
                     Nombre Negocio: @Html.TextBoxFor(p => p.NombreNegocio, new { @class = "form-control" })
-                   
-                    Gustos Seleccionados:
-                    <select id="lala" name="lala" multiple="multiple" class="form-control">
 
-                        @foreach (InvitacionPedidoGustoEmpanadaUsuario item in ((List<InvitacionPedidoGustoEmpanadaUsuario>)ViewBag.ListaGusto))
+                    Gustos Seleccionados:
+                    
+                    <select class="form-control" id="lala" title="Seleccione gustos.." name="lala">
+                        @foreach (var item in ViewBag.Lista as MultiSelectList)
                         {
-                            <option value="">@item.GustoEmpanada.Nombre</option>
+                            <option value="@item.Value">@item.Text</option>
                         }
                     </select>
 

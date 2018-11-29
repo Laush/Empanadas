@@ -162,7 +162,9 @@ namespace Empanadas.Controllers
             {
                 ViewBag.ListaUsuario = servicioUsuario.ObtenerUsuariosPorPedido(p.IdPedido);
                 ViewBag.ListaDeUsuarios = servicioUsuario.ObtenerTodosLosUsuarios();
-                ViewBag.ListaGusto = servicioGustos.ListarGustos(p.IdPedido);
+                List<GustoEmpanada> InitGustos = servicioPedido.ObtenerGustosPorPedido(id);
+                ViewBag.Lista = new MultiSelectList(InitGustos, "IdGustoEmpanada", "Nombre");
+                //ViewBag.ListaGusto = servicioGustos.ListarGustos(p.IdPedido);
                 ViewBag.ListaDeGustos = servicioPedido.ObtenerGustosDeEmpanada();
                 return View(MiBD.Pedido.Find(id));
             }

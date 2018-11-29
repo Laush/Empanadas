@@ -15,6 +15,11 @@ namespace Empanadas.Servicios
         {
             return MiBD.GustoEmpanada.FirstOrDefault(g => g.IdGustoEmpanada == id);
         }
+
+        public List<GustoEmpanada> ObtenerTodos()
+        {
+            return MiBD.GustoEmpanada.ToList();
+        }
         /*
          * 
          * // ESTO NO ANDA Y NO SE USA, LO DEJO POR SI SIRVE LA SINTAXIS 

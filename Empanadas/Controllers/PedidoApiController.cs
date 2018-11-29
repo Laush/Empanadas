@@ -26,102 +26,33 @@ namespace Empanadas.Controllers
         }
 
         // GET: api/PedidoApi
-        public IQueryable<Pedido> GetPedido()
+        public dynamic GetPedido()
         {
-            return db.Pedido;
+            db.Configuration.ProxyCreationEnabled = false;
+            return db.Pedido.Select(o => new { o.IdPedido, o.IdUsuarioResponsable }).ToList();
         }
 
-        // GET: api/PedidoApi/5
-        [ResponseType(typeof(Pedido))]
-        public IHttpActionResult GetPedido(int id)
+        [HttpGet]
+        public List<GustoEmpanada> ObtenerTodos([FromBody] GustoEmpanada i)
         {
-            Pedido pedido = db.Pedido.Find(id);
-            if (pedido == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(pedido);
-        }
-
-        // PUT: api/PedidoApi/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutPedido(int id, Pedido pedido)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != pedido.IdPedido)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(pedido).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PedidoExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
+            return srvGustos.ObtenerTodos();
         }
 
         // POST: api/PedidoApi
-        [ResponseType(typeof(Pedido))]
-        public IHttpActionResult PostPedido(Pedido pedido)
+        public ConfirmarGustosRespuesta ConfirmarGustos(int IdUsuario, string Token, List<GustoConfirmado> GustosEmpanadasCantidad)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            db.Pedido.Add(pedido);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = pedido.IdPedido }, pedido);
+            var respuesta = new ConfirmarGustosRespuesta();return respuesta;
         }
-
-        // DELETE: api/PedidoApi/5
-        [ResponseType(typeof(Pedido))]
-        public IHttpActionResult DeletePedido(int id)
-        {
-            Pedido pedido = db.Pedido.Find(id);
-            if (pedido == null)
-            {
-                return NotFound();
-            }
-
-            db.Pedido.Remove(pedido);
-            db.SaveChanges();
-
-            return Ok(pedido);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool PedidoExists(int id)
-        {
-            return db.Pedido.Count(e => e.IdPedido == id) > 0;
-        }
+    }
+    public class GustoConfirmado
+  
+    {
+        public int IdGustoEmpanada { get; set; }
+        public int Cantidad { get; set; }
+    }
+    public class ConfirmarGustosRespuesta
+    {
+        public string Resultado { get; set; }
+        public string Mensaje { get; set; }
     }
 }
