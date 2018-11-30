@@ -4,7 +4,7 @@ $(document).ready(function () {
     $("#Confirmar").click(function () {
 
         var InvitacionPedidoGustoEmpanadaUsuario = {
-            Gusto: $("#GustoEmpanada").val()
+            GustoEmpanada: getSelectedText("cboGustos")
         };
         $.ajax({
             url: "/api/PedidoApi/ConfirmarGustos",

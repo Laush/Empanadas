@@ -12,6 +12,5 @@ namespace Empanadas.Models
         [RegularExpression(@"^([^<>]){1,50}$", ErrorMessage = "¡{0} No Válido! Tiene un máximo 50 caracteres.")]
         [Display(Name = "NombreNegocio")]
         public string NombreNegocio { get; set; }
-
     }
 }

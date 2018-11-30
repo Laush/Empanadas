@@ -234,6 +234,7 @@ namespace Empanadas.Controllers
         {
 
             var usuarioLogueado = Session["Usuario"] as Usuario;
+            ViewBag.UsuarioLog = usuarioLogueado;
             Pedido p = servicioPedido.ObtenerPorId(id);
             InvitacionPedido token = servicioInvitacion.GetInvitacionPedidoPorPedido(id, usuarioLogueado.IdUsuario);
             ViewBag.Token = token.Token;
@@ -242,20 +243,17 @@ namespace Empanadas.Controllers
             return View(p);
 
             /* Pedido p = servicioPedido.ObtenerPorId(id);
-             ViewBag.ListaGustos = servicioGustos.ListarGustos(id);
+             ViewBag.
+             
+            
+            = servicioGustos.ListarGustos(id);
              InvitacionPedidoGustoEmpanadaUsuario i = servicioGustos.ObtenerInvitacionPedidoUsuarioGustoPorIdPedido(id);
              i.Pedido.IdPedido = p.IdPedido;
              return View(i);*/
         }
 
 
-        [HttpPost]
-        public ActionResult Elegir(InvitacionPedidoGustoEmpanadaUsuario i)
-        {
-            List<InvitacionPedidoGustoEmpanadaUsuario> lista = servicioGustos.ListarGustos(i.IdPedido);
-            return View("ListaFiltrada", lista);
-        }
-
+        
 
     }
 }

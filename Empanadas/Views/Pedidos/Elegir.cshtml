@@ -1,9 +1,7 @@
 ﻿@{
     ViewBag.Title = "Elegir";
     Layout = "~/Views/Shared/_UsuarioLayout.cshtml";
-    List<InvitacionPedidoGustoEmpanadaUsuario> listaGustos = ViewBag.ListaGustos;
 }
-
 @model Pedido
 
 <html>
@@ -53,13 +51,35 @@
             return flag;
         }
 
-        function getSelectedText(elementId) {
+       function getSelectedText(elementId) {
             var elt = document.getElementById(elementId);
 
             if (elt.selectedIndex == -1)
                 return null;
 
             return elt.options[elt.selectedIndex].text;
+        }
+
+        function confirmar() {
+
+            var data = {
+                IdUsuario: $("#IdUsuario").val(),
+                Token: "@ViewBag.Token",
+                GustosEmpanadasCantidad: dataArray
+            };
+            return $.ajax({
+                contentType: 'application/json; charset=utf-8',
+                type: 'POST',
+                url: "/api/PedidoApi/ConfirmarGustos",
+                data: JSON.stringify(data),
+                success: function (Resultado) {
+                    alert(Resultado.Resultado + " " + Resultado.Mensaje);
+                    location.reload();
+                },
+                error: function (Resultado) {
+                    alert('Error al seleccionar los gustos.' + Resultado);
+                }
+            });
         }
 
 
@@ -69,7 +89,7 @@
         function createTable() {
 
             var tbody = '';
-            var theader = '<table class="table table-striped"> <tr><th>Gusto</th><th>Cantidad</th></tr>\n';
+            var theader = '<table class="table table-condensed" style="color:white"> <tr><th>Gusto</th><th>Cantidad</th></tr>\n';
             for (var i = 0; i < tablaArray.length; i++) {
                 tbody += '<tr>';
                 tbody += '<td>';
@@ -91,7 +111,10 @@
 <body>
     <h2>Iniciar Pedido</h2>
     <div class="container">
-    <form action="/Pedidos/Elegir" method="Post">
+        <form action="/Pedidos/Elegir" method="Post">
+
+            @Html.Hidden("IdUsuario", Model.Usuario.IdUsuario, new { @id = "IdUsuario" })
+
             <div class="row">
                 <div class="col-md-6">
                     @Html.HiddenFor(p => p.IdPedido, new { @class = "form-control" })
@@ -106,30 +129,29 @@
                     Precio x Docena: @Html.TextBoxFor(p => p.PrecioDocena, new { @class = "form-control" })
                     <br>
                 </div>
-             
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <select class="selectpicker" id="cboGustos" onchange="changeOption(this)" data-live-search="true" title="Seleccione GUSTOS.." name="GustoDeEmpanadaSeleccionados">
-                                    @foreach (var item in ViewBag.Lista as MultiSelectList)
-                                    {
-                                        <option value="@item.Value">@item.Text</option>
-                                    }
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <input class="form-control" style="display:none" id="cantidad" placeholder="ingrese cantidad" />
-                            </div>
-                            <div class="col-md-2">
-                                <button type="button" class="btn btn-warning" style="display:none" id="btncantidad" onclick="agregar()">Agregar</button>
-                            </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <select class="selectpicker" id="cboGustos" onchange="changeOption(this)" class="form-control" data-live-search="true" title="Seleccione GUSTOS.." name="GustoDeEmpanadaSeleccionados">
+                                @foreach (var item in ViewBag.Lista as MultiSelectList)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
                         </div>
+                        <div class="col-md-3">
+                            <input class="form-control" style="display:none" id="cantidad" placeholder="ingrese cantidad" />
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-warning" style="display:none" id="btncantidad" onclick="agregar()">Agregar</button>
+                        </div>
+                    </div>
 
                     <div class="form-group">
                         <div class="row">
                             <div class="col-md-3">
-                                <div id="midiv" class="table-hover" style="display:none; color:black;">
-                                </div>
+                                <div id="midiv" class="table-hover" style="display:none; color:black;"></div>
                             </div>
                         </div>
                     </div>
@@ -138,30 +160,21 @@
 
             </div>
 
-            <p>probandooo</p>
-            <table class="table table-condensed">
-                <thead class="thead-inverse">
-                    <tr>
-                        <td>GustosDisponibles</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in ViewBag.Lista as MultiSelectList)
-                    {
-                        <tr>
-                            <td id="GustosEmpanada">@item.Text</td>
-                        </tr>
-                    }
+            <!--  <input class="btn btn-warning my-2 my-sm-0" type="button" value="Confirmar" id="Confirmar" /> -->
 
-                </tbody>
-            </table>
-            <input class="btn btn-warning my-2 my-sm-0" type="button" value="Confirmar" id="Confirmar" />
+            <br>
 
-    </div>
-    <br>
+        
 
-    <a class="btn btn-warning my-2 my-sm-0" href="/Pedidos/Listar">Cancelar</a>
-    </form>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <input type="reset" value="Cancelar" id="btnCancelar" class="btn btn-warning my-2 my-sm-0" />
+                        <button type="button" onclick="confirmar()" id="btnConfirmar" class="btn btn-warning my-2 my-sm-0">Confirmar</button>
+                    </div>
+                </div>
+            </div>
+        </form>
 
     </div>
 </body>

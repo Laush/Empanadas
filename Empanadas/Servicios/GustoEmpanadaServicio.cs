@@ -69,12 +69,12 @@ namespace Empanadas.Servicios
             return listGustos;
         }
 
+        public GustoEmpanada GetById(int id)
+        {
+            return MiBD.GustoEmpanada.Single(e => e.IdGustoEmpanada == id);
+        }
 
-
-
-
-
-
+        
 
     }
 }

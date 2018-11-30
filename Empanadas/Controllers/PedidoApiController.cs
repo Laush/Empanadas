@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Empanadas;
+using Empanadas.Models;
 using Empanadas.Servicios;
 
 namespace Empanadas.Controllers
@@ -18,12 +19,36 @@ namespace Empanadas.Controllers
         private Entities db = new Entities();
 
         GustoEmpanadaServicio srvGustos = new GustoEmpanadaServicio();
+        InvitacionPedidoServicio srvInvitacion = new InvitacionPedidoServicio();
+
 
         [HttpPost]
-        public void ConfirmarGustos([FromBody] InvitacionPedidoGustoEmpanadaUsuario i)
+        public IHttpActionResult ConfirmarGustos([FromBody]ConfirmarGustosModel datos)
         {
-            srvGustos.ObtenerPorId(i.IdGustoEmpanada);
+            try
+            {
+                bool estado = srvInvitacion.ValidarGustos(datos);
+                if (estado)
+                {
+                    srvInvitacion.ConfirmarGustos(datos);
+                    return Json(new { Resultado = "OK", Mensaje = "Gustos elegidos satisfactoriamente" });
+                }
+                else
+                {
+                    return Json(new { success = false, Resultado = "ERROR", Mensaje = "Error al confirmar los gustos" });
+                }
+            }
+            catch (Exception err)
+            {
+                return Json(new { success = false, Resultado = "ERROR", Mensaje = "No se pudo efectuar la operación porque " + err.Message });
+            }
+
         }
+
+
+
+        /*
+        
 
         // GET: api/PedidoApi
         public dynamic GetPedido()
@@ -43,7 +68,11 @@ namespace Empanadas.Controllers
         {
             var respuesta = new ConfirmarGustosRespuesta();return respuesta;
         }
+
+     */
     }
+
+    /* Explicacion Pablo
     public class GustoConfirmado
   
     {
@@ -54,5 +83,5 @@ namespace Empanadas.Controllers
     {
         public string Resultado { get; set; }
         public string Mensaje { get; set; }
-    }
+    }*/
 }

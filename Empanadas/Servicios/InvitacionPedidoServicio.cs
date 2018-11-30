@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Empanadas.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+
 
 namespace Empanadas.Servicios
 {
@@ -24,41 +26,55 @@ namespace Empanadas.Servicios
         {
             return null;
         }
+        
+        public bool ValidarGustos(ConfirmarGustosModel datos)
+        {
+            try
+            {
+                var estadoPedido = MiBD.InvitacionPedido.Where(i => i.Token == datos.Token).FirstOrDefault();
+
+                if (estadoPedido.Pedido.IdEstadoPedido == 2)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public void ConfirmarGustos(ConfirmarGustosModel datos)
+        {
+            int idpedido = MiBD.InvitacionPedido
+                            .Where(p => p.Token == datos.Token)
+                            .Select(p => p.IdPedido).First();
+            foreach (InvitacionPedidoGustoEmpanadaUsuario item in datos.GustosEmpanadasCantidad)
+            {
+                item.IdPedido = idpedido;
+                item.IdUsuario = datos.IdUsuario;
+                MiBD.InvitacionPedidoGustoEmpanadaUsuario.Add(item);
+                MiBD.SaveChanges();
+            }
+        }
 
         public List<Usuario> ObtenerGustosConfirmados(int idPedido)
         {
-            List<InvitacionPedido> invitacionesDelUsuario = MiBD.InvitacionPedido.Include("Pedido")
-              .Where(o => o.IdPedido == idPedido).ToList();
+            //List<InvitacionPedido> invitacionesDelUsuario = Contexto.InvitacionPedido.Include("Pedido")
+            //  .Where(o => o.IdPedido == idPedido).ToList();
             List<Usuario> usuarios = MiBD.Usuario.ToList();
-            int i = 0;
-            foreach (InvitacionPedido item in invitacionesDelUsuario)
-            {
-                if (usuarios[i].IdUsuario != item.IdUsuario)
-                {
-                    usuarios.RemoveAt(i);
-                    i++;
-                }
-            }
+            //int i = 0;
+            //foreach (InvitacionPedido item in invitacionesDelUsuario)
+            //{
+            //    if (usuarios[i].IdUsuario != item.IdUsuario)
+            //    {
+            //        usuarios.RemoveAt(i);
+            //        i++;
+            //    }
+            //}
             return usuarios;
         }
-
-        /* public bool ValidarGustos(ConfirmarGusto datos)
-         {
-             try
-             {
-                 var estadoPedido = MiBD.InvitacionPedido.Where(i => i.Token == datos.Token).FirstOrDefault();
-
-                 if (estadoPedido.Pedido.IdEstadoPedido == 2)
-                 {
-                     return false;
-                 }
-                 return true;
-             }
-             catch
-             {
-                 return false;
-             }
-         }*/
-
     }
+
 }

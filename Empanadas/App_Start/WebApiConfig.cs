@@ -20,6 +20,7 @@ namespace Empanadas
                  defaults: new { id = RouteParameter.Optional }
              );*/
             // si quiero usar mis action y no solo post, get, put...
+
             config.Routes.MapHttpRoute(
              name: "DefaultApi2",
              routeTemplate: "api/{controller}/{action}/{id}",
