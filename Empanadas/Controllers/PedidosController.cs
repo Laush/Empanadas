@@ -114,6 +114,7 @@ namespace Empanadas.Controllers
 
         public ActionResult Iniciado(Pedido p)
         {
+
             return View(p);
         }
 
@@ -151,6 +152,7 @@ namespace Empanadas.Controllers
             TempData["mensaje"] = "Pedido " + servicioPedido.ObtenerPorId(p.IdPedido).NombreNegocio + " ha sido eliminado exitosamente";
             servicioPedido.Eliminar(p.IdPedido);
             return RedirectToAction("Listar", "Pedidos");
+
         }
 
         // GET: Editar
@@ -188,9 +190,13 @@ namespace Empanadas.Controllers
                     }
                 }
             }
-            //esto es a futuro para mostrar el si o no de lo sk ya confirmaron
-            //  List<Usuario> gustosElegidos = servicioInvitacionPedido.ObtenerGustosConfirmados(id);
-            //   ViewBag.GustosElegidos = gustosElegidos;
+            ViewBag.Confirmados = new MultiSelectList(servicioUsuario.ObtenerUsuariosPorPedidoQueConfirmaron(id), "IdUsuario", "Email");
+            //esto es a futuro para mostrar el si o no de lo sk ya confirmaron          
+            ViewBag.usuariosCompletaronPedido = new MultiSelectList(servicioUsuario.UsuariosCompletaronPedido(id), "IdUsuario", "Email");
+            ViewBag.usuariosQueNoCompletaronPedido = new MultiSelectList(servicioUsuario.UsuariosQueNoCompletaronPedido(id), "IdUsuario", "Email");
+            //  ViewBag.usuariosQueNoTienenInvitacion = new MultiSelectList(servicioUsuario.usuariosQueNoTienenInvitacion(id), "IdUsuario", "Email");
+
+
             ViewBag.Lista = new MultiSelectList(InitGustos, "IdGustoEmpanada", "Nombre");
             ViewBag.Mails = new MultiSelectList(mails, "IdUsuario", "Email");
             ViewBag.Mailseleccionados = new MultiSelectList(mailsNuevos, "IdUsuario", "Email");
@@ -200,7 +206,7 @@ namespace Empanadas.Controllers
         }
 
         [HttpPost]
-        public ActionResult Editar(Pedido pedido, string btnConfirmar, string btnCancelar)
+        public ActionResult Editar(Pedido pedido, string btnConfirmar, string btnCancelar, string EnviarInvitaciones)
         {
             if (ModelState.IsValid)
             {
@@ -212,21 +218,17 @@ namespace Empanadas.Controllers
 
                 if (btnConfirmar == "Confirmar")
                 {
-                    servicioPedido.cerrarPedido(pedido);
+                    servicioPedido.CerrarPedido(pedido);
                 }
+                servicioPedido.EnviarInvitaciones(pedido, EnviarInvitaciones);
                 servicioPedido.Modificar(pedido);
                 return RedirectToAction("Listar");
-
-
             }
             else
             {
                 return View(pedido);
             }
-
-       
         }
-
 
 
         [HttpGet]
@@ -241,19 +243,10 @@ namespace Empanadas.Controllers
             List<GustoEmpanada> InitGustos = servicioPedido.ObtenerGustosPorPedido(id);
             ViewBag.Lista = new MultiSelectList(InitGustos, "IdGustoEmpanada", "Nombre");
             return View(p);
-
-            /* Pedido p = servicioPedido.ObtenerPorId(id);
-             ViewBag.
-             
-            
-            = servicioGustos.ListarGustos(id);
-             InvitacionPedidoGustoEmpanadaUsuario i = servicioGustos.ObtenerInvitacionPedidoUsuarioGustoPorIdPedido(id);
-             i.Pedido.IdPedido = p.IdPedido;
-             return View(i);*/
         }
 
 
-        
+
 
     }
 }

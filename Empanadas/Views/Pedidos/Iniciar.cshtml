@@ -17,16 +17,16 @@
                 <div class="col-md-6">
                     @Html.HiddenFor(p => p.IdPedido, new { @class = "form-control" })
                     @Html.HiddenFor(p => p.IdUsuarioResponsable, new { @class = "form-control" })
-                           @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                       Nombre Negocio: @Html.TextBoxFor(p => p.NombreNegocio, new { @class = "form-control", required = true, placeholder = "Campo es obligatorio." })
-                           @Html.ValidationMessageFor(model => model.NombreNegocio, "", new { @class = "text-danger" })
+                    Nombre Negocio: @Html.TextBoxFor(p => p.NombreNegocio, new { @class = "form-control", required = true, placeholder = "Campo es obligatorio." })
+                    @Html.ValidationMessageFor(model => model.NombreNegocio, "", new { @class = "text-danger" })
 
                     Descripcion: @Html.TextBoxFor(p => p.Descripcion, new { @class = "form-control" })
                     @Html.HiddenFor(p => p.IdEstadoPedido, new { @class = "form-control" })
                     Gustos:
                     <br>
-                    <select class="selectpicker" id="IdGustosSeleccionados" name="IdGustosSeleccionados" multiple="multiple" class="form-control">
+                    <select class="selectpicker" id="IdGustosSeleccionados" name="IdGustosSeleccionados" multiple="multiple">
                         <option value="1">Seleccione</option>
                         <option value="0">Otros</option>
                         @foreach (GustoEmpanada item in ((List
@@ -46,7 +46,7 @@
                     @Html.HiddenFor(p => p.FechaModificacion, new { @class = "form-control" })
 
                     Invitados:
-                    <select class="selectpicker" id="IdUsuariosInvitados" name="IdUsuariosInvitados" multiple="multiple" class="form-control">
+                    <select class="selectpicker" id="IdUsuariosInvitados" name="IdUsuariosInvitados" multiple="multiple">
 
                         @foreach (Usuario item in ((List
                         <Usuario>
@@ -59,12 +59,16 @@
                 </div>
             </div>
             <br>
-            <input class="btn btn-warning my-2 my-sm-0" type="submit" text="Guardar" />
-        </form>
-
-   
-        <form action="/Pedidos/Listar/">
-            <button class="btn btn-warning my-2 my-sm-0" type="submit">Cancelar</button>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-2">
+                        <input class="btn btn-warning my-2 my-sm-0" type="submit" text="Guardar" />
+                    </div>
+                    <div class="col-md-2">
+                        <a class="btn btn-warning my-2 my-sm-0"href="/Pedidos/Listar/">Cancelar</a>
+                    </div>
+                </div>
+            </div>
         </form>
     </div>
 </body>

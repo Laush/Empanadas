@@ -13,6 +13,7 @@ namespace Empanadas.Models
         private Entities MiBD = new Entities();
         private GustoEmpanadaServicio srvGustoEmpanda = new GustoEmpanadaServicio();
         private UsuarioServicio srvUsuario = new UsuarioServicio();
+        private InvitacionPedidoServicio srvInvitacion = new InvitacionPedidoServicio();
 
         public void Agregar(Pedido p, Usuario idUsuarioReponsable)
         {
@@ -56,7 +57,7 @@ namespace Empanadas.Models
             MiBD.SaveChanges();
             EnviarEmailInvitados(invitacionPedidoDelUsuarioResponsable);
         }
-
+        //Envio de mail cuando se inicia el pedido
         public void EnviarEmailInvitados(InvitacionPedido invitacion)
         {
             Usuario usuario = MiBD.Usuario.Find(invitacion.IdUsuario);
@@ -64,8 +65,9 @@ namespace Empanadas.Models
             msg.To.Add(new MailAddress(usuario.Email));
             msg.From = new MailAddress("empanadas.ya18@gmail.com");
             msg.Subject = "Bienvenido a Empanadas YA!";
-            //   msg.Body = "Recibiste una invitacion de" + invitacion.Usuario.Email + "Invitacion: " + HttpContext.Current.Request.Url.Authority + " /Pedidos/Elegir/" + invitacion.Token;
-            msg.Body = "Recibiste una invitacion para elegir gustos..... Ingresa aqui--> " + HttpContext.Current.Request.Url.Authority + " /Pedidos/Elegir/" + invitacion.IdPedido;
+            //msg.Body = "Recibiste una invitacion de" + invitacion.Usuario.Email + "Invitacion: " + HttpContext.Current.Request.Url.Authority + " /Pedidos/Elegir/" + invitacion.Token;
+            //msg.Body = "Recibiste una invitacion para elegir gustos..... Ingresa aqui--> " + HttpContext.Current.Request.Url.Authority + " /Pedidos/Elegir/" + invitacion.IdPedido;
+            msg.Body = "Recibiste una invitacion para elegir gustos del pedido: " + invitacion.IdPedido + " Ingresa aqui--> " + HttpContext.Current.Request.Url.Authority + " /Pedidos/Elegir/" + invitacion.Token;
             SmtpClient clienteSmtp = new SmtpClient();
             clienteSmtp.Host = "smtp.gmail.com";
             clienteSmtp.Port = 587;
@@ -76,6 +78,8 @@ namespace Empanadas.Models
             clienteSmtp.Send(msg);
 
         }
+
+
 
         public void Eliminar(int id)
         {
@@ -88,9 +92,7 @@ namespace Empanadas.Models
             MiBD.SaveChanges();
 
             Pedido pedidoEliminar = MiBD.Pedido.FirstOrDefault(pedido => pedido.IdPedido == id);
-
             pedidoEliminar.GustoEmpanada.Clear();
-
             MiBD.Pedido.Remove(pedidoEliminar);
             MiBD.SaveChanges();
         }
@@ -143,7 +145,6 @@ namespace Empanadas.Models
             return MiBD.GustoEmpanada.ToList();
         }
 
-
         public List<GustoEmpanada> ObtenerGustosPorPedido(int id)
         {
             return MiBD.Pedido.FirstOrDefault(p => p.IdPedido == id).GustoEmpanada.ToList();
@@ -155,20 +156,26 @@ namespace Empanadas.Models
                 .Where(c => c.Completado == true).Count();
         }
 
-        //CAMBIO DE ESTADO DE UN PEDIDO
-        public void cerrarPedido(Pedido pedido)
+
+        public void CerrarPedido(Pedido pedido)
         {
             Pedido p = MiBD.Pedido.Find(pedido.IdPedido);
             p.FechaModificacion = DateTime.Now;
             p.IdEstadoPedido = 2;
             MiBD.SaveChanges();
 
+            foreach (var idUsuario in pedido.IdUsuariosInvitados)
+            {
+                var invitacion = MiBD.InvitacionPedido.Where(m => m.IdPedido == p.IdPedido)
+                                                    .Where(m => m.IdUsuario == idUsuario)
+                                                    .First();
+                EnviarMailCerrado(invitacion, pedido);
+            }
+
         }
 
-        // consultar como modificar pedidos ahora que no guardo en invitacionPedidoGustoEmpa
         public void Modificar(Pedido j)
         {
-            //Pedido p = MiBD.Pedido.Include("InvitacionPedido").First(pedido => pedido.IdPedido == j.IdPedido);
             Pedido p = MiBD.Pedido.Find(j.IdPedido);
             p.NombreNegocio = j.NombreNegocio;
             p.Descripcion = j.Descripcion;
@@ -181,14 +188,133 @@ namespace Empanadas.Models
                 p.GustoEmpanada.Add(gustoEmpanadaDisponible);
                 MiBD.SaveChanges();
             }
-            /*  foreach (var idIn in j.IdUsuariosInvitados)
-              {
-                  Usuario u = srvUsuario.ObtenerPorId(idIn);
-                  InvitacionPedido i = srvGustoEmpanda.ObtenerInvitacionPorPedido(j.IdPedido);
-                  p.InvitacionPedido.Add(i);
-              }*/
+            //falta que deje editar los invitados
             MiBD.SaveChanges();
         }
 
+
+        public void EnviarInvitaciones(Pedido pedido, string ReEnviarInvitacion)
+        {
+            switch (ReEnviarInvitacion)
+            {
+                case "1":
+                    foreach (var item in MiBD.InvitacionPedido.Where(m => m.IdPedido == pedido.IdPedido))
+                    {
+                        EnviarEmailInvitados(item);
+                    }
+                    break;
+                case "2":
+                    List<int> lista = new List<int>();
+                    foreach (var item in pedido.IdUsuariosInvitados)
+                    {
+                        if (!MiBD.InvitacionPedido.Where(x => x.IdPedido == pedido.IdPedido)
+                                                     .Select(x => x.IdUsuario).Contains(item))
+                        {
+                            lista.Add(item);
+                        }
+                    }
+                    if (lista.Count() > 0)
+                    {
+                        foreach (var item in lista)
+                        {
+                            EnviarEmailInvitados(srvInvitacion.Crear(pedido, item));
+                        }
+                    }
+                    break;
+                case "3":
+                    foreach (var item in MiBD.InvitacionPedido.Where(m => m.IdPedido == pedido.IdPedido).Where(m => m.Completado == false))
+                    {
+                        EnviarEmailInvitados(item);
+                    }
+                    break;
+            }
+        }
+        public void EnviarMailCerrado(InvitacionPedido invitacionPedido, Pedido pedido)
+        {
+            Usuario usuario = MiBD.Usuario.Find(invitacionPedido.IdUsuario);
+
+            int cantidadTotal = invitacionPedido.Pedido.InvitacionPedidoGustoEmpanadaUsuario.Sum(m => m.Cantidad);
+            int docenasTotales = cantidadTotal / 12;
+            int resto = cantidadTotal - (docenasTotales * 12);
+            int TotalPorDocenas = docenasTotales * invitacionPedido.Pedido.PrecioDocena;
+            int precioResto = resto * invitacionPedido.Pedido.PrecioUnidad;
+            int Total = TotalPorDocenas + precioResto;
+
+            List<String> usuarioPrecioPorAbonar = new List<String>();
+
+            foreach (var item in pedido.IdUsuariosInvitados)
+            {
+                Usuario user = MiBD.Usuario.Find(item);
+                int cantidadTotalesPorUsuario = user.InvitacionPedidoGustoEmpanadaUsuario
+                                                            .Where(m => m.IdUsuario == item)
+                                                            .Where(m => m.IdPedido == invitacionPedido.IdPedido)
+                                                            .Sum(m => m.Cantidad);
+                int docenasTotalesPorUsuario = cantidadTotalesPorUsuario / 12;
+                int restoPorUsuario = cantidadTotalesPorUsuario - (docenasTotalesPorUsuario * 12);
+                int RestoPorUsuario = restoPorUsuario * invitacionPedido.Pedido.PrecioUnidad;
+                int TotalPorDocenasDeUsuario = docenasTotalesPorUsuario * invitacionPedido.Pedido.PrecioDocena;
+                int TotalPorUsuario = TotalPorDocenasDeUsuario + RestoPorUsuario;
+                usuarioPrecioPorAbonar.Add("Invitado: " + user.Email + " Precio a abonar: $" + Convert.ToString(RestoPorUsuario));
+            }
+
+            List<string> detalle = new List<string>();
+
+            var newlist = invitacionPedido.Pedido.InvitacionPedidoGustoEmpanadaUsuario.GroupBy(d => d.IdGustoEmpanada)
+            .Select(
+                g => new
+                {
+                    Key = g.Key,
+                    Value = g.Sum(s => s.Cantidad),
+                    Category = g.First().GustoEmpanada,
+                    Name = g.First().GustoEmpanada.Nombre
+                });
+            foreach (var item in newlist.ToList())
+            {
+                detalle.Add(item.Name + ": " + item.Value);
+            }
+
+            var fromAddress = new MailAddress("empanadas.ya18@gmail.com", "From Name");
+            var toAddress = new MailAddress("empanadas.ya18@gmail.com", "To Name");
+            string fromPassword = "empanadas2018";
+            string subject = "Subject";
+            string body = "";
+            //mail para el responsable
+            if (invitacionPedido.IdUsuario == invitacionPedido.Pedido.IdUsuarioResponsable)
+            {
+                body = "<h1>Empanadas Ya</h1>Precio Total:</b> $" + Total + "<br><b>Invitados:</b><br> " +
+                    String.Join(",<br>", usuarioPrecioPorAbonar.ToArray()) + "<br><b>Detalle:</b><br>" + String.Join(",<br>", detalle.ToArray()) +
+                    "<br><b>Total de empanadas: </b>" + cantidadTotal;
+            }
+            else
+            {//mail para el resto
+                List<string> datosInvitados = new List<string>();
+                foreach (var item in invitacionPedido.Pedido.InvitacionPedidoGustoEmpanadaUsuario.Where(m => m.IdUsuario == invitacionPedido.IdUsuario))
+                {
+                    GustoEmpanada empanadas = MiBD.GustoEmpanada.Find(item.IdGustoEmpanada);
+                    datosInvitados.Add("Gusto: " + empanadas.Nombre + ", Cantidad: " + item.Cantidad);
+                }
+                body = "<h1>Empanadas Ya</h1>Total de empanadas del pedido: " + cantidadTotal + "<br>" +
+                    String.Join(",<br>", datosInvitados.ToArray()) + "<br>Precio Total: $" + Total + "</b>";
+            }
+
+            var smtp = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+            };
+            using (var message = new MailMessage(fromAddress, toAddress)
+            {
+                Subject = subject,
+                Body = body,
+                IsBodyHtml = true
+            })
+            {
+                smtp.Send(message);
+            }
+        }
     }
 }

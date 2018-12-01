@@ -55,15 +55,48 @@
                             <option value="@item.Value">@item.Text</option>
                         }
                     </select>
-
-
                 </div>
+
+                <div class="col-md-6">
+                    Estado de los invitados:
+                    <select class="selectpicker" name="IdUsuariosInvitados" multiple="multiple">
+                        @foreach (var item in ViewBag.usuariosCompletaronPedido as MultiSelectList)
+                        {
+                            <option value="@item.Value" selected="selected">@item.Text (Si)</option>
+                        }
+                        @foreach (var item2 in ViewBag.usuariosQueNoCompletaronPedido as MultiSelectList)
+                        {
+                            <option value="@item2.Value" selected="selected">@item2.Text (No)</option>
+                        }
+                        @*foreach (var item3 in ViewBag.usuariosQueNoTienenInvitacion as MultiSelectList)
+                            {
+                                <option value="@item3.Value">@item3.Text</option>
+                            }*@
+                    </select>
+                    <label>Lista que muestra solo los que confirmaron</label>
+                    <select class="selectpicker" name="IdUsuariosInvitados" multiple="multiple">
+                        @foreach (var item in ViewBag.Confirmados as MultiSelectList)
+                        {
+                            <option value="@item.Value" selected="selected">@item.Text (Si)</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    Re-envios:
+                    <select class="selectpicker" data-live-search="true" title="Re-enviar invitación.." name="EnviarInvitaciones">
+                        <option value="0">A Nadie</option>
+                        <option value="1">Re - enviar Invitación a Todos</option>
+                        <option value="2">Enviar sólo a los Nuevos</option>
+                        <option value="3">Re - enviar sólo a los que no eligieron gustos</option>
+                    </select>
+                </div>
+
             </div>
             <br>
             <div class="form-group">
                 <div class="row">
-                    <div class="col-md-2 col-lg-offset-3">
-
+                    <div class="col-md-2">
                         <input type="submit" value="Cancelar" id="btnCancelar" class="btn btn-block btn-warning" />
                     </div>
                     <div class="col-md-2">
@@ -75,6 +108,7 @@
                     </div>
                 </div>
             </div>
+
         </form>
 
     </div>

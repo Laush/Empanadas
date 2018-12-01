@@ -26,7 +26,7 @@ namespace Empanadas.Servicios
         {
             return null;
         }
-        
+
         public bool ValidarGustos(ConfirmarGustosModel datos)
         {
             try
@@ -56,7 +56,12 @@ namespace Empanadas.Servicios
                 item.IdUsuario = datos.IdUsuario;
                 MiBD.InvitacionPedidoGustoEmpanadaUsuario.Add(item);
                 MiBD.SaveChanges();
+
+                InvitacionPedido pedCompletado = MiBD.InvitacionPedido.FirstOrDefault(i => i.IdPedido == item.IdPedido);
+                pedCompletado.Completado = true;
+                MiBD.SaveChanges();
             }
+
         }
 
         public List<Usuario> ObtenerGustosConfirmados(int idPedido)
@@ -74,6 +79,19 @@ namespace Empanadas.Servicios
             //    }
             //}
             return usuarios;
+        }
+
+        public InvitacionPedido Crear(Pedido pedido, int idUsuario)
+        {
+            InvitacionPedido nuevaInvitacion = new InvitacionPedido();
+            Pedido p = MiBD.Pedido.Find(pedido.IdPedido);
+            nuevaInvitacion.IdPedido = p.IdPedido;
+            nuevaInvitacion.IdUsuario = idUsuario;
+            nuevaInvitacion.Completado = false;
+            nuevaInvitacion.Token = Guid.NewGuid();
+            MiBD.InvitacionPedido.Add(nuevaInvitacion);
+            MiBD.SaveChanges();
+            return nuevaInvitacion;
         }
     }
 

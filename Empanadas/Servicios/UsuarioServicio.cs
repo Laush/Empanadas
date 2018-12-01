@@ -54,5 +54,46 @@ namespace Empanadas.Servicios
         {
             return MiBD.Usuario.ToList();
         }
+
+        public List<Usuario> ObtenerUsuariosPorPedidoQueConfirmaron(int idPedido)
+        {
+            var list = (from u in MiBD.Usuario
+                        join i in MiBD.InvitacionPedido on u.IdUsuario equals i.IdUsuario
+                        join p in MiBD.Pedido on i.IdPedido equals p.IdPedido
+                        where p.IdPedido == idPedido && i.Completado == true
+                        select u).ToList();
+            return list;
+        }
+
+        public IQueryable UsuariosCompletaronPedido(int? idPedido)
+        {
+            var usuariosCompletaronPedido = from u in MiBD.Usuario
+                                            join i in MiBD.InvitacionPedido on u.IdUsuario equals i.IdUsuario
+                                            where i.Completado == true
+                                            where i.IdPedido == idPedido
+                                            select new { IdUsuario = u.IdUsuario, Email = u.Email };
+            return usuariosCompletaronPedido;
+        }
+
+        public IQueryable UsuariosQueNoCompletaronPedido(int? idPedido)
+        {
+            var usuariosQueNoCompletaronPedido = from u in MiBD.Usuario
+                                                 join i in MiBD.InvitacionPedido on u.IdUsuario equals i.IdUsuario
+                                                 where i.Completado == false
+                                                 where i.IdPedido == idPedido
+                                                 select new { IdUsuario = u.IdUsuario, Email = u.Email };
+            return usuariosQueNoCompletaronPedido;
+        }
+
+        public IQueryable usuariosQueNoTienenInvitacion(int? idPedido)
+        {
+            var usuariosQueNoTienenInvitacion = from a in MiBD.Usuario
+                                                where !(from b in MiBD.InvitacionPedido
+                                                        where b.IdPedido == idPedido
+                                                        select b.IdUsuario)
+                                                          .Contains(a.IdUsuario)
+                                                select new { IdUsuario = a.IdUsuario, Email = a.Email };
+            return usuariosQueNoTienenInvitacion;
+        }
     }
 }
