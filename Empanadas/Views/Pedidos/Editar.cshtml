@@ -58,7 +58,7 @@
                 </div>
 
                 <div class="col-md-6">
-                    Estado de los invitados:
+                     <label>Lista que muestra solo los que confirmaron</label>
                     <select class="selectpicker" name="IdUsuariosInvitados" multiple="multiple">
                         @foreach (var item in ViewBag.usuariosCompletaronPedido as MultiSelectList)
                         {
@@ -73,13 +73,14 @@
                                 <option value="@item3.Value">@item3.Text</option>
                             }*@
                     </select>
+                    @*
                     <label>Lista que muestra solo los que confirmaron</label>
                     <select class="selectpicker" name="IdUsuariosInvitados" multiple="multiple">
                         @foreach (var item in ViewBag.Confirmados as MultiSelectList)
                         {
                             <option value="@item.Value" selected="selected">@item.Text (Si)</option>
                         }
-                    </select>
+                    </select>*@
                 </div>
 
                 <div class="col-md-6">

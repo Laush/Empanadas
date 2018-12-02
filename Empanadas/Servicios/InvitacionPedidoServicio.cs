@@ -57,8 +57,10 @@ namespace Empanadas.Servicios
                 MiBD.InvitacionPedidoGustoEmpanadaUsuario.Add(item);
                 MiBD.SaveChanges();
 
-                InvitacionPedido pedCompletado = MiBD.InvitacionPedido.FirstOrDefault(i => i.IdPedido == item.IdPedido);
-                pedCompletado.Completado = true;
+                //InvitacionPedido pedCompletado = MiBD.InvitacionPedido.FirstOrDefault(i => i.IdPedido == item.IdPedido );
+                //InvitacionPedido pedCompleto = MiBD.InvitacionPedido.Where(i => i.IdPedido == item.IdPedido && i.IdUsuario == item.IdUsuario).FirstOrDefault();
+                InvitacionPedido pedCompleto = MiBD.InvitacionPedido.FirstOrDefault(y => y.Token == datos.Token);
+                pedCompleto.Completado = true;
                 MiBD.SaveChanges();
             }
 

@@ -45,7 +45,7 @@ namespace Empanadas.Models
                     MiBD.SaveChanges();
                     EnviarEmailInvitados(nuevaInvitacionPedido);
                 }
-            }//end if
+            }
 
             //AGREGO AL USUARIO RESPONSABLE EN LA INVITACION PEDIDO
             InvitacionPedido invitacionPedidoDelUsuarioResponsable = new InvitacionPedido();
@@ -57,6 +57,10 @@ namespace Empanadas.Models
             MiBD.SaveChanges();
             EnviarEmailInvitados(invitacionPedidoDelUsuarioResponsable);
         }
+
+
+
+
         //Envio de mail cuando se inicia el pedido
         public void EnviarEmailInvitados(InvitacionPedido invitacion)
         {

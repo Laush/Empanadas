@@ -191,8 +191,9 @@ namespace Empanadas.Controllers
                 }
             }
             ViewBag.Confirmados = new MultiSelectList(servicioUsuario.ObtenerUsuariosPorPedidoQueConfirmaron(id), "IdUsuario", "Email");
-            //esto es a futuro para mostrar el si o no de lo sk ya confirmaron          
+            //Usuarios que modificaron la cantidad de los gustos q quieren 
             ViewBag.usuariosCompletaronPedido = new MultiSelectList(servicioUsuario.UsuariosCompletaronPedido(id), "IdUsuario", "Email");
+            //Usuarios que NO  modificaron la cantidad de los gustos q quieren 
             ViewBag.usuariosQueNoCompletaronPedido = new MultiSelectList(servicioUsuario.UsuariosQueNoCompletaronPedido(id), "IdUsuario", "Email");
             //  ViewBag.usuariosQueNoTienenInvitacion = new MultiSelectList(servicioUsuario.usuariosQueNoTienenInvitacion(id), "IdUsuario", "Email");
 
