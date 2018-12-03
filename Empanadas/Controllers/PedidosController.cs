@@ -46,6 +46,8 @@ namespace Empanadas.Controllers
                 DateTime fecha = DateTime.Now;
                 Pedido pedido = new Pedido();
                 pedido.IdUsuarioResponsable = usuarioLogueado.IdUsuario;
+                pedido.PrecioUnidad = 30;
+                pedido.PrecioDocena = 280;
                 pedido.IdEstadoPedido = 1;
                 pedido.FechaCreacion = fecha;
                 pedido.FechaModificacion = fecha;
@@ -165,6 +167,7 @@ namespace Empanadas.Controllers
             //ViewBag.Lista = new MultiSelectList(InitGustos, "IdGustoEmpanada", "Nombre");
             //ViewBag.ListaDeGustos = servicioPedido.ObtenerGustosDeEmpanada();
             //return View(MiBD.Pedido.Find(id));
+
             var usuarioLogueado = Session["Usuario"] as Usuario;
             Pedido pedido = servicioPedido.ObtenerPorId(id);
 
@@ -198,7 +201,7 @@ namespace Empanadas.Controllers
             //  ViewBag.usuariosQueNoTienenInvitacion = new MultiSelectList(servicioUsuario.usuariosQueNoTienenInvitacion(id), "IdUsuario", "Email");
 
 
-            ViewBag.Lista = new MultiSelectList(InitGustos, "IdGustoEmpanada", "Nombre");
+            ViewBag.ListaGustos = new MultiSelectList(InitGustos, "IdGustoEmpanada", "Nombre");
             ViewBag.Mails = new MultiSelectList(mails, "IdUsuario", "Email");
             ViewBag.Mailseleccionados = new MultiSelectList(mailsNuevos, "IdUsuario", "Email");
 

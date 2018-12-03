@@ -29,7 +29,7 @@
                         {
                             <option value="@item.IdGustoEmpanada" selected>@item.Nombre</option>
                         }
-                        @foreach (var item in ViewBag.Lista as MultiSelectList)
+                        @foreach (var item in ViewBag.ListaGustos as MultiSelectList)
                         {
                             <option value="@item.Value">@item.Text</option>
                         }
@@ -48,7 +48,7 @@
                     <select class="selectpicker" multiple data-live-search="true" title="Seleccione invitados.." name="IdUsuariosInvitados">
                         @foreach (var item in ViewBag.Mailseleccionados as MultiSelectList)
                         {
-                            <option value="@item.Value" selected>@item.Text</option>
+                            <option value="" selected>@item.Text</option>
                         }
                         @foreach (var item in ViewBag.Mails as MultiSelectList)
                         {
@@ -68,19 +68,9 @@
                         {
                             <option value="@item2.Value" selected="selected">@item2.Text (No)</option>
                         }
-                        @*foreach (var item3 in ViewBag.usuariosQueNoTienenInvitacion as MultiSelectList)
-                            {
-                                <option value="@item3.Value">@item3.Text</option>
-                            }*@
+                        
                     </select>
-                    @*
-                    <label>Lista que muestra solo los que confirmaron</label>
-                    <select class="selectpicker" name="IdUsuariosInvitados" multiple="multiple">
-                        @foreach (var item in ViewBag.Confirmados as MultiSelectList)
-                        {
-                            <option value="@item.Value" selected="selected">@item.Text (Si)</option>
-                        }
-                    </select>*@
+                    
                 </div>
 
                 <div class="col-md-6">

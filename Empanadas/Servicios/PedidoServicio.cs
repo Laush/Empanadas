@@ -71,7 +71,7 @@ namespace Empanadas.Models
             msg.Subject = "Bienvenido a Empanadas YA!";
             //msg.Body = "Recibiste una invitacion de" + invitacion.Usuario.Email + "Invitacion: " + HttpContext.Current.Request.Url.Authority + " /Pedidos/Elegir/" + invitacion.Token;
             //msg.Body = "Recibiste una invitacion para elegir gustos..... Ingresa aqui--> " + HttpContext.Current.Request.Url.Authority + " /Pedidos/Elegir/" + invitacion.IdPedido;
-            msg.Body = "Recibiste una invitacion para elegir gustos del pedido: " + invitacion.IdPedido + " Ingresa aqui--> " + HttpContext.Current.Request.Url.Authority + " /Pedidos/Elegir/" + invitacion.Token;
+            msg.Body = "Recibiste una invitacion para elegir gustos del pedido: " + invitacion.IdPedido + " Ingresa aqui--> " + HttpContext.Current.Request.Url.Authority + "/Pedidos/Elegir/" + invitacion.IdPedido;
             SmtpClient clienteSmtp = new SmtpClient();
             clienteSmtp.Host = "smtp.gmail.com";
             clienteSmtp.Port = 587;
@@ -192,8 +192,29 @@ namespace Empanadas.Models
                 p.GustoEmpanada.Add(gustoEmpanadaDisponible);
                 MiBD.SaveChanges();
             }
-            //falta que deje editar los invitados
-            MiBD.SaveChanges();
+            // MiBD.Pedido.FirstOrDefault(p => p.IdPedido == id).GustoEmpanada.ToList();
+            /*
+            InvitacionPedido nuevaInvitacionPedido = MiBD.InvitacionPedido.FirstOrDefault(x => x.IdPedido == j.IdPedido);
+            foreach ( var invitadoNuevo in j.IdUsuariosInvitados)
+            {
+                if (nuevaInvitacionPedido.IdUsuario != invitadoNuevo)
+                {
+                    InvitacionPedido newInvitado = new InvitacionPedido();
+                    newInvitado.IdUsuario = invitadoNuevo;
+                    newInvitado.Token = Guid.NewGuid();
+                    newInvitado.IdPedido = j.IdPedido;
+                    newInvitado.Completado = false;
+                    p.InvitacionPedido.Add(newInvitado);
+                    MiBD.SaveChanges();
+                }
+
+              
+            } */
+            //p.InvitacionPedido.Clear();
+            
+            
+         
+                MiBD.SaveChanges();
         }
 
 
@@ -233,6 +254,7 @@ namespace Empanadas.Models
                     break;
             }
         }
+
         public void EnviarMailCerrado(InvitacionPedido invitacionPedido, Pedido pedido)
         {
             Usuario usuario = MiBD.Usuario.Find(invitacionPedido.IdUsuario);
@@ -264,14 +286,11 @@ namespace Empanadas.Models
             List<string> detalle = new List<string>();
 
             var newlist = invitacionPedido.Pedido.InvitacionPedidoGustoEmpanadaUsuario.GroupBy(d => d.IdGustoEmpanada)
-            .Select(
-                g => new
-                {
-                    Key = g.Key,
-                    Value = g.Sum(s => s.Cantidad),
-                    Category = g.First().GustoEmpanada,
-                    Name = g.First().GustoEmpanada.Nombre
-                });
+            .Select(g => new {  Key = g.Key,
+                                Value = g.Sum(s => s.Cantidad),
+                                Category = g.First().GustoEmpanada,
+                                Name = g.First().GustoEmpanada.Nombre});
+
             foreach (var item in newlist.ToList())
             {
                 detalle.Add(item.Name + ": " + item.Value);

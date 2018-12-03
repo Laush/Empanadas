@@ -31,7 +31,7 @@ namespace Empanadas
 
         
 
-   /*     protected void Application_Error(object sender, EventArgs e)
+       protected void Application_Error(object sender, EventArgs e)
         {
             // Do whatever you want to do with the error
 
@@ -57,6 +57,6 @@ namespace Empanadas
             errorsController.Execute(rc);
 
             Response.End();
-        }*/
+        }
     }
 }
