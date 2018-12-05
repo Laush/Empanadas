@@ -9,14 +9,16 @@
     <div class="form-group">
         <div class="row">
             <label>
-                El pedido se inicio correctamente<br />
+                El pedido " @Model.NombreNegocio " se inicio correctamente<br />
 
             </label>
         </div>
     </div>
     <br />
-    <form action="/Pedidos/Listar/">
-        <button class="btn btn-warning my-2 my-sm-0" type="submit">Volver</button>
+
+
+    <form action="/Pedidos/Editar/@Model.IdPedido">
+        <button class="btn btn-warning my-2 my-sm-0" type="submit">Editar</button>
     </form>
 </div>
 

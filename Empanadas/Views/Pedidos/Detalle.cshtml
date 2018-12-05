@@ -15,36 +15,47 @@
         <form action="/Pedidos/Listar">
             <div class="row">
                 <div class="col-md-6">
-                    Nombre Negocio:@Model.NombreNegocio
+                    Nombre Negocio: @Model.NombreNegocio
                     <br>
-                    Descripcion:@Model.Descripcion
+                    Descripcion: @Model.Descripcion
                     <br>
-                    IdEstadoPed:@Model.EstadoPedido.Nombre
+                    IdEstadoPed: @Model.EstadoPedido.Nombre
 
+                    <br>
+                    <table class="table table-condensed" style="color:white">
+                        <tr> Gustos Disponibles:
+                        <tr>
+                            <td>
+                                @foreach (var item in ViewBag.Lista as MultiSelectList)
+                                {
+                                    @item.Text <br>
+                                }
+                            </td>
+                        </tr>
+                    </table>
                 </div>
                 <div class="col-md-6">
-                    Precio x Unidad:@Model.PrecioUnidad
+                    Precio x Unidad: @Model.PrecioUnidad
                     <br>
-                    Precio x Docena:@Model.PrecioDocena
+                    Precio x Docena: @Model.PrecioDocena
                     <br>
-                    FechaCreacion:@Model.FechaCreacion
+                    FechaCreacion: @Model.FechaCreacion
                     <br>
+
+                    <table class="table table-condensed" style="color:white">
+                        <tr> Invitados:
+                        <tr>
+                            <td>
+                                @foreach (var item in ViewBag.ListaInvitados as MultiSelectList)
+                                {
+                                    @item.Text <br>
+                                }
+                            </td>
+                        </tr>
+                    </table>
                 </div>
-                <br>
-                <div class="col-md-6">
-                   
-                        Gustos Disponibles:
-                        <div id="midiv" class="table-hover">
+                <br><br>
 
-                            @foreach (var item in ViewBag.Lista as MultiSelectList)
-                            {
-                                @item.Text <br>
-                            }
-                        </div>
-     
-
-                    
-                    </div>
             </div>
             <br>
             <div class="center-align pt-1">
@@ -56,5 +67,3 @@
 </body>
 
 </html>
-
-

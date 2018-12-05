@@ -18,7 +18,7 @@ namespace Empanadas
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
-            //BundleConfig.RegisterBundles(BundleTable.Bundles);
+           // BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             //Evito las referencias circulares al trabajar con Entity FrameWork         
             GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize;
@@ -30,7 +30,7 @@ namespace Empanadas
         }
 
         
-
+/*
        protected void Application_Error(object sender, EventArgs e)
         {
             // Do whatever you want to do with the error
@@ -57,6 +57,6 @@ namespace Empanadas
             errorsController.Execute(rc);
 
             Response.End();
-        }
+        }*/
     }
 }

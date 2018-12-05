@@ -111,16 +111,7 @@ namespace Empanadas.Models
         {
             // return MiBD.Pedido.Include("GustoEmpanada").Where(x => x.IdUsuarioResponsable == idUsuario).OrderByDescending(x => x.FechaCreacion).ToList();
             // return MiBD.Pedido.Include("GustoEmpanada").Where(x => x.IdUsuarioResponsable.Equals(usu.IdUsuario)).OrderByDescending(p => p.FechaCreacion).ToList();
-            /* var query =
-                (from p in MiBD.Pedido
-                 join ip in MiBD.InvitacionPedido on p.IdPedido equals ip.IdPedido
-                 where p.IdUsuarioResponsable == usu.IdUsuario || ip.IdUsuario == usu.IdUsuario
-                 orderby p.FechaCreacion descending
-                 select p).Distinct().ToList();
-             return query;*/
-
-            //otra version
-
+       
             List<Pedido> pedidosResultado = new List<Pedido>();
             List<InvitacionPedido> imvitacionesDelUsuario = MiBD.InvitacionPedido.Include("Pedido")
                           .Where(o => o.IdUsuario.Equals(usu.IdUsuario)).Distinct().ToList();
@@ -296,10 +287,10 @@ namespace Empanadas.Models
                 detalle.Add(item.Name + ": " + item.Value);
             }
 
-            var fromAddress = new MailAddress("empanadas.ya18@gmail.com", "From Name");
-            var toAddress = new MailAddress("empanadas.ya18@gmail.com", "To Name");
+            var fromAddress = new MailAddress("empanadas.ya18@gmail.com", "Empanadas YA!");
+            var toAddress = new MailAddress(usuario.Email);
             string fromPassword = "empanadas2018";
-            string subject = "Subject";
+            string subject = "Resumen";
             string body = "";
             //mail para el responsable
             if (invitacionPedido.IdUsuario == invitacionPedido.Pedido.IdUsuarioResponsable)

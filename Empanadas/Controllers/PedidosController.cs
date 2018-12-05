@@ -104,7 +104,7 @@ namespace Empanadas.Controllers
             {
                 var usuarioLogueado = Session["Usuario"] as Usuario;
                 servicioPedido.Agregar(p, usuarioLogueado);
-                return RedirectToAction("Iniciado", new { id = p.IdPedido });
+                return RedirectToAction("Iniciado",p);
             }
             else
             {
@@ -128,12 +128,16 @@ namespace Empanadas.Controllers
                 List<GustoEmpanada> InitGustos = servicioPedido.ObtenerGustosPorPedido(id);
                 ViewBag.Lista = new MultiSelectList(InitGustos, "IdGustoEmpanada", "Nombre");
 
+                List<Usuario> InitInvitados = servicioUsuario.ObtenerUsuariosPorPedido(id);
+                ViewBag.ListaInvitados = new MultiSelectList(InitInvitados, "IdUsuario", "Email");
+
                 return View(servicioPedido.ObtenerPorId(id));
             }
             Session["RedireccionLogin"] = "Pedidos/Listar";
             return RedirectToAction("Login", "Home");
 
         }
+
 
         [HttpGet]
         public ActionResult Eliminar(int id)
@@ -160,14 +164,6 @@ namespace Empanadas.Controllers
         // GET: Editar
         public ActionResult Editar(int id)
         {
-            // Pedido p = servicioPedido.ObtenerPorId(id);
-            //ViewBag.ListaUsuario = servicioUsuario.ObtenerUsuariosPorPedido(p.IdPedido);
-            //ViewBag.ListaDeUsuarios = servicioUsuario.ObtenerTodosLosUsuarios();
-            //List<GustoEmpanada> InitGustos = servicioPedido.ObtenerGustosPorPedido(id);
-            //ViewBag.Lista = new MultiSelectList(InitGustos, "IdGustoEmpanada", "Nombre");
-            //ViewBag.ListaDeGustos = servicioPedido.ObtenerGustosDeEmpanada();
-            //return View(MiBD.Pedido.Find(id));
-
             var usuarioLogueado = Session["Usuario"] as Usuario;
             Pedido pedido = servicioPedido.ObtenerPorId(id);
 

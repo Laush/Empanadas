@@ -45,16 +45,17 @@
                     @Html.HiddenFor(p => p.FechaModificacion, new { @class = "form-control" })
 
                     Invitados:
-                    <select class="selectpicker" multiple data-live-search="true" title="Seleccione invitados.." name="IdUsuariosInvitados">
-                        @foreach (var item in ViewBag.Mailseleccionados as MultiSelectList)
-                        {
-                            <option value="" selected>@item.Text</option>
-                        }
-                        @foreach (var item in ViewBag.Mails as MultiSelectList)
-                        {
-                            <option value="@item.Value">@item.Text</option>
-                        }
-                    </select>
+
+        <select class="selectpicker" multiple data-live-search="true" title="Seleccione invitados.." name="IdUsuariosInvitados">
+            @foreach (var item in ViewBag.Mailseleccionados as MultiSelectList)
+            {
+                <option value="@item.Value" selected>@item.Text</option>
+            }
+            @foreach (var item in ViewBag.Mails as MultiSelectList)
+            {
+                <option value="@item.Value">@item.Text</option>
+            }
+        </select>
                 </div>
 
                 <div class="col-md-6">
