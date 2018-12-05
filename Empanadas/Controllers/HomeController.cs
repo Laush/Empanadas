@@ -60,23 +60,11 @@ namespace Empanadas.Controllers
         [HttpPost]
         public ActionResult Login(Usuario u)
         {
-            // bool recuerdame = Request.Form["Recordame"] == "on";
             var user = servicioUsuario.VerificarExistenciaUsuario(u);
             if (user != null)
             {
                 Session["Usuario"] = user;
-                // para un futuro recordar al usuario al loguearse
-                /*
-                   string result = string.Empty;
-                   Usuario usuarioCookie = servicioUsuario.BuscarUsuarioPorMail(u.Email);
 
-                  if (recuerdame)
-                   {
-                       byte[] encryted = System.Text.Encoding.Unicode.GetBytes(Convert.ToString(usuarioCookie.IdUsuario));
-                       result = Convert.ToBase64String(encryted);
-                       Response.Cookies["usuarioSesion"].Value = result;
-                   }
-                   */
                 if (Session["RedireccionLogin"] != null)
                 {
                     String accionSesion = (String)Session["RedireccionLogin"];

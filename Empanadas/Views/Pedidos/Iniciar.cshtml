@@ -19,10 +19,11 @@
                     @Html.HiddenFor(p => p.IdUsuarioResponsable, new { @class = "form-control" })
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                    Nombre Negocio: @Html.TextBoxFor(p => p.NombreNegocio, new { @class = "form-control", required = true, placeholder = "Campo es obligatorio." })
+                    Nombre Negocio: @Html.TextBoxFor(p => p.NombreNegocio, new { @class = "form-control", required = true })
                     @Html.ValidationMessageFor(model => model.NombreNegocio, "", new { @class = "text-danger" })
 
-                    Descripcion: @Html.TextBoxFor(p => p.Descripcion, new { @class = "form-control" })
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    Descripcion: @Html.TextBoxFor(p => p.Descripcion, new { @class = "form-control", required = true })
                     @Html.HiddenFor(p => p.IdEstadoPedido, new { @class = "form-control" })
                     Gustos:
                     <br>
@@ -40,8 +41,10 @@
 
                 </div>
                 <div class="col-md-6">
-                    Precio x Unidad: @Html.TextBoxFor(p => p.PrecioUnidad, new { @class = "form-control" })
-                    Precio x Docena: @Html.TextBoxFor(p => p.PrecioDocena, new { @class = "form-control" })
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    Precio x Unidad: @Html.TextBoxFor(p => p.PrecioUnidad, new { @class = "form-control", required = true })
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    Precio x Docena: @Html.TextBoxFor(p => p.PrecioDocena, new { @class = "form-control", required = true })
                     @Html.HiddenFor(p => p.FechaCreacion, new { @class = "form-control" })
                     @Html.HiddenFor(p => p.FechaModificacion, new { @class = "form-control" })
 

@@ -17,12 +17,11 @@
                 <div class="col-md-6">
                     @Html.HiddenFor(p => p.IdPedido, new { @class = "form-control" })
                     @Html.HiddenFor(p => p.IdUsuarioResponsable, new { @class = "form-control" })
+                    Nombre Negocio: @Html.TextBoxFor(p => p.NombreNegocio, new { @class = "form-control" })
                     Descripcion: @Html.TextBoxFor(p => p.Descripcion, new { @class = "form-control" })
                     @Html.HiddenFor(p => p.IdEstadoPedido, new { @class = "form-control" })
-                    Nombre Negocio: @Html.TextBoxFor(p => p.NombreNegocio, new { @class = "form-control" })
 
                     Gustos:
-
                     <select class="selectpicker" multiple data-live-search="true" title="Seleccione gustos.." name="IdGustosSeleccionados">
 
                         @foreach (var item in Model.GustoEmpanada)
@@ -35,8 +34,6 @@
                         }
                     </select>
 
-
-
                 </div>
                 <div class="col-md-6">
                     Precio x Unidad: @Html.TextBoxFor(p => p.PrecioUnidad, new { @class = "form-control" })
@@ -45,13 +42,12 @@
                     @Html.HiddenFor(p => p.FechaModificacion, new { @class = "form-control" })
 
                     Invitados:
-
         <select class="selectpicker" multiple data-live-search="true" title="Seleccione invitados.." name="IdUsuariosInvitados">
-            @foreach (var item in ViewBag.Mailseleccionados as MultiSelectList)
+            @foreach (var item in ViewBag.invitados as MultiSelectList)
             {
                 <option value="@item.Value" selected>@item.Text</option>
             }
-            @foreach (var item in ViewBag.Mails as MultiSelectList)
+            @foreach (var item in ViewBag.usuariosQueNoTienenInvitacion as MultiSelectList)
             {
                 <option value="@item.Value">@item.Text</option>
             }
@@ -59,7 +55,7 @@
                 </div>
 
                 <div class="col-md-6">
-                     <label>Lista que muestra solo los que confirmaron</label>
+                    Invitados que confirmaron:
                     <select class="selectpicker" name="IdUsuariosInvitados" multiple="multiple">
                         @foreach (var item in ViewBag.usuariosCompletaronPedido as MultiSelectList)
                         {

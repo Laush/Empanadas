@@ -38,7 +38,7 @@ namespace Empanadas.Controllers
         }
 
         [HttpGet]
-        public ActionResult Iniciar(int? id)
+        public ActionResult Iniciar(int? id)//para copiar pedidos
         {
             var usuarioLogueado = Session["Usuario"] as Usuario;
             if (usuarioLogueado != null)
@@ -69,32 +69,6 @@ namespace Empanadas.Controllers
             Session["RedireccionLogin"] = "Pedidos/Iniciar";
             return RedirectToAction("Login", "Home");
 
-            /* //esta version anda e inicia bien los pedidos--pero OJO hay k cambiar la vista Iniciar los viewBag
-                        var pedido = p;
-                        pedido.IdEstadoPedido = 1;
-                        pedido.FechaCreacion = DateTime.Now;
-                        //gustos
-                        List<GustoEmpanada> gustosSeleccionados = new List<GustoEmpanada>();
-                        foreach (int gId in p.IdGustosSeleccionados)
-                        {
-                            gustosSeleccionados.Add(MiBD.GustoEmpanada.FirstOrDefault(ge => ge.IdGustoEmpanada == gId));
-
-                        }
-                        pedido.GustoEmpanada = gustosSeleccionados;
-                        MiBD.Pedido.Add(pedido);
-                        //usuarios invitados
-                        if (p.IdUsuariosInvitados != null)
-                        {
-                            foreach (var id in pedido.IdUsuariosInvitados)
-                            {
-                                InvitacionPedido invitacion = new InvitacionPedido();
-                                invitacion.IdPedido = pedido.IdPedido;
-                                invitacion.Completado = true;
-                                invitacion.Token = Guid.NewGuid();
-                                invitacion.IdUsuario = id;
-                                MiBD.InvitacionPedido.Add(invitacion);
-                                //EnviarCorreo(invitacion);
-                            }*/
         }
 
         [HttpPost]
@@ -190,13 +164,11 @@ namespace Empanadas.Controllers
                 }
             }
             ViewBag.Confirmados = new MultiSelectList(servicioUsuario.ObtenerUsuariosPorPedidoQueConfirmaron(id), "IdUsuario", "Email");
-            //Usuarios que modificaron la cantidad de los gustos q quieren 
             ViewBag.usuariosCompletaronPedido = new MultiSelectList(servicioUsuario.UsuariosCompletaronPedido(id), "IdUsuario", "Email");
-            //Usuarios que NO  modificaron la cantidad de los gustos q quieren 
             ViewBag.usuariosQueNoCompletaronPedido = new MultiSelectList(servicioUsuario.UsuariosQueNoCompletaronPedido(id), "IdUsuario", "Email");
-            //  ViewBag.usuariosQueNoTienenInvitacion = new MultiSelectList(servicioUsuario.usuariosQueNoTienenInvitacion(id), "IdUsuario", "Email");
+            ViewBag.usuariosQueNoTienenInvitacion = new MultiSelectList(servicioUsuario.usuariosQueNoTienenInvitacion(id), "IdUsuario", "Email");
 
-
+            ViewBag.invitados= new MultiSelectList(servicioUsuario.ObtenerUsuariosPorPedido(id), "IdUsuario", "Email"); 
             ViewBag.ListaGustos = new MultiSelectList(InitGustos, "IdGustoEmpanada", "Nombre");
             ViewBag.Mails = new MultiSelectList(mails, "IdUsuario", "Email");
             ViewBag.Mailseleccionados = new MultiSelectList(mailsNuevos, "IdUsuario", "Email");
